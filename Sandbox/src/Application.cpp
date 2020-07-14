@@ -4,6 +4,7 @@
 #include "Renderer/Renderer.h"
 
 Window* Application::s_ActiveWindow = nullptr;
+Timestep Application::s_FrameTime = 0.0f;
 
 int main(int argc, char** argv)
 {
@@ -41,6 +42,8 @@ int main(int argc, char** argv)
 	OrthographicCamera camera(-1.6f, 1.6f, -0.9f, 0.9f);
 	while (!glfwWindowShouldClose(Application::s_ActiveWindow->GetNativeWindow()))
 	{
+		Application::DisplayFrameTime();
+
 		Renderer::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Renderer::Clear();
 
@@ -71,4 +74,20 @@ void Application::Shutdown()
 	LOG_WARN("Application terminating!");
 	delete s_ActiveWindow;
 	Context::GLFWTerminate();
+}
+
+void Application::DisplayFrameTime()
+{
+	std::stringstream title;
+	title << Application::s_ActiveWindow->GetWindowProps().Title;
+	title << " " << std::setprecision(4) << Application::s_FrameTime.DeltaTime() << "ms";
+	glfwSetWindowTitle(Application::s_ActiveWindow->GetNativeWindow(), title.str().c_str());
+}
+
+void Application::DisplayFPS()
+{
+	std::stringstream title;
+	title << Application::s_ActiveWindow->GetWindowProps().Title;
+	title << " " << (uint32_t)(1.0f / (Application::s_FrameTime.DeltaTime() / 1000.0f)) << " FPS";
+	glfwSetWindowTitle(Application::s_ActiveWindow->GetNativeWindow(), title.str().c_str());
 }
