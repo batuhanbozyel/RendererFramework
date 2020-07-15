@@ -1329,6 +1329,9 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\Renderer3D.h" />
+    <ClInclude Include="tests\2DTest.h" />
+    <ClInclude Include="tests\3DTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -1370,5 +1373,8 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer\Renderer3D.cpp" />
+    <ClCompile Include="tests\2DTest.cpp" />
+    <ClCompile Include="tests\3DTest.cpp" />
   </ItemGroup>
 </Project>

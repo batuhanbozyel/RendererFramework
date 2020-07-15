@@ -1,11 +1,24 @@
 #include "pch.h"
 #include <glad/glad.h>
-#include "Renderer.h"
 
-void Renderer::Init()
+#include "Renderer.h"
+#include "Renderer2D.h"
+#include "Renderer3D.h"
+
+std::unique_ptr<Renderer> Renderer::s_Renderer = nullptr;
+
+void Renderer::Init(const RendererMode& mode)
 {
-	Renderer2D::Init();
-	LOG_WARN("Renderer initialization succeed!");
+	switch (mode)
+	{
+		case RendererMode::_2D: s_Renderer.reset(new Renderer2D);
+								LOG_WARN("Renderer initialization succeed!");
+							    return;
+		case RendererMode::_3D: s_Renderer.reset(new Renderer3D);
+								LOG_WARN("Renderer initialization succeed!");
+								return;
+	}
+	LOG_ASSERT(false, "Renderer initialization failed!");
 }
 
 void Renderer::Draw(const OrthographicCamera& camera)
@@ -13,24 +26,29 @@ void Renderer::Draw(const OrthographicCamera& camera)
 	Renderer2D::Draw(camera);
 }
 
-void Renderer::Submit(const std::string& name, const std::initializer_list<std::array<Vertex, 3>>& datas)
+void Renderer::Draw(const PerspectiveCamera& camera)
 {
-	Renderer2D::Submit(name, datas);
+	Renderer3D::Draw(camera);
 }
 
-void Renderer::Submit(const std::string& name, const std::array<Vertex, 3>& data)
+void Renderer::PushTriangle(const std::string& name, const std::array<Vertex, 3>& data)
 {
-	Renderer2D::Submit(name, data);
+	s_Renderer->Submit(name, data);
 }
 
-void Renderer::Submit(const std::string& name, const std::initializer_list<std::array<Vertex, 4>>& datas)
+void Renderer::PushTriangleMesh(const std::string& name, const std::initializer_list<std::array<Vertex, 3>>& datas)
 {
-	Renderer2D::Submit(name, datas);
+	s_Renderer->Submit(name, datas);
 }
 
-void Renderer::Submit(const std::string& name, const std::array<Vertex, 4>& data)
+void Renderer::PushQuad(const std::string& name, const std::array<Vertex, 4>& data)
 {
-	Renderer2D::Submit(name, data);
+	s_Renderer->Submit(name, data);
+}
+
+void Renderer::PushQuadMesh(const std::string& name, const std::initializer_list<std::array<Vertex, 4>>& datas)
+{
+	s_Renderer->Submit(name, datas);
 }
 
 void Renderer::ClearColor(const glm::vec4& color)

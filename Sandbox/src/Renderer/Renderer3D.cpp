@@ -1,13 +1,11 @@
 #include "pch.h"
-#include "Renderer2D.h"
-#include "Utility/Mesh.h"
+#include "Renderer3D.h"
 
-using ObjectMapValue = std::pair<std::shared_ptr<VertexBuffer>, uint32_t>;
-std::unordered_map<std::string, ObjectMapValue> Renderer2D::s_QuadMap;
-std::unordered_map<std::string, ObjectMapValue> Renderer2D::s_TriangleMap;
-std::vector<std::shared_ptr<Mesh>> Renderer2D::s_Meshes;
+std::unordered_map<std::string, Renderer3D::ObjectMapValue> Renderer3D::s_TriangleMap;
+std::unordered_map<std::string, Renderer3D::ObjectMapValue> Renderer3D::s_QuadMap;
+std::vector<std::shared_ptr<Mesh>> Renderer3D::s_Meshes;
 
-Renderer2D::Renderer2D()
+Renderer3D::Renderer3D()
 {
 	if (s_Meshes.size() == 0)
 	{
@@ -16,12 +14,12 @@ Renderer2D::Renderer2D()
 	}
 }
 
-Renderer2D::~Renderer2D()
+Renderer3D::~Renderer3D()
 {
 
 }
 
-void Renderer2D::Draw(const OrthographicCamera& camera)
+void Renderer3D::Draw(const PerspectiveCamera& camera)
 {
 	for (auto& mesh : s_Meshes)
 	{
@@ -31,7 +29,7 @@ void Renderer2D::Draw(const OrthographicCamera& camera)
 	}
 }
 
-void Renderer2D::Submit(const std::string& name, const std::initializer_list<std::array<Vertex, 3>>& datas)
+void Renderer3D::Submit(const std::string& name, const std::initializer_list<std::array<Vertex, 3>>& datas)
 {
 	if (s_TriangleMap.find(name) == s_TriangleMap.end())
 	{
@@ -43,7 +41,7 @@ void Renderer2D::Submit(const std::string& name, const std::initializer_list<std
 	}
 }
 
-void Renderer2D::Submit(const std::string& name, const std::array<Vertex, 3>& data)
+void Renderer3D::Submit(const std::string& name, const std::array<Vertex, 3>& data)
 {
 	if (s_TriangleMap.find(name) == s_TriangleMap.end())
 	{
@@ -53,7 +51,7 @@ void Renderer2D::Submit(const std::string& name, const std::array<Vertex, 3>& da
 	}
 }
 
-void Renderer2D::Submit(const std::string& name, const std::initializer_list<std::array<Vertex, 4>>& datas)
+void Renderer3D::Submit(const std::string& name, const std::initializer_list<std::array<Vertex, 4>>& datas)
 {
 	if (s_QuadMap.find(name) == s_QuadMap.end())
 	{
@@ -65,7 +63,7 @@ void Renderer2D::Submit(const std::string& name, const std::initializer_list<std
 	}
 }
 
-void Renderer2D::Submit(const std::string& name, const std::array<Vertex, 4>& data)
+void Renderer3D::Submit(const std::string& name, const std::array<Vertex, 4>& data)
 {
 	if (s_QuadMap.find(name) == s_QuadMap.end())
 	{

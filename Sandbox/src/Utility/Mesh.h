@@ -1,5 +1,19 @@
 #pragma once
-#include "Renderer/Renderer2D.h"
+#include "Renderer/Context.h"
+#include "Renderer/VertexArray.h"
+#include "Renderer/Shader.h"
+
+struct Vertex
+{
+	Vertex(const glm::vec3& pos, const glm::vec4& color = glm::vec4(1.0f))
+		: Position(pos, 1.0f), Color(color) {}
+
+	Vertex(const glm::vec4& pos, const glm::vec4& color = glm::vec4(1.0f))
+		: Position(pos), Color(1.0f) {}
+
+	glm::vec4 Position;
+	glm::vec4 Color;
+};
 
 enum class MeshType {
 	TRIANGLE,

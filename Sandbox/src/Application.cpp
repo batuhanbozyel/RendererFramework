@@ -3,6 +3,11 @@
 
 #include "Renderer/Renderer.h"
 
+#include "../tests/2DTest.h"
+#include "../tests/3DTest.h"
+
+static RendererMode s_Mode = RendererMode::_3D;
+
 Window* Application::s_ActiveWindow = nullptr;
 Timestep Application::s_FrameTime = 0.0f;
 
@@ -10,36 +15,10 @@ int main(int argc, char** argv)
 {
 	Application::Init();
 
-	const std::initializer_list<std::array<Vertex, 3>> myDatas = {
-		{
-			{{ 0.3f, -0.8f, 0.0f },
-			 {-0.1f,  0.1f, 0.0f },
-			 { 0.7f , 0.8f, 0.0f }}
-		},
+	Test3D();
+	//OrthographicCamera camera(-1.6f, 1.6f, -0.9f, 0.9f);
+	PerspectiveCamera camera(90.0f, 1.6f / 0.9f);
 
-		{
-			{{ 0.3f, -0.8f, 0.0f },
-			 { 0.7f,  0.8f, 0.0f },
-			 { 1.1f, -0.8f, 0.0f }}
-		},
-
-		{
-			{{ 1.1f, -0.8f, 0.0f },
-			 { 0.7f,  0.8f, 0.0f },
-			 { 1.5f,  0.1f, 0.0f }}
-		}
-	};
-
-	const std::array<Vertex, 4> squareData = { {
-		{-1.5f, -0.8f, 0.0f},
-		{-0.5f, -0.8f, 0.0f},
-		{-0.5f,  0.2f, 0.0f},
-		{-1.5f,  0.2f, 0.0f}
-	} };
-
-	Renderer::Submit("Pentagon", myDatas);
-	Renderer::Submit("Square", squareData);
-	OrthographicCamera camera(-1.6f, 1.6f, -0.9f, 0.9f);
 	while (!glfwWindowShouldClose(Application::s_ActiveWindow->GetNativeWindow()))
 	{
 		Application::DisplayFrameTime();
@@ -64,7 +43,7 @@ void Application::Init()
 	s_ActiveWindow = window;
 	Context::MakeCurrent(s_ActiveWindow->GetNativeWindow());
 
-	Renderer::Init();
+	Renderer::Init(s_Mode);
 
 	LOG_WARN("Application started running!");
 }
@@ -79,15 +58,15 @@ void Application::Shutdown()
 void Application::DisplayFrameTime()
 {
 	std::stringstream title;
-	title << Application::s_ActiveWindow->GetWindowProps().Title;
-	title << " " << std::setprecision(4) << Application::s_FrameTime.DeltaTime() << "ms";
-	glfwSetWindowTitle(Application::s_ActiveWindow->GetNativeWindow(), title.str().c_str());
+	title << s_ActiveWindow->GetWindowProps().Title;
+	title << " " << std::setprecision(4) << s_FrameTime.DeltaTime() << "ms";
+	glfwSetWindowTitle(s_ActiveWindow->GetNativeWindow(), title.str().c_str());
 }
 
 void Application::DisplayFPS()
 {
 	std::stringstream title;
-	title << Application::s_ActiveWindow->GetWindowProps().Title;
-	title << " " << (uint32_t)(1.0f / (Application::s_FrameTime.DeltaTime() / 1000.0f)) << " FPS";
-	glfwSetWindowTitle(Application::s_ActiveWindow->GetNativeWindow(), title.str().c_str());
+	title << s_ActiveWindow->GetWindowProps().Title;
+	title << " " << (uint32_t)(1.0f / (s_FrameTime.DeltaTime() / 1000.0f)) << " FPS";
+	glfwSetWindowTitle(s_ActiveWindow->GetNativeWindow(), title.str().c_str());
 }

@@ -113,12 +113,15 @@
     <ClInclude Include="src\Renderer\Context.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
     <ClInclude Include="src\Renderer\Renderer2D.h" />
+    <ClInclude Include="src\Renderer\Renderer3D.h" />
     <ClInclude Include="src\Renderer\Shader.h" />
     <ClInclude Include="src\Renderer\ShaderDataType.h" />
     <ClInclude Include="src\Renderer\VertexArray.h" />
     <ClInclude Include="src\Utility\Camera.h" />
     <ClInclude Include="src\Utility\Mesh.h" />
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="tests\2DTest.h" />
+    <ClInclude Include="tests\3DTest.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -537,6 +540,7 @@
     <ClCompile Include="src\Renderer\Context.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Renderer\Renderer2D.cpp" />
+    <ClCompile Include="src\Renderer\Renderer3D.cpp" />
     <ClCompile Include="src\Renderer\Shader.cpp" />
     <ClCompile Include="src\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Utility\Camera.cpp" />
@@ -544,6 +548,8 @@
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="tests\2DTest.cpp" />
+    <ClCompile Include="tests\3DTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

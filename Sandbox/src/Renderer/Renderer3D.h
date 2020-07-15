@@ -1,16 +1,13 @@
 #pragma once
 #include "Renderer.h"
-#include "Utility/Camera.h"
 
-class Mesh;
-
-class Renderer2D : public Renderer
+class Renderer3D : public Renderer
 {
 public:
-	Renderer2D();
-	~Renderer2D();
+	Renderer3D();
+	~Renderer3D();
 
-	static void Draw(const OrthographicCamera& camera);
+	static void Draw(const PerspectiveCamera& camera);
 
 	// Triangle Mesh submits
 	virtual void Submit(const std::string& name, const std::initializer_list<std::array<Vertex, 3>>& datas) override;
