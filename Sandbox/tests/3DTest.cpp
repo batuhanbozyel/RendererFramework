@@ -4,33 +4,55 @@
 
 void Test3D()
 {
-	const std::initializer_list<std::array<Vertex, 3>> myDatas = {
+	const std::initializer_list<std::array<Vertex, 4>> cubeData = {
 		{
-			Vertex(glm::vec3(0.3f, -0.8f, 0.0f), glm::vec4(0.8f, 0.3f, 0.2f, 1.0f)),
-			Vertex(glm::vec3(-0.1f, 0.1f, 0.0f), glm::vec4(0.2f, 0.7f, 0.8f, 1.0f)),
-			Vertex(glm::vec3(0.7f,  0.8f, 0.0f), glm::vec4(0.8f, 0.3f, 0.2f, 1.0f)),
+			// Back
+			Vertex(glm::vec3(-0.8f, -0.8f,  0.5f), glm::vec4(0.8f, 0.2f, 0.2f, 1.0f)),
+			Vertex(glm::vec3( 0.2f, -0.8f,  0.5f), glm::vec4(0.8f, 0.2f, 0.2f, 1.0f)),
+			Vertex(glm::vec3( 0.2f,  0.2f,  0.5f), glm::vec4(0.8f, 0.2f, 0.2f, 1.0f)),
+			Vertex(glm::vec3(-0.8f,  0.2f,  0.5f), glm::vec4(0.8f, 0.2f, 0.2f, 1.0f)),
 		},
 
 		{
-			Vertex(glm::vec3(0.3f, -0.8f, 0.0f), glm::vec4(0.8f, 0.3f, 0.2f, 1.0f)),
-			Vertex(glm::vec3(0.7f,  0.8f, 0.0f), glm::vec4(0.8f, 0.3f, 0.2f, 1.0f)),
-			Vertex(glm::vec3(1.1f, -0.8f, 0.0f), glm::vec4(0.8f, 0.3f, 0.2f, 1.0f)),
+			// Left
+			Vertex(glm::vec3(-0.8f, -0.8f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)),
+			Vertex(glm::vec3(-0.8f, -0.8f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)),
+			Vertex(glm::vec3(-0.8f,  0.2f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)),
+			Vertex(glm::vec3(-0.8f,  0.2f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)),
 		},
 
 		{
-			Vertex(glm::vec3(1.1f, -0.8f, 0.0f), glm::vec4(0.8f, 0.3f, 0.2f, 1.0f)),
-			Vertex(glm::vec3(0.7f,  0.8f, 0.0f), glm::vec4(0.8f, 0.3f, 0.2f, 1.0f)),
-			Vertex(glm::vec3(1.5f,  0.1f, 0.0f), glm::vec4(0.2f, 0.7f, 0.8f, 1.0f)),
-		}
+			// Bottom
+			Vertex(glm::vec3(-0.8f, -0.8f, -0.5f), glm::vec4(0.2f, 0.2f, 0.8f, 1.0f)),
+			Vertex(glm::vec3( 0.2f, -0.8f, -0.5f), glm::vec4(0.2f, 0.2f, 0.8f, 1.0f)),
+			Vertex(glm::vec3( 0.2f, -0.8f,  0.5f), glm::vec4(0.2f, 0.2f, 0.8f, 1.0f)),
+			Vertex(glm::vec3(-0.8f, -0.8f,  0.5f), glm::vec4(0.2f, 0.2f, 0.8f, 1.0f)),
+		},
+
+		{
+			// Right
+			Vertex(glm::vec3( 0.2f, -0.8f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)),
+			Vertex(glm::vec3( 0.2f, -0.8f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)),
+			Vertex(glm::vec3( 0.2f,  0.2f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)),
+			Vertex(glm::vec3( 0.2f,  0.2f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)),
+		},
+
+		{
+			// Top
+			Vertex(glm::vec3(-0.8f,  0.2f, -0.5f), glm::vec4(0.2f, 0.2f, 0.8f, 1.0f)),
+			Vertex(glm::vec3( 0.2f,  0.2f, -0.5f), glm::vec4(0.2f, 0.2f, 0.8f, 1.0f)),
+			Vertex(glm::vec3( 0.2f,  0.2f,  0.5f), glm::vec4(0.2f, 0.2f, 0.8f, 1.0f)),
+			Vertex(glm::vec3(-0.8f,  0.2f,  0.5f), glm::vec4(0.2f, 0.2f, 0.8f, 1.0f)),
+		},
+
+		{
+			// Front
+			Vertex(glm::vec3(-0.8f, -0.8f, -0.5f), glm::vec4(0.8f, 0.2f, 0.2f, 1.0f)),
+			Vertex(glm::vec3( 0.2f, -0.8f, -0.5f), glm::vec4(0.8f, 0.2f, 0.2f, 1.0f)),
+			Vertex(glm::vec3( 0.2f,  0.2f, -0.5f), glm::vec4(0.8f, 0.2f, 0.2f, 1.0f)),
+			Vertex(glm::vec3(-0.8f,  0.2f, -0.5f), glm::vec4(0.8f, 0.2f, 0.2f, 1.0f)),
+		},
 	};
 
-	const std::array<Vertex, 4> squareData = { {
-		Vertex(glm::vec3(-1.5f, -0.8f, 0.0f), glm::vec4(0.2f, 0.7f, 0.8f, 1.0f)),
-		Vertex(glm::vec3(-0.5f, -0.8f, 0.0f), glm::vec4(0.2f, 0.7f, 0.8f, 1.0f)),
-		Vertex(glm::vec3(-0.5f,  0.2f, 0.0f), glm::vec4(0.8f, 0.3f, 0.2f, 1.0f)),
-		Vertex(glm::vec3(-1.5f,  0.2f, 0.0f), glm::vec4(0.8f, 0.3f, 0.2f, 1.0f)),
-	} };
-
-	Renderer::PushTriangleMesh("Pentagon", myDatas);
-	Renderer::PushQuad("Square", squareData);
+	Renderer::PushQuadMesh("Pentagon", cubeData);
 }

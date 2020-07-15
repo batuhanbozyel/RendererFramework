@@ -23,7 +23,7 @@ void OrthographicCamera::SetPosition(const glm::vec3& position)
 // Perspective Camera
 
 PerspectiveCamera::PerspectiveCamera(float fov, float aspect)
-	: m_ProjectionMatrix(glm::perspective(glm::radians(fov), aspect, -1.0f, 1.0f)), m_Position(0.0f, 0.0f, -1.6f)
+	: m_ProjectionMatrix(glm::perspective(glm::radians(fov), aspect, 0.01f, 2.0f)), m_Position(0.0f, 0.0f, 2.0f)
 {
 	m_ViewMatrix = glm::lookAt(m_Position, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;

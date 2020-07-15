@@ -18,13 +18,20 @@ int main(int argc, char** argv)
 	Test3D();
 	//OrthographicCamera camera(-1.6f, 1.6f, -0.9f, 0.9f);
 	PerspectiveCamera camera(90.0f, 1.6f / 0.9f);
-
+	glm::vec3 position(0.0f, 0.0f, 2.0f);
 	while (!glfwWindowShouldClose(Application::s_ActiveWindow->GetNativeWindow()))
 	{
 		Application::DisplayFrameTime();
 
 		Renderer::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Renderer::Clear();
+
+		if		(Input::IsKeyPressed(KEY_A)) position.x += 0.01f * Application::s_FrameTime.DeltaTime();
+		else if (Input::IsKeyPressed(KEY_D)) position.x -= 0.01f * Application::s_FrameTime.DeltaTime();
+		else if (Input::IsKeyPressed(KEY_W)) position.y -= 0.01f * Application::s_FrameTime.DeltaTime();
+		else if (Input::IsKeyPressed(KEY_S)) position.y += 0.01f * Application::s_FrameTime.DeltaTime();
+
+		camera.SetPosition(position);
 
 		Renderer::Draw(camera);
 
