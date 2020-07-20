@@ -20,6 +20,7 @@ IncludeDir["GLFW"] = "Sandbox/vendor/GLFW/include"
 IncludeDir["Glad"] = "Sandbox/vendor/Glad/include"
 IncludeDir["glm"] = "Sandbox/vendor/glm"
 IncludeDir["spdlog"] = "Sandbox/vendor/spdlog/include"
+IncludeDir["stb"] = "Sandbox/vendor/stb"
 
 group "Dependencies"
 	include "Sandbox/vendor/GLFW"
@@ -45,7 +46,12 @@ project "Sandbox"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl"
+		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/vendor/stb/**.h",
+		"%{prj.name}/vendor/stb/**.cpp",
+
+		"%{prj.name}/tests/**.h",
+		"%{prj.name}/tests/**.cpp"
 	}
 
 	defines
@@ -57,6 +63,7 @@ project "Sandbox"
 	includedirs
 	{
 		"%{prj.name}/src",
+		"%{prj.name}/vendor",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",

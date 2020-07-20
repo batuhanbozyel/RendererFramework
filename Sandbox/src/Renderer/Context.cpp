@@ -51,6 +51,8 @@ Context::Context(GLFWwindow* window)
 	LOG_ASSERT(status, "Glad initialization failed");
 
 	glEnable(GL_MULTISAMPLE);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
 	LOG_INFO(glGetString(GL_RENDERER));
 	LOG_INFO(glGetString(GL_VERSION));

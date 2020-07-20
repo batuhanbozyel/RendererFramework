@@ -2,17 +2,19 @@
 #include "Renderer/Context.h"
 #include "Renderer/VertexArray.h"
 #include "Renderer/Shader.h"
+#include "Renderer/Texture.h"
 
 struct Vertex
 {
-	Vertex(const glm::vec3& pos, const glm::vec4& color = glm::vec4(1.0f))
-		: Position(pos, 1.0f), Color(color) {}
+	Vertex(const glm::vec3& pos, const glm::vec4& color, const glm::vec2& tex)
+		: Position(pos, 1.0f), Color(color), TexCoord(tex) {}
 
-	Vertex(const glm::vec4& pos, const glm::vec4& color = glm::vec4(1.0f))
-		: Position(pos), Color(1.0f) {}
+	Vertex(const glm::vec4& pos, const glm::vec4& color, const glm::vec2& tex)
+		: Position(pos), Color(1.0f), TexCoord(tex) {}
 
 	glm::vec4 Position;
 	glm::vec4 Color;
+	glm::vec2 TexCoord;
 };
 
 enum class MeshType {
@@ -44,7 +46,7 @@ public:
 	virtual ~TriangleMesh() = default;
 	virtual void Push(const Vertex* data) override;
 
-	virtual void Bind() const override { s_VAO->Bind(); s_Program->Bind(); }
+	virtual void Bind() const override { s_Texture->Bind(0); s_VAO->Bind(); s_Program->Bind(); }
 	virtual void Unbind() const override { s_VAO->Unbind(); s_Program->Unbind(); }
 
 	virtual inline uint32_t GetOffset() const override { return s_Offset; }
@@ -56,6 +58,7 @@ private:
 private:
 	std::unique_ptr<VertexArray> s_VAO;
 	std::shared_ptr<Shader> s_Program;
+	std::unique_ptr<Texture> s_Texture;
 
 	uint32_t s_Offset;
 	std::shared_ptr<VertexBuffer> s_VertexBufferPtr;
@@ -68,7 +71,7 @@ public:
 	virtual ~QuadMesh() = default;
 	virtual void Push(const Vertex* data) override;
 
-	virtual void Bind() const override { s_VAO->Bind(); s_Program->Bind(); }
+	virtual void Bind() const override { s_Texture->Bind(0); s_VAO->Bind(); s_Program->Bind(); }
 	virtual void Unbind() const override { s_VAO->Unbind(); s_Program->Unbind(); }
 
 	virtual inline uint32_t GetOffset() const override { return s_Offset; }
@@ -80,6 +83,7 @@ private:
 private:
 	std::unique_ptr<VertexArray> s_VAO;
 	std::shared_ptr<Shader> s_Program;
+	std::unique_ptr<Texture> s_Texture;
 
 	uint32_t s_Offset;
 	std::shared_ptr<VertexBuffer> s_VertexBufferPtr;

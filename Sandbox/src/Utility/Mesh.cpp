@@ -19,12 +19,14 @@ TriangleMesh::TriangleMesh()
 {
 	s_Offset = 0;
 	s_VAO.reset(new VertexArray);
+	s_Texture.reset(new Texture2D("assets/textures/brick.png"));
 
 	std::shared_ptr<VertexBuffer> vertexBuffer;
 	vertexBuffer.reset(new VertexBuffer(MaxTriangles * 3 * sizeof(Vertex)));
 	vertexBuffer->SetLayout({
 		{ ShaderDataType::Float4, "a_Position" },
-		{ ShaderDataType::Float4, "a_Color" }
+		{ ShaderDataType::Float4, "a_Color" },
+		{ ShaderDataType::Float2, "a_TexCoord" }
 	});
 	s_VAO->AddVertexBuffer(vertexBuffer);
 	s_VertexBufferPtr = vertexBuffer;
@@ -36,7 +38,7 @@ TriangleMesh::TriangleMesh()
 	delete[] indices;
 
 	// Hard coding the shader temporarily
-	s_Program.reset(new Shader("assets/shaders/FlatColor.glsl"));
+	s_Program.reset(new Shader("assets/shaders/Texture.glsl"));
 }
 
 void TriangleMesh::Push(const Vertex* data)
@@ -47,7 +49,8 @@ void TriangleMesh::Push(const Vertex* data)
 		vertexBuffer.reset(new VertexBuffer(MaxTriangles * 3 * sizeof(Vertex)));
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float4, "a_Position" },
-			{ ShaderDataType::Float4, "a_Color" }
+			{ ShaderDataType::Float4, "a_Color" },
+			{ ShaderDataType::Float2, "a_TexCoord" }
 		});
 		s_VAO->AddVertexBuffer(vertexBuffer);
 		s_VertexBufferPtr = vertexBuffer;
@@ -75,12 +78,14 @@ QuadMesh::QuadMesh()
 {
 	s_Offset = 0;
 	s_VAO.reset(new VertexArray);
+	s_Texture.reset(new Texture2D("assets/textures/brick.png"));
 
 	std::shared_ptr<VertexBuffer> vertexBuffer;
 	vertexBuffer.reset(new VertexBuffer(MaxQuads * 4 * sizeof(Vertex)));
 	vertexBuffer->SetLayout({
 		{ ShaderDataType::Float4, "a_Position" },
-		{ ShaderDataType::Float4, "a_Color" }
+		{ ShaderDataType::Float4, "a_Color" },
+		{ ShaderDataType::Float2, "a_TexCoord" }
 	});
 	s_VAO->AddVertexBuffer(vertexBuffer);
 	s_VertexBufferPtr = vertexBuffer;
@@ -92,7 +97,7 @@ QuadMesh::QuadMesh()
 	delete[] indices;
 
 	// Hard coding the shader temporarily
-	s_Program.reset(new Shader("assets/shaders/FlatColor.glsl"));
+	s_Program.reset(new Shader("assets/shaders/Texture.glsl"));
 }
 
 void QuadMesh::Push(const Vertex* data)
@@ -103,7 +108,8 @@ void QuadMesh::Push(const Vertex* data)
 		vertexBuffer.reset(new VertexBuffer(MaxTriangles * 4 * sizeof(Vertex)));
 		vertexBuffer->SetLayout({
 			{ ShaderDataType::Float4, "a_Position" },
-			{ ShaderDataType::Float4, "a_Color" }
+			{ ShaderDataType::Float4, "a_Color" },
+			{ ShaderDataType::Float2, "a_TexCoord" }
 		});
 		s_VAO->AddVertexBuffer(vertexBuffer);
 		s_VertexBufferPtr = vertexBuffer;

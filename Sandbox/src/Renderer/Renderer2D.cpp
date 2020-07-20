@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Renderer2D.h"
-#include "Utility/Mesh.h"
 
 using ObjectMapValue = std::pair<std::shared_ptr<VertexBuffer>, uint32_t>;
 std::unordered_map<std::string, ObjectMapValue> Renderer2D::s_QuadMap;

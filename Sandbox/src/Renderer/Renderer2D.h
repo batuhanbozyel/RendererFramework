@@ -1,8 +1,5 @@
 #pragma once
 #include "Renderer.h"
-#include "Utility/Camera.h"
-
-class Mesh;
 
 class Renderer2D : public Renderer
 {
