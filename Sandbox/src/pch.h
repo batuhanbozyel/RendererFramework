@@ -19,5 +19,14 @@
 #include <Windows.h>
 #endif
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "Core/Log.h"
 #include "Core/Input.h"
+
+#include "Renderer/Buffer.h"
+#include "Renderer/Context.h"
+#include "Renderer/Shader.h"
+#include "Renderer/Texture.h"
+#include "Renderer/VertexArray.h"

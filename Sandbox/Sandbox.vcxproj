@@ -109,6 +109,7 @@
     <ClInclude Include="src\Events\KeyEvent.h" />
     <ClInclude Include="src\Events\MouseEvent.h" />
     <ClInclude Include="src\Events\WindowEvent.h" />
+    <ClInclude Include="src\Renderer\Texture.h" />
     <ClInclude Include="src\Renderer\Buffer.h" />
     <ClInclude Include="src\Renderer\Context.h" />
     <ClInclude Include="src\Renderer\Framebuffer.h" />
@@ -117,10 +118,9 @@
     <ClInclude Include="src\Renderer\Renderer3D.h" />
     <ClInclude Include="src\Renderer\Shader.h" />
     <ClInclude Include="src\Renderer\ShaderDataType.h" />
-    <ClInclude Include="src\Renderer\Texture.h" />
     <ClInclude Include="src\Renderer\VertexArray.h" />
     <ClInclude Include="src\Utility\Camera.h" />
-    <ClInclude Include="src\Utility\Mesh.h" />
+    <ClInclude Include="src\Utility\SceneObject3D.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="tests\2DTest.h" />
     <ClInclude Include="tests\3DTest.h" />
@@ -539,6 +539,7 @@
     <ClCompile Include="src\Core\Input.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
+    <ClCompile Include="src\Renderer\Texture.cpp" />
     <ClCompile Include="src\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Renderer\Context.cpp" />
     <ClCompile Include="src\Renderer\Framebuffer.cpp" />
@@ -546,10 +547,9 @@
     <ClCompile Include="src\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Renderer\Renderer3D.cpp" />
     <ClCompile Include="src\Renderer\Shader.cpp" />
-    <ClCompile Include="src\Renderer\Texture.cpp" />
     <ClCompile Include="src\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Utility\Camera.cpp" />
-    <ClCompile Include="src\Utility\Mesh.cpp" />
+    <ClCompile Include="src\Utility\SceneObject3D.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -564,6 +564,9 @@
     <ProjectReference Include="vendor\Glad\Glad.vcxproj">
       <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\BindlessTexture.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

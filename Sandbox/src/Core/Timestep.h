@@ -7,13 +7,16 @@ public:
 	Timestep(float time)
 		: m_LastFrameTime(time) {}
 
-	float DeltaTime()
+	inline float DeltaTime()
 	{
 		float time = (float)glfwGetTime();
-		float deltaTime = time - m_LastFrameTime;
+		m_DeltaTime = time - m_LastFrameTime;
 		m_LastFrameTime = time;
-		return deltaTime * 1000;
+		return m_DeltaTime * 1000;
 	}
+
+	inline float GetDeltaTime() { return m_DeltaTime * 1000; }
 private:
 	float m_LastFrameTime = 0.0f;
+	float m_DeltaTime = 0.0f;
 };

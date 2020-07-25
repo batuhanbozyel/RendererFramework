@@ -34,7 +34,14 @@ void VertexArray::AddVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 	for (const auto& element : layout)
 	{
 		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(index,
+		if (element.AttribIPointer)
+			glVertexAttribIPointer(index,
+				element.GetComponentCount(),
+				ShaderDataTypeToOpenGLBaseType(element.Type),
+				layout.GetStride(),
+				(const void*)element.Offset);
+		else
+			glVertexAttribPointer(index,
 			element.GetComponentCount(),
 			ShaderDataTypeToOpenGLBaseType(element.Type),
 			element.Normalized ? GL_TRUE : GL_FALSE,

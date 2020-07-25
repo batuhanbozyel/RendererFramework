@@ -1,6 +1,25 @@
 #pragma once
 #include "ShaderDataType.h"
 
+struct Vertex
+{
+	Vertex() {}
+
+	Vertex(const glm::vec3& pos, const glm::vec4& color, const glm::vec2& tex, uint64_t handle = 0.0f)
+		: Position(pos, 1.0f), Color(color), TexCoord(tex), TexHandle(handle) 
+	{
+
+	}
+
+	Vertex(const glm::vec4& pos, const glm::vec4& color, const glm::vec2& tex, uint64_t handle = 0.0f)
+		: Position(pos), Color(1.0f), TexCoord(tex), TexHandle(handle) {}
+
+	glm::vec4 Position;
+	glm::vec4 Color;
+	glm::vec2 TexCoord;
+	uint64_t TexHandle;
+};
+
 enum class BufferUsage
 {
 	STATIC = GL_STATIC_DRAW,
@@ -15,9 +34,10 @@ struct BufferElement
 	uint32_t Size;
 	uint64_t Offset;
 	bool Normalized;
+	bool AttribIPointer;
 
-	BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
-		: Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), Normalized(normalized)
+	BufferElement(ShaderDataType type, const std::string& name, bool attribI = false, bool normalized = false)
+		: Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), AttribIPointer(attribI) ,Normalized(normalized)
 	{
 	}
 
@@ -35,6 +55,10 @@ struct BufferElement
 			case ShaderDataType::Int2:    return 2;
 			case ShaderDataType::Int3:    return 3;
 			case ShaderDataType::Int4:    return 4;
+			case ShaderDataType::UInt:    return 1;
+			case ShaderDataType::UInt2:   return 2;
+			case ShaderDataType::UInt3:   return 3;
+			case ShaderDataType::UInt4:   return 4;
 			case ShaderDataType::Bool:    return 1;
 		}
 
@@ -76,7 +100,7 @@ private:
 class VertexBuffer
 {
 public:
-	VertexBuffer(uint32_t size);
+	VertexBuffer(uint32_t size, BufferUsage usage = BufferUsage::DYNAMIC);
 	VertexBuffer(const float* vertices, uint32_t size, BufferUsage usage = BufferUsage::DYNAMIC);
 	~VertexBuffer();
 
@@ -94,12 +118,14 @@ private:
 class IndexBuffer
 {
 public:
+	IndexBuffer(uint32_t count, BufferUsage usage = BufferUsage::DYNAMIC);
 	IndexBuffer(const uint32_t* indices, uint32_t count, BufferUsage usage = BufferUsage::DYNAMIC);
 	~IndexBuffer();
 
 	void Bind() const;
 	void Unbind() const;
 
+	void SetData(const float* indices, uint32_t offset, uint32_t size);
 	inline uint32_t GetCount() const { return m_Count; }
 private:
 	uint32_t m_RendererID;

@@ -1,74 +1,112 @@
 #include "pch.h"
 #include "Renderer3D.h"
 
-std::unordered_map<std::string, Renderer3D::ObjectMapValue> Renderer3D::s_TriangleMap;
-std::unordered_map<std::string, Renderer3D::ObjectMapValue> Renderer3D::s_QuadMap;
-std::vector<std::shared_ptr<Mesh>> Renderer3D::s_Meshes;
+constexpr uint32_t MaxQuads = 10000;
 
 Renderer3D::Renderer3D()
 {
-	if (s_Meshes.size() == 0)
-	{
-		s_Meshes.push_back(Mesh::Create(MeshType::TRIANGLE));
-		s_Meshes.push_back(Mesh::Create(MeshType::QUAD));
-	}
+	m_Meshes.Textures.reset(new Texture);
+
+	// Create VertexArray
+	m_Meshes.VAO.reset(new VertexArray);
+
+	// Create new VertexBuffer
+	std::shared_ptr<VertexBuffer> vertexBuffer;
+	vertexBuffer.reset(new VertexBuffer(MaxQuads * 4 * sizeof(Vertex)));
+	vertexBuffer->SetLayout({
+		{ ShaderDataType::Float4, "a_Position" },
+		{ ShaderDataType::Float4, "a_Color" },
+		{ ShaderDataType::Float2, "a_TexCoord" },
+		{ ShaderDataType::UInt2 , "a_TexHandle", true}
+	});
+	m_Meshes.VertexBufferPtr = vertexBuffer;
+	m_Meshes.VAO->AddVertexBuffer(vertexBuffer);
+	m_Meshes.Offset = 0;
+
+	// Create IndexBuffer
+	std::shared_ptr<IndexBuffer> indexBuffer;
+	std::vector<uint32_t> indices = CalculateIndices();
+	indexBuffer.reset(new IndexBuffer(&indices[0], MaxQuads * 6));
+	m_Meshes.VAO->SetIndexBuffer(indexBuffer);
+
+	// Create Shader
+	m_Meshes.Program.reset(new Shader("assets/shaders/BindlessTexture.glsl"));
 }
 
-Renderer3D::~Renderer3D()
+void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)
 {
-
-}
-
-void Renderer3D::Draw(const PerspectiveCamera& camera)
-{
-	for (auto& mesh : s_Meshes)
+	if (m_ObjectCache.find(object) == m_ObjectCache.end())
 	{
-		mesh->Bind();
-		mesh->GetShader()->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-		glDrawElements(GL_TRIANGLES, mesh->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-	}
-}
-
-void Renderer3D::Submit(const std::string& name, const std::initializer_list<std::array<Vertex, 3>>& datas)
-{
-	if (s_TriangleMap.find(name) == s_TriangleMap.end())
-	{
-		s_TriangleMap.insert(std::pair<std::string, ObjectMapValue>(name, ObjectMapValue(s_Meshes[0]->GetVertexBufferPtr(), s_Meshes[0]->GetOffset())));
-		for (auto& data : datas)
+		// Create new VertexBuffer
+		if (m_Meshes.Offset >= MaxQuads * 4 * sizeof(Vertex))
 		{
-			s_Meshes[0]->Push(&data[0]);
+			std::shared_ptr<VertexBuffer> vertexBuffer;
+			vertexBuffer.reset(new VertexBuffer(MaxQuads * 4 * sizeof(Vertex)));
+			vertexBuffer->SetLayout({
+				{ ShaderDataType::Float4, "a_Position" },
+				{ ShaderDataType::Float4, "a_Color" },
+				{ ShaderDataType::Float2, "a_TexCoord" },
+				{ ShaderDataType::UInt2 , "a_TexHandle"}
+			});
+			m_Meshes.VertexBufferPtr = vertexBuffer;
+			m_Meshes.VAO->AddVertexBuffer(vertexBuffer);
+			m_Meshes.Offset = 0;
 		}
+
+		// Insert object into cache
+		ObjectMapValue mapObject;
+		mapObject.Object = object;
+		mapObject.VertexBufferPtr = m_Meshes.VertexBufferPtr;
+		mapObject.Offset = m_Meshes.Offset;
+		m_ObjectCache.insert(std::make_pair(object, mapObject));
+
+		// Push object into VertexArray
+		m_Meshes.VertexBufferPtr->SetData(&(object->GetData()[0].Position[0]), m_Meshes.Offset, object->GetSize());
+		m_Meshes.Offset += object->GetSize();
 	}
 }
 
-void Renderer3D::Submit(const std::string& name, const std::array<Vertex, 3>& data)
+uint64_t Renderer3D::AddTexture(const char* path)
 {
-	if (s_TriangleMap.find(name) == s_TriangleMap.end())
-	{
-		s_TriangleMap.insert(std::pair<std::string, ObjectMapValue>(name, ObjectMapValue(s_Meshes[0]->GetVertexBufferPtr(), s_Meshes[0]->GetOffset())));
-
-		s_Meshes[0]->Push(&data[0]);
-	}
+	return m_Meshes.Textures->LoadTexture(path);
 }
 
-void Renderer3D::Submit(const std::string& name, const std::initializer_list<std::array<Vertex, 4>>& datas)
+uint64_t Renderer3D::GetDefaultTexture()
 {
-	if (s_QuadMap.find(name) == s_QuadMap.end())
-	{
-		s_QuadMap.insert(std::pair<std::string, ObjectMapValue>(name, ObjectMapValue(s_Meshes[1]->GetVertexBufferPtr(), s_Meshes[1]->GetOffset())));
-		for (auto& data : datas)
-		{
-			s_Meshes[1]->Push(&data[0]);
-		}
-	}
+	return m_Meshes.Textures->DefaultTexture();
 }
 
-void Renderer3D::Submit(const std::string& name, const std::array<Vertex, 4>& data)
+void Renderer3D::Transform(const std::shared_ptr<SceneObject3D>& object, const glm::mat4& transform)
 {
-	if (s_QuadMap.find(name) == s_QuadMap.end())
+	auto& object_it = m_ObjectCache.find(object);
+	if (object_it == m_ObjectCache.end())
 	{
-		s_QuadMap.insert(std::pair<std::string, ObjectMapValue>(name, ObjectMapValue(s_Meshes[1]->GetVertexBufferPtr(), s_Meshes[1]->GetOffset())));
-
-		s_Meshes[1]->Push(&data[0]);
+		LOG_ERROR("Object does not exist!");
+		return;
 	}
+	auto& transedObject = object_it->second.Object;
+	transedObject->Transform(transform);
+	object_it->second.VertexBufferPtr->SetData(&transedObject->GetData()[0].Position[0], object_it->second.Offset, transedObject->GetSize());
 }
+
+std::vector<uint32_t> Renderer3D::CalculateIndices()
+{
+	std::vector<uint32_t> indices(MaxQuads * 6);
+
+	uint32_t offset = 0;
+	for (uint32_t i = 0; i < MaxQuads; i += 6)
+	{
+		indices[i + 0] = offset + 0;
+		indices[i + 1] = offset + 1;
+		indices[i + 2] = offset + 2;
+		indices[i + 3] = offset + 2;
+		indices[i + 4] = offset + 3;
+		indices[i + 5] = offset + 0;
+
+		offset += 4;
+	}
+
+	return indices;
+}
+
+

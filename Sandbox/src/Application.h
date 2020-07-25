@@ -13,6 +13,7 @@ public:
 	static void Init();
 	static void Shutdown();
 
+	static void DisplayFrameTimeAndFPS();
 	static void DisplayFrameTime();
 	static void DisplayFPS();
 

@@ -2,18 +2,19 @@
 #include <glad/glad.h>
 
 #include "Renderer.h"
-#include "Renderer2D.h"
+//#include "Renderer2D.h"
 #include "Renderer3D.h"
 
 std::unique_ptr<Renderer> Renderer::s_Renderer = nullptr;
+glm::vec4 Renderer::s_BackgroundColor(0.1f, 0.1f, 0.1f, 1.0f);
 
 void Renderer::Init(const RendererMode& mode)
 {
 	switch (mode)
 	{
-		case RendererMode::_2D: s_Renderer.reset(new Renderer2D);
-								LOG_WARN("Renderer initialization succeed!");
-							    return;
+		//case RendererMode::_2D: s_Renderer.reset(new Renderer2D);
+		//						LOG_WARN("Renderer initialization succeed!");
+		//					    return;
 		case RendererMode::_3D: s_Renderer.reset(new Renderer3D);
 								LOG_WARN("Renderer initialization succeed!");
 								return;
@@ -23,40 +24,47 @@ void Renderer::Init(const RendererMode& mode)
 
 void Renderer::Draw(const OrthographicCamera& camera)
 {
-	Renderer2D::Draw(camera);
 }
 
 void Renderer::Draw(const PerspectiveCamera& camera)
 {
-	Renderer3D::Draw(camera);
+	const Meshes& mesh = s_Renderer->GetMeshes();
+	mesh.Bind();
+	for (const auto& VBO : mesh.VAO->GetVertexBuffers())
+	{
+		VBO->Bind();
+		mesh.Program->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		glDrawElements(GL_TRIANGLES, mesh.VAO->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+	}
 }
 
-void Renderer::PushTriangle(const std::string& name, const std::array<Vertex, 3>& data)
+void Renderer::Push(const std::shared_ptr<SceneObject3D>& object)
 {
-	s_Renderer->Submit(name, data);
+	s_Renderer->PushObject(object);
 }
 
-void Renderer::PushTriangleMesh(const std::string& name, const std::initializer_list<std::array<Vertex, 3>>& datas)
+uint64_t Renderer::CreateTexture(const char* path)
 {
-	s_Renderer->Submit(name, datas);
+	return s_Renderer->AddTexture(path);
 }
 
-void Renderer::PushQuad(const std::string& name, const std::array<Vertex, 4>& data)
+uint64_t Renderer::DefaultTexture()
 {
-	s_Renderer->Submit(name, data);
+	return s_Renderer->GetDefaultTexture();
 }
 
-void Renderer::PushQuadMesh(const std::string& name, const std::initializer_list<std::array<Vertex, 4>>& datas)
+void Renderer::TransformObject(const std::shared_ptr<SceneObject3D>& object, const glm::mat4& transform)
 {
-	s_Renderer->Submit(name, datas);
+	s_Renderer->Transform(object, transform);
 }
 
-void Renderer::ClearColor(const glm::vec4& color)
+void Renderer::SetBackground(const glm::vec4& color)
 {
-	glClearColor(color.r, color.g, color.b, color.a);
+	s_BackgroundColor = color;
 }
 
-void Renderer::Clear()
+void Renderer::ClearColor()
 {
+	glClearColor(s_BackgroundColor.r, s_BackgroundColor.g, s_BackgroundColor.b, s_BackgroundColor.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

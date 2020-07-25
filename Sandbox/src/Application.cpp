@@ -16,22 +16,21 @@ int main(int argc, char** argv)
 	Application::Init();
 
 	Test3D();
-	//OrthographicCamera camera(-1.6f, 1.6f, -0.9f, 0.9f);
 	glm::vec3 position(0.0f, 0.0f, 2.0f);
 	PerspectiveCamera camera(45.0f, 1.6f / 0.9f, position);
 	while (!glfwWindowShouldClose(Application::s_ActiveWindow->GetNativeWindow()))
 	{
-		Application::DisplayFrameTime();
+		Renderer::ClearColor();
 
-		Renderer::ClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-		Renderer::Clear();
+		float dt = Application::s_FrameTime.DeltaTime();
+		//Application::DisplayFrameTimeAndFPS();
 
-		if		(Input::IsKeyPressed(KEY_A))	 position.x -= 0.005f * Application::s_FrameTime.DeltaTime();
-		else if (Input::IsKeyPressed(KEY_D)) position.x += 0.005f * Application::s_FrameTime.DeltaTime();
-		else if (Input::IsKeyPressed(KEY_W)) position.y += 0.005f * Application::s_FrameTime.DeltaTime();
-		else if (Input::IsKeyPressed(KEY_S)) position.y -= 0.005f * Application::s_FrameTime.DeltaTime();
-		else if (Input::IsKeyPressed(KEY_Q)) position.z += 0.005f * Application::s_FrameTime.DeltaTime();
-		else if (Input::IsKeyPressed(KEY_E)) position.z -= 0.005f * Application::s_FrameTime.DeltaTime();
+		if (Input::IsKeyPressed(KEY_A))	position.x -= 0.001f * dt;
+		if (Input::IsKeyPressed(KEY_D)) position.x += 0.001f * dt;
+		if (Input::IsKeyPressed(KEY_W)) position.y += 0.001f * dt;
+		if (Input::IsKeyPressed(KEY_S)) position.y -= 0.001f * dt;
+		if (Input::IsKeyPressed(KEY_Q)) position.z += 0.001f * dt;
+		if (Input::IsKeyPressed(KEY_E)) position.z -= 0.001f * dt;
 
 		camera.SetPosition(position);
 
@@ -64,11 +63,20 @@ void Application::Shutdown()
 	Context::GLFWTerminate();
 }
 
+void Application::DisplayFrameTimeAndFPS()
+{
+	float dt = s_FrameTime.GetDeltaTime();
+	std::stringstream title;
+	title << s_ActiveWindow->GetWindowProps().Title;
+	title << " " << std::setprecision(4) << (uint32_t)(1.0f / (dt / 1000.0f)) << " FPS " << dt << " ms";
+	glfwSetWindowTitle(s_ActiveWindow->GetNativeWindow(), title.str().c_str());
+}
+
 void Application::DisplayFrameTime()
 {
 	std::stringstream title;
 	title << s_ActiveWindow->GetWindowProps().Title;
-	title << " " << std::setprecision(4) << s_FrameTime.DeltaTime() << "ms";
+	title << " " << std::setprecision(4) << s_FrameTime.GetDeltaTime() << "ms";
 	glfwSetWindowTitle(s_ActiveWindow->GetNativeWindow(), title.str().c_str());
 }
 
@@ -76,6 +84,6 @@ void Application::DisplayFPS()
 {
 	std::stringstream title;
 	title << s_ActiveWindow->GetWindowProps().Title;
-	title << " " << (uint32_t)(1.0f / (s_FrameTime.DeltaTime() / 1000.0f)) << " FPS";
+	title << " " << (uint32_t)(1.0f / (s_FrameTime.GetDeltaTime() / 1000.0f)) << " FPS";
 	glfwSetWindowTitle(s_ActiveWindow->GetNativeWindow(), title.str().c_str());
 }

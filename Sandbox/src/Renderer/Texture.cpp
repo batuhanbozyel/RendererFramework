@@ -1,46 +1,72 @@
 #include "pch.h"
 #include "Texture.h"
-#include <glad/glad.h>
 
 #include "stb/stb_image.h"
 
-Texture2D::Texture2D(const char* filePath)
+constexpr uint32_t max_textures = 1024;
+
+Texture::Texture()
+	: m_Count(0)
 {
-	stbi_set_flip_vertically_on_load(1);
-	int width, height, bpp;
-	unsigned char* buffer = stbi_load(filePath, &width, &height, &bpp, 4);
+	m_IDs.resize(max_textures, 0);
+	m_Handles.resize(max_textures, 0);
 
-	LOG_ASSERT(buffer, "Cannot Open Texture file!");
+	glGenTextures(max_textures, m_IDs.data());
 
-	glGenTextures(1, &m_ID);
-	glBindTexture(GL_TEXTURE_2D, m_ID);
+	glBindTexture(GL_TEXTURE_2D, m_IDs[m_Count]);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	unsigned char buffer[4] = { 255, 255, 255, 255 };
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+	m_Handles[m_Count] = glGetTextureHandleARB(m_IDs[m_Count]);
+	glMakeTextureHandleResidentARB(m_Handles[m_Count]);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	m_Count++;
+}
 
+Texture::~Texture()
+{
+	for (const auto& texture : m_Handles)
+	{
+		glMakeTextureHandleNonResidentARB(texture);
+	}
+	glDeleteTextures(max_textures, m_IDs.data());
+}
+
+uint64_t Texture::LoadTexture(const char* path)
+{
+	glBindTexture(GL_TEXTURE_2D, m_IDs[m_Count]);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	stbi_set_flip_vertically_on_load(1);
+	int width, height, channels;
+	unsigned char* buffer = stbi_load(path, &width, &height, &channels, 4);
 	if (buffer)
+	{
+		if (m_Count < max_textures)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			m_Handles[m_Count] = glGetTextureHandleARB(m_IDs[m_Count]);
+			glMakeTextureHandleResidentARB(m_Handles[m_Count]);
+			glBindTexture(GL_TEXTURE_2D, 0);
+			uint64_t handle = m_Handles[m_Count];
+			m_Count++;
+			stbi_image_free(buffer);
+			return handle;
+		}
+		LOG_WARN("Texture slots are occupied!");
 		stbi_image_free(buffer);
-}
-
-Texture2D::~Texture2D()
-{
-	glDeleteTextures(1, &m_ID);
-}
-
-void Texture2D::Bind(uint32_t slot)
-{
-	glActiveTexture(GL_TEXTURE0 + slot);
-	glBindTexture(GL_TEXTURE_2D, m_ID);
-}
-
-void Texture2D::Unbind()
-{
-	glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	LOG_ERROR("Could not load texture!");
+	return 0;
 }

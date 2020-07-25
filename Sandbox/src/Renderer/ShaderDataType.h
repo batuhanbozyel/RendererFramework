@@ -3,7 +3,7 @@
 
 enum class ShaderDataType
 {
-	Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool,
+	Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, UInt, UInt2, UInt3, UInt4, Bool,
 };
 
 static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
@@ -20,6 +20,10 @@ static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
 		case ShaderDataType::Int2:     return GL_INT;
 		case ShaderDataType::Int3:     return GL_INT;
 		case ShaderDataType::Int4:     return GL_INT;
+		case ShaderDataType::UInt:     return GL_UNSIGNED_INT;
+		case ShaderDataType::UInt2:    return GL_UNSIGNED_INT;
+		case ShaderDataType::UInt3:    return GL_UNSIGNED_INT;
+		case ShaderDataType::UInt4:    return GL_UNSIGNED_INT;
 		case ShaderDataType::Bool:     return GL_BOOL;
 	}
 
@@ -41,6 +45,10 @@ static uint32_t ShaderDataTypeSize(ShaderDataType type)
 		case ShaderDataType::Int2:     return 4 * 2;
 		case ShaderDataType::Int3:     return 4 * 3;
 		case ShaderDataType::Int4:     return 4 * 4;
+		case ShaderDataType::UInt:     return 4;
+		case ShaderDataType::UInt2:    return 4 * 2;
+		case ShaderDataType::UInt3:    return 4 * 3;
+		case ShaderDataType::UInt4:    return 4 * 4;
 		case ShaderDataType::Bool:     return 1;
 	}
 

@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "Camera.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
 // Orthographic Camera
 
 OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top)

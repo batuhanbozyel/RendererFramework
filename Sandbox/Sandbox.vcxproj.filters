@@ -105,16 +105,13 @@
     <ClInclude Include="src\Renderer\ShaderDataType.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Texture.h">
-      <Filter>src\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\Renderer\VertexArray.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Utility\Camera.h">
       <Filter>src\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utility\Mesh.h">
+    <ClInclude Include="src\Utility\SceneObject3D.h">
       <Filter>src\Utility</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h">
@@ -1353,6 +1350,7 @@
     <ClInclude Include="vendor\stb\stb_image.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -1388,16 +1386,13 @@
     <ClCompile Include="src\Renderer\Shader.cpp">
       <Filter>src\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Texture.cpp">
-      <Filter>src\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\Renderer\VertexArray.cpp">
       <Filter>src\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Utility\Camera.cpp">
       <Filter>src\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utility\Mesh.cpp">
+    <ClCompile Include="src\Utility\SceneObject3D.cpp">
       <Filter>src\Utility</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp">
@@ -1412,5 +1407,9 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer\Texture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\BindlessTexture.glsl" />
   </ItemGroup>
 </Project>

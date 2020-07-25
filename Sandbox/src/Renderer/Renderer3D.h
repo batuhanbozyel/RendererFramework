@@ -5,21 +5,27 @@ class Renderer3D : public Renderer
 {
 public:
 	Renderer3D();
-	~Renderer3D();
+	~Renderer3D() = default;
 
-	static void Draw(const PerspectiveCamera& camera);
-
-	// Triangle Mesh submits
-	virtual void Submit(const std::string& name, const std::initializer_list<std::array<Vertex, 3>>& datas) override;
-	virtual void Submit(const std::string& name, const std::array<Vertex, 3>& data) override;
-
-	// Quad Mesh submits
-	virtual void Submit(const std::string& name, const std::initializer_list<std::array<Vertex, 4>>& datas) override;
-	virtual void Submit(const std::string& name, const std::array<Vertex, 4>& data) override;
 private:
-	using ObjectMapValue = std::pair<std::shared_ptr<VertexBuffer>, uint32_t>;
-	static std::unordered_map<std::string, ObjectMapValue> s_TriangleMap;
-	static std::unordered_map<std::string, ObjectMapValue> s_QuadMap;
+	virtual void PushObject(const std::shared_ptr<SceneObject3D>& object) override;
 
-	static std::vector<std::shared_ptr<Mesh>> s_Meshes;
+	virtual uint64_t AddTexture(const char* path) override;
+	virtual uint64_t GetDefaultTexture() override;
+
+	virtual void Transform(const std::shared_ptr<SceneObject3D>& object, const glm::mat4& transform) override;
+
+	virtual inline const Meshes& GetMeshes() const override { return m_Meshes; }
+	std::vector<uint32_t> CalculateIndices();
+private:
+	Meshes m_Meshes;
+
+	// Cache for transforming or removing objects faster
+	struct ObjectMapValue
+	{
+		std::shared_ptr<SceneObject3D> Object;
+		std::shared_ptr<VertexBuffer> VertexBufferPtr;
+		uint32_t Offset;
+	};
+	std::unordered_map<std::shared_ptr<SceneObject3D>, ObjectMapValue> m_ObjectCache;
 };

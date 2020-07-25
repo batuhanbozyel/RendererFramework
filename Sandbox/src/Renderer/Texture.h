@@ -3,20 +3,14 @@
 class Texture
 {
 public:
-	virtual ~Texture() = default;
-	
-	virtual void Bind(uint32_t slot) = 0;
-	virtual void Unbind() = 0;
-};
+	Texture();
+	~Texture();
 
-class Texture2D : public Texture
-{
-public:
-	Texture2D(const char* filePath);
-	~Texture2D();
-
-	virtual void Bind(uint32_t slot) override;
-	virtual void Unbind() override;
+	uint64_t DefaultTexture() const { return m_Handles[0]; }
+	uint64_t LoadTexture(const char* path);
 private:
-	uint32_t m_ID;
+	std::vector<uint32_t> m_IDs;
+	std::vector<uint64_t> m_Handles;
+
+	int m_Count = 0;
 };
