@@ -125,7 +125,7 @@ public:
 	void Bind() const;
 	void Unbind() const;
 
-	void SetData(const float* indices, uint32_t offset, uint32_t size);
+	void SetData(const uint32_t* indices, uint32_t offset, uint32_t count);
 	inline uint32_t GetCount() const { return m_Count; }
 private:
 	uint32_t m_RendererID;

@@ -30,12 +30,23 @@ void Renderer::Draw(const PerspectiveCamera& camera)
 {
 	const Meshes& mesh = s_Renderer->GetMeshes();
 	mesh.Bind();
-	for (const auto& VBO : mesh.VAO->GetVertexBuffers())
+
+	const auto& vertexBuffers = mesh.VAO->GetVertexBuffers();
+	const auto& indexBuffers = mesh.VAO->GetIndexBuffers();
+	for (int i = 0; i < vertexBuffers.size(); i++)
 	{
-		VBO->Bind();
+		vertexBuffers[i]->Bind();
+		indexBuffers[i]->Bind();
 		mesh.Program->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-		glDrawElements(GL_TRIANGLES, mesh.VAO->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, mesh.IndexBufferPtr->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
+
+// 	for (const auto& VBO : mesh.VAO->GetVertexBuffers())
+// 	{
+// 		VBO->Bind();
+// 		mesh.Program->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+// 		glDrawElements(GL_TRIANGLES, mesh.IndexBufferPtr->GetCount(), GL_UNSIGNED_INT, nullptr);
+// 	}
 }
 
 void Renderer::Push(const std::shared_ptr<SceneObject3D>& object)

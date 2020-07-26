@@ -71,8 +71,8 @@ void IndexBuffer::Unbind() const
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void IndexBuffer::SetData(const float* indices, uint32_t offset, uint32_t size)
+void IndexBuffer::SetData(const uint32_t* indices, uint32_t offset, uint32_t count)
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, indices);
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, sizeof(uint32_t) * count, indices);
 }

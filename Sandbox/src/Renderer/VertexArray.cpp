@@ -22,7 +22,7 @@ void VertexArray::Unbind() const
 	glBindVertexArray(0);
 }
 
-void VertexArray::AddVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
+void VertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
 {
 	LOG_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer is empty!");
 
@@ -53,10 +53,10 @@ void VertexArray::AddVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 	m_VertexBuffers.push_back(vertexBuffer);
 }
 
-void VertexArray::SetIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer)
+void VertexArray::AddIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
 {
 	glBindVertexArray(m_RendererID);
 	indexBuffer->Bind();
 
-	m_IndexBuffer = indexBuffer;
+	m_IndexBuffers.push_back(indexBuffer);
 }

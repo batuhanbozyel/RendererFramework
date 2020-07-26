@@ -18,7 +18,11 @@ struct Meshes
 
 	// To decide pushing objects into which VertexBuffer
 	std::shared_ptr<VertexBuffer> VertexBufferPtr;
-	uint32_t Offset = 0;
+	std::shared_ptr<IndexBuffer> IndexBufferPtr;
+	uint32_t VertexOffset = 0;
+	uint32_t IndexOffset = 0;
+
+	uint32_t offset = 0;
 };
 
 enum class RendererMode

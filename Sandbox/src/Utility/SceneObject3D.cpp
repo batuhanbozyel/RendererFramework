@@ -3,12 +3,16 @@
 
 #include "Renderer/Renderer.h"
 
+// Cuboid Object Implementations
+
 Cuboid::Cuboid(glm::vec3 length, const glm::vec4& color, uint64_t handle)
 {
 	if (handle == 0)
 		handle = Renderer::DefaultTexture();
+
 	m_Data.resize(24);
 	length = length / 2.0f;
+
 	// Front
 	m_Data[0] =  { glm::vec3(-length.x, -length.y,  length.z), color, glm::vec2(0.0f, 0.0f), handle };
 	m_Data[1] =  { glm::vec3( length.x, -length.y,  length.z), color, glm::vec2(1.0f, 0.0f), handle };
@@ -49,3 +53,99 @@ void Cuboid::Transform(const glm::mat4& transform)
 	}
 }
 
+const std::vector<uint32_t> Cuboid::CalculateIndices(uint32_t& offset)
+{
+	std::vector<uint32_t> indices(36);
+	for (uint32_t i = 0; i < 36; i += 6)
+	{
+		indices[i + 0] = offset + 0;
+		indices[i + 1] = offset + 1;
+		indices[i + 2] = offset + 2;
+		indices[i + 3] = offset + 2;
+		indices[i + 4] = offset + 3;
+		indices[i + 5] = offset + 0;
+
+		offset += 4;
+	}
+	return indices;
+}
+
+// Sphere Object Implementations
+
+Sphere::Sphere(float radius, const glm::vec4& color, uint32_t sectorCount, uint32_t stackCount, uint64_t handle)
+	: m_SectorCount(sectorCount), m_StackCount(stackCount)
+{
+	radius = radius / 2.0f;
+	float x, y, z, xy;                              // vertex position
+	float s, t;                                     // vertex texCoord
+
+	float sectorStep = 2 * glm::pi<float>() / sectorCount;
+	float stackStep = glm::pi<float>() / stackCount;
+	float sectorAngle, stackAngle;
+
+	for (uint32_t i = 0; i <= stackCount; i++)
+	{
+		stackAngle = i * stackStep - glm::pi<float>() / 2;        // starting from pi/2 to -pi/2
+		xy = radius * glm::cos(stackAngle);
+		z = radius * glm::sin(stackAngle);
+
+		for (uint32_t j = 0; j <= sectorCount; j++)
+		{
+			sectorAngle = j * sectorStep;
+
+			x = xy * glm::cos(sectorAngle);
+			y = xy * glm::sin(sectorAngle);
+			glm::vec3 pos(x, y, z);
+
+			s = (float)j / sectorCount;
+			t = (float)i / stackCount;
+			glm::vec2 texCoord(s, t);
+
+			m_Data.push_back(Vertex(pos, color, texCoord, handle));
+		}
+	}
+}
+
+void Sphere::Transform(const glm::mat4& transform)
+{
+	for (auto& vertex : m_Data)
+	{
+		vertex.Position = transform * vertex.Position;
+	}
+}
+
+const std::vector<uint32_t> Sphere::CalculateIndices(uint32_t& offset)
+{
+	std::vector<uint32_t> indices;
+	int k1, k2;
+	for (uint32_t i = 0; i < m_StackCount; ++i)
+	{
+		k1 = i * (m_SectorCount + 1);     // beginning of current stack
+		k2 = k1 + m_SectorCount + 1;      // beginning of next stack
+
+		for (uint32_t j = 0; j < m_SectorCount; ++j, ++k1, ++k2)
+		{
+			// 2 triangles per sector excluding first and last stacks
+			// k1 => k2 => k1+1
+			if (i != 0)
+			{
+				indices.push_back(k1);
+				indices.push_back(k2);
+				indices.push_back(k1 + 1);
+				offset += 2;
+			}
+
+			// k1+1 => k2 => k2+1
+			if (i != (m_StackCount - 1))
+			{
+				indices.push_back(k1 + 1);
+				indices.push_back(k2);
+				indices.push_back(k2 + 1);
+				offset += 2;
+			}
+			
+		}
+	}
+	m_IndexCount = (uint32_t)indices.size();
+	return indices;
+}

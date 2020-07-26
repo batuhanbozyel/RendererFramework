@@ -21,13 +21,14 @@ Renderer3D::Renderer3D()
 	});
 	m_Meshes.VertexBufferPtr = vertexBuffer;
 	m_Meshes.VAO->AddVertexBuffer(vertexBuffer);
-	m_Meshes.Offset = 0;
+	m_Meshes.VertexOffset = 0;
 
 	// Create IndexBuffer
 	std::shared_ptr<IndexBuffer> indexBuffer;
-	std::vector<uint32_t> indices = CalculateIndices();
-	indexBuffer.reset(new IndexBuffer(&indices[0], MaxQuads * 6));
-	m_Meshes.VAO->SetIndexBuffer(indexBuffer);
+	indexBuffer.reset(new IndexBuffer(MaxQuads * 6));
+	m_Meshes.IndexBufferPtr = indexBuffer;
+	m_Meshes.VAO->AddIndexBuffer(indexBuffer);
+	m_Meshes.IndexOffset = 0;
 
 	// Create Shader
 	m_Meshes.Program.reset(new Shader("assets/shaders/BindlessTexture.glsl"));
@@ -38,7 +39,7 @@ void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)
 	if (m_ObjectCache.find(object) == m_ObjectCache.end())
 	{
 		// Create new VertexBuffer
-		if (m_Meshes.Offset >= MaxQuads * 4 * sizeof(Vertex))
+		if (m_Meshes.VertexOffset >= MaxQuads * 4 * sizeof(Vertex))
 		{
 			std::shared_ptr<VertexBuffer> vertexBuffer;
 			vertexBuffer.reset(new VertexBuffer(MaxQuads * 4 * sizeof(Vertex)));
@@ -50,19 +51,33 @@ void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)
 			});
 			m_Meshes.VertexBufferPtr = vertexBuffer;
 			m_Meshes.VAO->AddVertexBuffer(vertexBuffer);
-			m_Meshes.Offset = 0;
+			m_Meshes.VertexOffset = 0;
+
+			std::shared_ptr<IndexBuffer> indexBuffer;
+			indexBuffer.reset(new IndexBuffer(MaxQuads * 6));
+			m_Meshes.IndexBufferPtr = indexBuffer;
+			m_Meshes.VAO->AddIndexBuffer(indexBuffer);
+			m_Meshes.IndexOffset = 0;
 		}
 
 		// Insert object into cache
 		ObjectMapValue mapObject;
 		mapObject.Object = object;
+
 		mapObject.VertexBufferPtr = m_Meshes.VertexBufferPtr;
-		mapObject.Offset = m_Meshes.Offset;
+		mapObject.VertexOffset = m_Meshes.VertexOffset;
+
+		mapObject.IndexBufferPtr = m_Meshes.IndexBufferPtr;
+		mapObject.IndexOffset = m_Meshes.IndexOffset;
 		m_ObjectCache.insert(std::make_pair(object, mapObject));
 
 		// Push object into VertexArray
-		m_Meshes.VertexBufferPtr->SetData(&(object->GetData()[0].Position[0]), m_Meshes.Offset, object->GetSize());
-		m_Meshes.Offset += object->GetSize();
+		m_Meshes.VertexBufferPtr->SetData(&(object->GetData()[0].Position[0]), m_Meshes.VertexOffset, object->GetVertexSize());
+		m_Meshes.VertexOffset += object->GetVertexSize();
+
+		const auto& indices = object->CalculateIndices(m_Meshes.offset);
+		m_Meshes.IndexBufferPtr->SetData(indices.data(), m_Meshes.IndexOffset, object->GetIndexCount());
+		m_Meshes.IndexOffset += object->GetIndexCount() * sizeof(uint32_t);
 	}
 }
 
@@ -86,27 +101,6 @@ void Renderer3D::Transform(const std::shared_ptr<SceneObject3D>& object, const g
 	}
 	auto& transedObject = object_it->second.Object;
 	transedObject->Transform(transform);
-	object_it->second.VertexBufferPtr->SetData(&transedObject->GetData()[0].Position[0], object_it->second.Offset, transedObject->GetSize());
+	object_it->second.VertexBufferPtr->SetData(&transedObject->GetData()[0].Position[0], object_it->second.VertexOffset, transedObject->GetVertexSize());
 }
-
-std::vector<uint32_t> Renderer3D::CalculateIndices()
-{
-	std::vector<uint32_t> indices(MaxQuads * 6);
-
-	uint32_t offset = 0;
-	for (uint32_t i = 0; i < MaxQuads; i += 6)
-	{
-		indices[i + 0] = offset + 0;
-		indices[i + 1] = offset + 1;
-		indices[i + 2] = offset + 2;
-		indices[i + 3] = offset + 2;
-		indices[i + 4] = offset + 3;
-		indices[i + 5] = offset + 0;
-
-		offset += 4;
-	}
-
-	return indices;
-}
-
 
