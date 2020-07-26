@@ -35,7 +35,7 @@ private:
 class Sphere : public SceneObject3D
 {
 public:
-	explicit Sphere(float radius, const glm::vec4& color = glm::vec4(1.0f), uint32_t sectorCount = 18, uint32_t stackCount = 18, uint64_t handle = 0);
+	explicit Sphere(float radius, uint32_t sectorCount = 18, uint32_t stackCount = 18, const glm::vec4& color = glm::vec4(1.0f), uint64_t handle = 0);
 	~Sphere() = default;
 
 	virtual void Transform(const glm::mat4& transform) override;

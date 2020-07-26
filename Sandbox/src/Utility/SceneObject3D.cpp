@@ -72,9 +72,12 @@ const std::vector<uint32_t> Cuboid::CalculateIndices(uint32_t& offset)
 
 // Sphere Object Implementations
 
-Sphere::Sphere(float radius, const glm::vec4& color, uint32_t sectorCount, uint32_t stackCount, uint64_t handle)
+Sphere::Sphere(float radius, uint32_t sectorCount, uint32_t stackCount, const glm::vec4& color, uint64_t handle)
 	: m_SectorCount(sectorCount), m_StackCount(stackCount)
 {
+	if (handle == 0)
+		handle = Renderer::DefaultTexture();
+
 	radius = radius / 2.0f;
 	float x, y, z, xy;                              // vertex position
 	float s, t;                                     // vertex texCoord
@@ -129,23 +132,21 @@ const std::vector<uint32_t> Sphere::CalculateIndices(uint32_t& offset)
 			// k1 => k2 => k1+1
 			if (i != 0)
 			{
-				indices.push_back(k1);
-				indices.push_back(k2);
-				indices.push_back(k1 + 1);
-				offset += 2;
+				indices.push_back(offset + k1);
+				indices.push_back(offset + k2);
+				indices.push_back(offset + k1 + 1);
 			}
 
 			// k1+1 => k2 => k2+1
 			if (i != (m_StackCount - 1))
 			{
-				indices.push_back(k1 + 1);
-				indices.push_back(k2);
-				indices.push_back(k2 + 1);
-				offset += 2;
-			}
-			
+				indices.push_back(offset + k1 + 1);
+				indices.push_back(offset + k2);
+				indices.push_back(offset + k2 + 1);
+			}		
 		}
 	}
+	offset += (uint32_t)m_Data.size();
 	m_IndexCount = (uint32_t)indices.size();
 	return indices;
 }
