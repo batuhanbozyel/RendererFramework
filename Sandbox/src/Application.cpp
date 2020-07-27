@@ -6,6 +6,11 @@
 #include "../tests/2DTest.h"
 #include "../tests/3DTest.h"
 
+extern "C"
+{
+	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+}
+
 static RendererMode s_Mode = RendererMode::_3D;
 
 Window* Application::s_ActiveWindow = nullptr;
@@ -21,9 +26,7 @@ int main(int argc, char** argv)
 	while (!glfwWindowShouldClose(Application::s_ActiveWindow->GetNativeWindow()))
 	{
 		Renderer::ClearColor();
-
 		float dt = Application::s_FrameTime.DeltaTime();
-		//Application::DisplayFrameTimeAndFPS();
 
 		if (Input::IsKeyPressed(KEY_A))	position.x -= 0.001f * dt;
 		if (Input::IsKeyPressed(KEY_D)) position.x += 0.001f * dt;
@@ -38,7 +41,7 @@ int main(int argc, char** argv)
 
 		Application::s_ActiveWindow->OnUpdate();
 	}
-
+	
 	Application::Shutdown();
 }
 

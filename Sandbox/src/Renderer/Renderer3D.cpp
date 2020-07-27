@@ -5,6 +5,7 @@ constexpr uint32_t MaxQuads = 10000;
 
 Renderer3D::Renderer3D()
 {
+	// Create Texture array with a default white texture
 	m_Meshes.Textures.reset(new Texture);
 
 	// Create VertexArray
@@ -15,6 +16,7 @@ Renderer3D::Renderer3D()
 	vertexBuffer.reset(new VertexBuffer(MaxQuads * 4 * sizeof(Vertex)));
 	vertexBuffer->SetLayout({
 		{ ShaderDataType::Float4, "a_Position" },
+		{ ShaderDataType::Float3, "a_Normal" },
 		{ ShaderDataType::Float4, "a_Color" },
 		{ ShaderDataType::Float2, "a_TexCoord" },
 		{ ShaderDataType::UInt2 , "a_TexHandle", true}
@@ -45,9 +47,10 @@ void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)
 			vertexBuffer.reset(new VertexBuffer(MaxQuads * 4 * sizeof(Vertex)));
 			vertexBuffer->SetLayout({
 				{ ShaderDataType::Float4, "a_Position" },
+				{ ShaderDataType::Float3, "a_Normal" },
 				{ ShaderDataType::Float4, "a_Color" },
 				{ ShaderDataType::Float2, "a_TexCoord" },
-				{ ShaderDataType::UInt2 , "a_TexHandle"}
+				{ ShaderDataType::UInt2 , "a_TexHandle", true}
 			});
 			m_Meshes.VertexBufferPtr = vertexBuffer;
 			m_Meshes.VAO->AddVertexBuffer(vertexBuffer);
@@ -99,8 +102,11 @@ void Renderer3D::Transform(const std::shared_ptr<SceneObject3D>& object, const g
 		LOG_ERROR("Object does not exist!");
 		return;
 	}
+	// Get object from the Cache and apply transform
 	auto& transedObject = object_it->second.Object;
 	transedObject->Transform(transform);
+
+	// Update object position with the new transform
 	object_it->second.VertexBufferPtr->SetData(&transedObject->GetData()[0].Position[0], object_it->second.VertexOffset, transedObject->GetVertexSize());
 }
 

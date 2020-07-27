@@ -14,6 +14,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 #ifdef _WIN32
 #include <Windows.h>

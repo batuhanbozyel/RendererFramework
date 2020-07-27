@@ -14,35 +14,35 @@ Cuboid::Cuboid(glm::vec3 length, const glm::vec4& color, uint64_t handle)
 	length = length / 2.0f;
 
 	// Front
-	m_Data[0] =  { glm::vec3(-length.x, -length.y,  length.z), color, glm::vec2(0.0f, 0.0f), handle };
-	m_Data[1] =  { glm::vec3( length.x, -length.y,  length.z), color, glm::vec2(1.0f, 0.0f), handle };
-	m_Data[2] =  { glm::vec3( length.x,  length.y,  length.z), color, glm::vec2(1.0f, 1.0f), handle };
-	m_Data[3] =  { glm::vec3(-length.x,  length.y,  length.z), color, glm::vec2(0.0f, 1.0f), handle };
+	m_Data[0] =  { glm::vec3(-length.x, -length.y,  length.z), glm::vec3(0.0f, 0.0f, 1.0f), color, glm::vec2(0.0f, 0.0f), handle };
+	m_Data[1] =  { glm::vec3( length.x, -length.y,  length.z), glm::vec3(0.0f, 0.0f, 1.0f), color, glm::vec2(1.0f, 0.0f), handle };
+	m_Data[2] =  { glm::vec3( length.x,  length.y,  length.z), glm::vec3(0.0f, 0.0f, 1.0f), color, glm::vec2(1.0f, 1.0f), handle };
+	m_Data[3] =  { glm::vec3(-length.x,  length.y,  length.z), glm::vec3(0.0f, 0.0f, 1.0f), color, glm::vec2(0.0f, 1.0f), handle };
 	// Back
-	m_Data[4] =  { glm::vec3(-length.x, -length.y, -length.z), color, glm::vec2(0.0f, 0.0f), handle };
-	m_Data[5] =  { glm::vec3( length.x, -length.y, -length.z), color, glm::vec2(1.0f, 0.0f), handle };
-	m_Data[6] =  { glm::vec3( length.x,  length.y, -length.z), color, glm::vec2(1.0f, 1.0f), handle };
-	m_Data[7] =  { glm::vec3(-length.x,  length.y, -length.z), color, glm::vec2(0.0f, 1.0f), handle };
+	m_Data[4] =  { glm::vec3(-length.x, -length.y, -length.z), glm::vec3(0.0f, 0.0f, -1.0f), color, glm::vec2(0.0f, 0.0f), handle };
+	m_Data[5] =  { glm::vec3( length.x, -length.y, -length.z), glm::vec3(0.0f, 0.0f, -1.0f), color, glm::vec2(1.0f, 0.0f), handle };
+	m_Data[6] =  { glm::vec3( length.x,  length.y, -length.z), glm::vec3(0.0f, 0.0f, -1.0f), color, glm::vec2(1.0f, 1.0f), handle };
+	m_Data[7] =  { glm::vec3(-length.x,  length.y, -length.z), glm::vec3(0.0f, 0.0f, -1.0f), color, glm::vec2(0.0f, 1.0f), handle };
 	// Left
-	m_Data[8] =  { glm::vec3(-length.x, -length.y, -length.z), color, glm::vec2(0.0f, 0.0f), handle };
-	m_Data[9] =  { glm::vec3(-length.x, -length.y,  length.z), color, glm::vec2(1.0f, 0.0f), handle };
-	m_Data[10] = { glm::vec3(-length.x,  length.y,  length.z), color, glm::vec2(1.0f, 1.0f), handle };
-	m_Data[11] = { glm::vec3(-length.x,  length.y, -length.z), color, glm::vec2(0.0f, 1.0f), handle };
+	m_Data[8] =  { glm::vec3(-length.x, -length.y, -length.z), glm::vec3(-1.0f, 0.0f, 0.0f), color, glm::vec2(0.0f, 0.0f), handle };
+	m_Data[9] =  { glm::vec3(-length.x, -length.y,  length.z), glm::vec3(-1.0f, 0.0f, 0.0f), color, glm::vec2(1.0f, 0.0f), handle };
+	m_Data[10] = { glm::vec3(-length.x,  length.y,  length.z), glm::vec3(-1.0f, 0.0f, 0.0f), color, glm::vec2(1.0f, 1.0f), handle };
+	m_Data[11] = { glm::vec3(-length.x,  length.y, -length.z), glm::vec3(-1.0f, 0.0f, 0.0f), color, glm::vec2(0.0f, 1.0f), handle };
 	// Right	
-	m_Data[12] = { glm::vec3( length.x, -length.y, -length.z), color, glm::vec2(0.0f, 0.0f), handle };
-	m_Data[13] = { glm::vec3( length.x, -length.y,  length.z), color, glm::vec2(1.0f, 0.0f), handle };
-	m_Data[14] = { glm::vec3( length.x,  length.y,  length.z), color, glm::vec2(1.0f, 1.0f), handle };
-	m_Data[15] = { glm::vec3( length.x,  length.y, -length.z), color, glm::vec2(0.0f, 1.0f), handle };
+	m_Data[12] = { glm::vec3( length.x, -length.y, -length.z), glm::vec3(1.0f, 0.0f, 0.0f), color, glm::vec2(0.0f, 0.0f), handle };
+	m_Data[13] = { glm::vec3( length.x, -length.y,  length.z), glm::vec3(1.0f, 0.0f, 0.0f), color, glm::vec2(1.0f, 0.0f), handle };
+	m_Data[14] = { glm::vec3( length.x,  length.y,  length.z), glm::vec3(1.0f, 0.0f, 0.0f), color, glm::vec2(1.0f, 1.0f), handle };
+	m_Data[15] = { glm::vec3( length.x,  length.y, -length.z), glm::vec3(1.0f, 0.0f, 0.0f), color, glm::vec2(0.0f, 1.0f), handle };
 	// Top
-	m_Data[16] = { glm::vec3(-length.x,  length.y, -length.z), color, glm::vec2(0.0f, 0.0f), handle };
-	m_Data[17] = { glm::vec3( length.x,  length.y, -length.z), color, glm::vec2(1.0f, 0.0f), handle };
-	m_Data[18] = { glm::vec3( length.x,  length.y,  length.z), color, glm::vec2(1.0f, 1.0f), handle };
-	m_Data[19] = { glm::vec3(-length.x,  length.y,  length.z), color, glm::vec2(0.0f, 1.0f), handle };
+	m_Data[16] = { glm::vec3(-length.x,  length.y, -length.z), glm::vec3(0.0f, 1.0f, 0.0f), color, glm::vec2(0.0f, 0.0f), handle };
+	m_Data[17] = { glm::vec3( length.x,  length.y, -length.z), glm::vec3(0.0f, 1.0f, 0.0f), color, glm::vec2(1.0f, 0.0f), handle };
+	m_Data[18] = { glm::vec3( length.x,  length.y,  length.z), glm::vec3(0.0f, 1.0f, 0.0f), color, glm::vec2(1.0f, 1.0f), handle };
+	m_Data[19] = { glm::vec3(-length.x,  length.y,  length.z), glm::vec3(0.0f, 1.0f, 0.0f), color, glm::vec2(0.0f, 1.0f), handle };
 	// Bottom
-	m_Data[20] = { glm::vec3(-length.x, -length.y, -length.z), color, glm::vec2(0.0f, 0.0f), handle };
-	m_Data[21] = { glm::vec3( length.x, -length.y, -length.z), color, glm::vec2(1.0f, 0.0f), handle };
-	m_Data[22] = { glm::vec3( length.x, -length.y,  length.z), color, glm::vec2(1.0f, 1.0f), handle };
-	m_Data[23] = { glm::vec3(-length.x, -length.y,  length.z), color, glm::vec2(0.0f, 1.0f), handle };
+	m_Data[20] = { glm::vec3(-length.x, -length.y, -length.z), glm::vec3(0.0f, -1.0f, 0.0f), color, glm::vec2(0.0f, 0.0f), handle };
+	m_Data[21] = { glm::vec3( length.x, -length.y, -length.z), glm::vec3(0.0f, -1.0f, 0.0f), color, glm::vec2(1.0f, 0.0f), handle };
+	m_Data[22] = { glm::vec3( length.x, -length.y,  length.z), glm::vec3(0.0f, -1.0f, 0.0f), color, glm::vec2(1.0f, 1.0f), handle };
+	m_Data[23] = { glm::vec3(-length.x, -length.y,  length.z), glm::vec3(0.0f, -1.0f, 0.0f), color, glm::vec2(0.0f, 1.0f), handle };
 }
 
 void Cuboid::Transform(const glm::mat4& transform)
@@ -80,33 +80,40 @@ Sphere::Sphere(float radius, uint32_t sectorCount, uint32_t stackCount, const gl
 
 	radius = radius / 2.0f;
 	float x, y, z, xy;                              // vertex position
+	float nx, ny, nz, lengthInv = 1.0f / radius;		// vertex normal
 	float s, t;                                     // vertex texCoord
 
-	float sectorStep = 2 * glm::pi<float>() / sectorCount;
+	float sectorCounttep = 2 * glm::pi<float>() / sectorCount;
 	float stackStep = glm::pi<float>() / stackCount;
 	float sectorAngle, stackAngle;
 
 	for (uint32_t i = 0; i <= stackCount; i++)
 	{
-		stackAngle = i * stackStep - glm::pi<float>() / 2;        // starting from pi/2 to -pi/2
+		stackAngle = i * stackStep - glm::pi<float>() / 2;		// starting from -pi/2 to pi/2
 		xy = radius * glm::cos(stackAngle);
 		z = radius * glm::sin(stackAngle);
 
 		for (uint32_t j = 0; j <= sectorCount; j++)
 		{
-			sectorAngle = j * sectorStep;
+			sectorAngle = j * sectorCounttep;		// starting from 0 to 2pi
 
 			x = xy * glm::cos(sectorAngle);
 			y = xy * glm::sin(sectorAngle);
 			glm::vec3 pos(x, y, z);
 
+			nx = x * lengthInv;
+			ny = y * lengthInv;
+			nz = z * lengthInv;
+			glm::vec3 normal(nx, ny, nz);
+
 			s = (float)j / sectorCount;
 			t = (float)i / stackCount;
 			glm::vec2 texCoord(s, t);
 
-			m_Data.push_back(Vertex(pos, color, texCoord, handle));
+			m_Data.push_back(Vertex(pos, normal, color, texCoord, handle));
 		}
 	}
+	Transform(glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(-1.0f, 0.0f, 0.0f)));
 }
 
 void Sphere::Transform(const glm::mat4& transform)

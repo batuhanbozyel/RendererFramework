@@ -1,24 +1,27 @@
 #pragma once
 #include "ShaderDataType.h"
 
+#pragma pack(push, 1)
 struct Vertex
 {
 	Vertex() {}
 
-	Vertex(const glm::vec3& pos, const glm::vec4& color, const glm::vec2& tex, uint64_t handle = 0.0f)
-		: Position(pos, 1.0f), Color(color), TexCoord(tex), TexHandle(handle) 
+	Vertex(const glm::vec3& pos, const glm::vec3& normal, const glm::vec4& color, const glm::vec2& tex, uint64_t handle = 0.0f)
+		: Position(pos, 1.0f), Normal(normal), Color(color), TexCoord(tex), TexHandle(handle) 
 	{
 
 	}
 
-	Vertex(const glm::vec4& pos, const glm::vec4& color, const glm::vec2& tex, uint64_t handle = 0.0f)
-		: Position(pos), Color(1.0f), TexCoord(tex), TexHandle(handle) {}
+	Vertex(const glm::vec4& pos, const glm::vec3& normal, const glm::vec4& color, const glm::vec2& tex, uint64_t handle = 0.0f)
+		: Position(pos), Normal(normal), Color(1.0f), TexCoord(tex), TexHandle(handle) {}
 
 	glm::vec4 Position;
+	glm::vec3 Normal;
 	glm::vec4 Color;
 	glm::vec2 TexCoord;
 	uint64_t TexHandle;
 };
+#pragma pack(pop)
 
 enum class BufferUsage
 {
@@ -37,7 +40,7 @@ struct BufferElement
 	bool AttribIPointer;
 
 	BufferElement(ShaderDataType type, const std::string& name, bool attribI = false, bool normalized = false)
-		: Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), AttribIPointer(attribI) ,Normalized(normalized)
+		: Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), AttribIPointer(attribI), Normalized(normalized)
 	{
 	}
 
