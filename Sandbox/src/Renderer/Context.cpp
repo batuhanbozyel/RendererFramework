@@ -13,7 +13,8 @@ void Context::GLFWInit()
 {
 	if (!s_Initialized)
 	{
-		LOG_ASSERT(glfwInit(), "GLFW initialization failed!");
+		int glfw = glfwInit();
+		LOG_ASSERT(glfw, "GLFW initialization failed!");
 		s_Initialized = true;
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);

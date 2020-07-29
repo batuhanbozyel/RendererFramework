@@ -27,6 +27,8 @@
 // Please use C89 style variable declarations in this file because VS 2010
 //========================================================================
 
+#pragma warning (disable : 6011)
+
 #include "internal.h"
 
 #include <assert.h>
