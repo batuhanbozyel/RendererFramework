@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 	Application::Init();
 
 	Test3D();
-	glm::vec3 position(0.0f, 0.0f, 2.0f);
+	glm::vec3 position(0.0f, 0.0f, 4.0f);
 	PerspectiveCamera camera(45.0f, 1.6f / 0.9f, position);
 	while (!glfwWindowShouldClose(Application::s_ActiveWindow->GetNativeWindow()))
 	{

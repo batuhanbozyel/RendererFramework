@@ -34,6 +34,8 @@ Renderer3D::Renderer3D()
 
 	// Create Shader
 	m_Meshes.Program.reset(new Shader("assets/shaders/BindlessTexture.glsl"));
+	m_Meshes.Program->Bind();
+	m_Meshes.Program->SetUniformFloat3("u_LightColor", glm::vec3(1.0f));
 }
 
 void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)

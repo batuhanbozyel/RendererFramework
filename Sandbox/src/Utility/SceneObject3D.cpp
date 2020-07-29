@@ -113,7 +113,12 @@ Sphere::Sphere(float radius, uint32_t sectorCount, uint32_t stackCount, const gl
 			m_Data.push_back(Vertex(pos, normal, color, texCoord, handle));
 		}
 	}
-	Transform(glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(-1.0f, 0.0f, 0.0f)));
+	glm::mat4 transform(glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(-1.0f, 0.0f, 0.0f)));
+	for (auto& vertex : m_Data)
+	{
+		vertex.Position = transform * vertex.Position;
+		vertex.Normal = transform * glm::vec4(vertex.Normal, 0.0f);
+	}
 }
 
 void Sphere::Transform(const glm::mat4& transform)

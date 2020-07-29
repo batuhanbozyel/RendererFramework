@@ -41,6 +41,8 @@ void Renderer::Draw(const PerspectiveCamera& camera)
 		vertexBuffers[i]->Bind();
 		indexBuffers[i]->Bind();
 		mesh.Program->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		mesh.Program->SetUniformFloat3("u_CameraPos", camera.GetPosition());
+		mesh.Program->SetUniformFloat3("u_LightPos", camera.GetPosition());
 		glDrawElements(GL_TRIANGLES, mesh.IndexBufferPtr->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 }
