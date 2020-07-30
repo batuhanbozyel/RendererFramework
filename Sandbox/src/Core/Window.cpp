@@ -98,6 +98,22 @@ Window::Window(const WindowProps& props)
 
 		props.EventCallback(WindowResizeEvent((uint32_t)width, (uint32_t)height));
 	});
+
+	// WindowFocus and WindowLostFocus Events
+	glfwSetWindowFocusCallback(windowContext, [](GLFWwindow* window, int focused)
+	{
+		WindowProps& props = *(WindowProps*)glfwGetWindowUserPointer(window);
+
+		focused == true ? props.EventCallback(WindowFocusEvent()) : props.EventCallback(WindowLostFocusEvent());
+	});
+
+	// WindowMoved Event
+	glfwSetWindowPosCallback(windowContext, [](GLFWwindow* window, int xPos, int yPos)
+	{
+		WindowProps& props = *(WindowProps*)glfwGetWindowUserPointer(window);
+
+		props.EventCallback(WindowMovedEvent(xPos, yPos));
+	});
 }
 
 Window::~Window()

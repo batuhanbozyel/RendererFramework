@@ -32,8 +32,6 @@ private:
 	uint32_t m_Width, m_Height;
 };
 
-// To be implemented later
-
 class WindowFocusEvent : public Event
 {
 public:
@@ -43,7 +41,6 @@ public:
 	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
 };
 
-// To be implemented later
 class WindowLostFocusEvent : public Event
 {
 public:
@@ -53,12 +50,14 @@ public:
 	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
 };
 
-// To be implemented later
 class WindowMovedEvent : public Event
 {
 public:
-	WindowMovedEvent() = default;
+	WindowMovedEvent(int xPos, int yPos)
+		: m_xPos(xPos), m_yPos(yPos) {}
 
 	EVENT_CLASS_TYPE(WindowMoved)
 	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
+private:
+	int m_xPos, m_yPos;
 };

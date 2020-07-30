@@ -11,7 +11,7 @@ extern "C"
 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
 }
 
-static RendererMode s_Mode = RendererMode::_3D;
+constexpr RendererMode s_Mode = RendererMode::_3D;
 
 Window* Application::s_ActiveWindow = nullptr;
 Timestep Application::s_FrameTime = 0.0f;
@@ -84,8 +84,10 @@ bool Application::OnWindowResize(WindowResizeEvent& e)
 {
 	glfwSetWindowSize(s_ActiveWindow->GetNativeWindow(), e.GetWidth(), e.GetHeight());
 	s_ActiveWindow->OnWindowResize(e);
+
 	Renderer::GetCamera()->SetProjection(e.GetWidth(), e.GetHeight());
 	Renderer::SetViewport(0, 0, e.GetWidth(), e.GetHeight());
+
 	LOG_TRACE(e.ToString());
 	return true;
 }
