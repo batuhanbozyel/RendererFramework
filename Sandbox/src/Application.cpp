@@ -22,7 +22,6 @@ int main(int argc, char** argv)
 
 	Test3D();
 	glm::vec3 position(0.0f, 0.0f, 4.0f);
-	PerspectiveCamera camera(45.0f, 1.6f / 0.9f, position);
 	while (!glfwWindowShouldClose(Application::s_ActiveWindow->GetNativeWindow()))
 	{
 		Renderer::ClearColor();
@@ -35,9 +34,9 @@ int main(int argc, char** argv)
 		if (Input::IsKeyPressed(KEY_Q)) position.z += 0.001f * dt;
 		if (Input::IsKeyPressed(KEY_E)) position.z -= 0.001f * dt;
 
-		camera.SetPosition(position);
+		Renderer::GetCamera()->SetPosition(position);
 
-		Renderer::Draw(camera);
+		Renderer::Draw();
 
 		Application::s_ActiveWindow->OnUpdate();
 	}
@@ -51,10 +50,11 @@ void Application::Init()
 	Context::GLFWInit();
 
 	Window* window = new Window;
+	window->SetEventCallbackFn(OnEvent);
 	s_ActiveWindow = window;
 	Context::MakeCurrent(s_ActiveWindow->GetNativeWindow());
 
-	Renderer::Init(s_Mode);
+	Renderer::Init(s_Mode, s_ActiveWindow->GetWindowProps());
 
 	LOG_WARN("Application started running!");
 }
@@ -64,6 +64,29 @@ void Application::Shutdown()
 	LOG_WARN("Application terminating!");
 	delete s_ActiveWindow;
 	Context::GLFWTerminate();
+}
+
+void Application::OnEvent(Event& e)
+{
+	EventDispatcher dispatcher(e);
+	dispatcher.Dispatch<WindowCloseEvent>(OnWindowClose);
+	dispatcher.Dispatch<WindowResizeEvent>(OnWindowResize);
+}
+
+bool Application::OnWindowClose(WindowCloseEvent& e)
+{
+	glfwSetWindowShouldClose(s_ActiveWindow->GetNativeWindow(), GLFW_TRUE);
+	LOG_TRACE(e.ToString());
+	return true;
+}
+
+bool Application::OnWindowResize(WindowResizeEvent& e)
+{
+	glfwSetWindowSize(s_ActiveWindow->GetNativeWindow(), e.GetWidth(), e.GetHeight());
+	s_ActiveWindow->OnWindowResize(e);
+	Renderer::GetCamera();
+	LOG_TRACE(e.ToString());
+	return true;
 }
 
 void Application::DisplayFrameTimeAndFPS()

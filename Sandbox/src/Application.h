@@ -13,6 +13,11 @@ public:
 	static void Init();
 	static void Shutdown();
 
+	static void OnEvent(Event& e);
+
+	static bool OnWindowClose(WindowCloseEvent& e);
+	static bool OnWindowResize(WindowResizeEvent& e);
+
 	static void DisplayFrameTimeAndFPS();
 	static void DisplayFrameTime();
 	static void DisplayFPS();

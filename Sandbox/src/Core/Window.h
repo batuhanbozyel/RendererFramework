@@ -3,12 +3,6 @@
 
 struct WindowProps
 {
-	std::string Title;
-	uint32_t Width, Height;
-	GLFWmonitor* Monitor;
-	GLFWwindow* Share;
-	bool VSync;
-
 	WindowProps(const std::string& title = "SandboxApp",
 		uint32_t width = 1280, uint32_t height = 720,
 		GLFWmonitor* monitor = nullptr,
@@ -18,6 +12,14 @@ struct WindowProps
 	{
 
 	}
+
+	std::string Title;
+	uint32_t Width, Height;
+	GLFWmonitor* Monitor;
+	GLFWwindow* Share;
+	bool VSync;
+
+	std::function<void(Event&)> EventCallback;
 };
 
 class Window
@@ -27,8 +29,10 @@ public:
 	~Window();
 
 	void OnUpdate();
+	void OnWindowResize(WindowResizeEvent& e);
 
 	void SetVSync(bool enabled);
+	inline void SetEventCallbackFn(std::function<void(Event&)> callback) { m_Props.EventCallback = callback; }
 	inline bool VSync() const { return m_Props.VSync; }
 
 	inline GLFWwindow* GetNativeWindow() const { return m_Context->GetNativeWindow(); }

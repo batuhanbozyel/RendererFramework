@@ -2,7 +2,7 @@
 #include "Utility/Camera.h"
 #include "Utility/SceneObject3D.h"
 
-#include "Texture.h"
+struct WindowProps;
 
 struct Meshes
 {
@@ -33,10 +33,9 @@ enum class RendererMode
 class Renderer
 {
 public:
-	static void Init(const RendererMode& mode);
+	static void Init(const RendererMode& mode, const WindowProps& props);
 
-	static void Draw(const OrthographicCamera& camera);
-	static void Draw(const PerspectiveCamera& camera);
+	static void Draw();
 
 	static void Push(const std::shared_ptr<SceneObject3D>& object);
 
@@ -48,6 +47,7 @@ public:
 	static void SetBackground(const glm::vec4& color);
 	static void ClearColor();
 
+	inline static const std::unique_ptr<Camera>& GetCamera() { return s_Camera; }
 protected:
 	// To be defined in Renderer2D/Renderer3D
 	virtual void PushObject(const std::shared_ptr<SceneObject3D>& object) = 0;
@@ -59,5 +59,6 @@ protected:
 private:
 	static std::unique_ptr<Renderer> s_Renderer;
 	static glm::vec4 s_BackgroundColor;
+	static std::unique_ptr<Camera> s_Camera;
 };
 

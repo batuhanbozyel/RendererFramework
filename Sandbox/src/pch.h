@@ -27,6 +27,11 @@
 #include "Core/Log.h"
 #include "Core/Input.h"
 
+#include "Events/KeyEvent.h"
+#include "Events/MouseEvent.h"
+#include "Events/WindowEvent.h"
+#include "Events/ApplicationEvent.h"
+
 #include "Renderer/Buffer.h"
 #include "Renderer/Context.h"
 #include "Renderer/Shader.h"
