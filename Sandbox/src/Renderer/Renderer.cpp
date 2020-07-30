@@ -68,6 +68,11 @@ void Renderer::TransformObject(const std::shared_ptr<SceneObject3D>& object, con
 	s_Renderer->Transform(object, transform);
 }
 
+void Renderer::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+{
+	glViewport(x, y, width, height);
+}
+
 void Renderer::SetBackground(const glm::vec4& color)
 {
 	s_BackgroundColor = color;

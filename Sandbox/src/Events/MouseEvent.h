@@ -6,7 +6,7 @@ class MouseButtonEvent : public Event
 public:
 	inline int GetMouseButton() const { return m_MouseCode; }
 
-	EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouseButton);
+	EVENT_CLASS_CATEGORY(EventCategoryMouseButton | EventCategoryInput);
 protected:
 	MouseButtonEvent(int mouseCode)
 		: m_MouseCode(mouseCode) {}

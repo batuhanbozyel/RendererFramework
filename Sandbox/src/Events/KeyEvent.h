@@ -6,7 +6,7 @@ class KeyEvent : public Event
 public:
 	inline int GetKeyCode() const { return m_KeyCode; }
 
-	EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryKeyboard)
+	EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 protected:
 	KeyEvent(int keyCode)
 		: m_KeyCode(keyCode) {}
@@ -36,6 +36,7 @@ private:
 
 class KeyReleasedEvent : public KeyEvent
 {
+public:
 	KeyReleasedEvent(int keyCode)
 		: KeyEvent(keyCode) {}
 
@@ -51,6 +52,7 @@ class KeyReleasedEvent : public KeyEvent
 
 class KeyTypedEvent : public KeyEvent
 {
+public:
 	KeyTypedEvent(int keyCode)
 		: KeyEvent(keyCode) {}
 

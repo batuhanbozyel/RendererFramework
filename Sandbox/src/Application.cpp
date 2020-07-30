@@ -84,7 +84,8 @@ bool Application::OnWindowResize(WindowResizeEvent& e)
 {
 	glfwSetWindowSize(s_ActiveWindow->GetNativeWindow(), e.GetWidth(), e.GetHeight());
 	s_ActiveWindow->OnWindowResize(e);
-	Renderer::GetCamera();
+	Renderer::GetCamera()->SetProjection(e.GetWidth(), e.GetHeight());
+	Renderer::SetViewport(0, 0, e.GetWidth(), e.GetHeight());
 	LOG_TRACE(e.ToString());
 	return true;
 }

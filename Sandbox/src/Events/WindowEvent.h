@@ -7,7 +7,7 @@ public:
 	WindowCloseEvent() = default;
 
 	EVENT_CLASS_TYPE(WindowClose)
-	EVENT_CLASS_CATEGORY(EventCategoryApplication | EventCategoryWindow)
+	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
 };
 
 class WindowResizeEvent : public Event
@@ -19,8 +19,15 @@ public:
 	inline uint32_t GetWidth() const { return m_Width; }
 	inline uint32_t GetHeight() const { return m_Height; }
 
+	std::string ToString() const override
+	{
+		std::stringstream ss;
+		ss << "WindowResizeEvent: " << m_Width << ", " << m_Height;
+		return ss.str();
+	}
+
 	EVENT_CLASS_TYPE(WindowResize)
-	EVENT_CLASS_CATEGORY(EventCategoryApplication | EventCategoryWindow)
+	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
 private:
 	uint32_t m_Width, m_Height;
 };
@@ -33,7 +40,7 @@ public:
 	WindowFocusEvent() = default;
 
 	EVENT_CLASS_TYPE(WindowFocus)
-	EVENT_CLASS_CATEGORY(EventCategoryApplication | EventCategoryWindow)
+	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
 };
 
 // To be implemented later
@@ -43,7 +50,7 @@ public:
 	WindowLostFocusEvent() = default;
 
 	EVENT_CLASS_TYPE(WindowLostFocus)
-	EVENT_CLASS_CATEGORY(EventCategoryApplication | EventCategoryWindow)
+	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
 };
 
 // To be implemented later
@@ -53,5 +60,5 @@ public:
 	WindowMovedEvent() = default;
 
 	EVENT_CLASS_TYPE(WindowMoved)
-	EVENT_CLASS_CATEGORY(EventCategoryApplication | EventCategoryWindow)
+	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
 };
