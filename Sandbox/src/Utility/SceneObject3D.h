@@ -13,11 +13,14 @@ protected:
 	virtual inline const std::vector<Vertex>& GetData() const = 0;
 	virtual inline uint32_t GetVertexSize() const = 0;
 	virtual inline uint32_t GetIndexCount() const = 0;
+protected:
+	std::vector<Vertex> m_Data;
 };
 
 class Cuboid : public SceneObject3D
 {
 public:
+	// Length, Color, Texture Handle
 	explicit Cuboid(glm::vec3 length, const glm::vec4& color = glm::vec4(1.0f), uint64_t handle = 0);
 	~Cuboid() = default;
 
@@ -28,13 +31,12 @@ private:
 	virtual inline const std::vector<Vertex>& GetData() const override { return m_Data; }
 	virtual inline uint32_t GetVertexSize() const { return 24 * sizeof(Vertex); }
 	virtual inline uint32_t GetIndexCount() const override { return 36; }
-private:
-	std::vector<Vertex> m_Data;
 };
 
 class Sphere : public SceneObject3D
 {
 public:
+	// Radius, Sector and Stack count, Color, Texture Handle
 	explicit Sphere(float radius, uint32_t sectorCount = 18, uint32_t stackCount = 18, const glm::vec4& color = glm::vec4(1.0f), uint64_t handle = 0);
 	~Sphere() = default;
 
@@ -46,8 +48,6 @@ private:
 	virtual inline uint32_t GetVertexSize() const { return (uint32_t)m_Data.size() * sizeof(Vertex); }
 	virtual inline uint32_t GetIndexCount() const { return m_IndexCount; }
 private:
-	std::vector<Vertex> m_Data;
 	uint32_t m_IndexCount = 0;
-
 	uint32_t m_SectorCount, m_StackCount;
 };

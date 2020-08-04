@@ -103,8 +103,8 @@ private:
 class VertexBuffer
 {
 public:
-	VertexBuffer(uint32_t size, BufferUsage usage = BufferUsage::DYNAMIC);
-	VertexBuffer(const float* vertices, uint32_t size, BufferUsage usage = BufferUsage::DYNAMIC);
+	VertexBuffer(uint32_t size, BufferUsage usage = BufferUsage::STATIC);
+	VertexBuffer(const float* vertices, uint32_t size, BufferUsage usage = BufferUsage::STATIC);
 	~VertexBuffer();
 
 	void Bind() const;
@@ -121,8 +121,8 @@ private:
 class IndexBuffer
 {
 public:
-	IndexBuffer(uint32_t count, BufferUsage usage = BufferUsage::DYNAMIC);
-	IndexBuffer(const uint32_t* indices, uint32_t count, BufferUsage usage = BufferUsage::DYNAMIC);
+	IndexBuffer(uint32_t count, BufferUsage usage = BufferUsage::STATIC);
+	IndexBuffer(const uint32_t* indices, uint32_t count, BufferUsage usage = BufferUsage::STATIC);
 	~IndexBuffer();
 
 	void Bind() const;

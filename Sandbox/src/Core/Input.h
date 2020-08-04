@@ -12,5 +12,5 @@ public:
 
 	// Mouse Input
 	static bool IsMouseButtonPressed(int button);
-	std::pair<float, float> GetMousePos();
+	static std::pair<float, float> GetMousePos();
 };

@@ -15,13 +15,13 @@ void Renderer::Init(const RendererMode& mode, const WindowProps& props)
 {
 	switch (mode)
 	{
-		//case RendererMode::_2D: s_Renderer.reset(new Renderer2D);
-		//						s_Camera.reset(new OrthographicCamera();
-		//						LOG_WARN("Renderer initialization succeed!");
-		//					    return;
+		case RendererMode::_2D: //s_Renderer.reset(new Renderer2D);
+								s_Camera.reset(new OrthographicCamera((float)props.Width, (float)props.Height));
+								LOG_WARN("Renderer2D initialization succeed!");
+							    return;
 		case RendererMode::_3D: s_Renderer.reset(new Renderer3D);
-								s_Camera.reset(new PerspectiveCamera(45.0f, (float)props.Width / (float)props.Height));
-								LOG_WARN("Renderer initialization succeed!");
+								s_Camera.reset(new PerspectiveCamera(45.0f, (float)props.Width, (float)props.Height));
+								LOG_WARN("Renderer3D initialization succeed!");
 								return;
 	}
 	LOG_ASSERT(false, "Renderer initialization failed!");
@@ -43,7 +43,7 @@ void Renderer::Draw()
 		indexBuffers[i]->Bind();
 		mesh.Program->SetUniformMat4("u_ViewProjection", s_Camera->GetViewProjectionMatrix());
 		mesh.Program->SetUniformFloat3("u_CameraPos", s_Camera->GetPosition());
-		mesh.Program->SetUniformFloat3("u_LightPos", s_Camera->GetPosition());
+		mesh.Program->SetUniformFloat3("u_Light.Position", s_Camera->GetPosition());
 		glDrawElements(GL_TRIANGLES, mesh.IndexBufferPtr->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 }

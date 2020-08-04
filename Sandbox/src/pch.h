@@ -6,6 +6,10 @@
 #include <algorithm>
 #include <functional>
 
+#include <thread>
+#include <atomic>
+#include <future>
+
 #include <string>
 #include <sstream>
 #include <iomanip>

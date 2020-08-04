@@ -7,7 +7,7 @@ struct WindowProps
 		uint32_t width = 1280, uint32_t height = 720,
 		GLFWmonitor* monitor = nullptr,
 		GLFWwindow* share = nullptr,
-		bool vsync = true)
+		bool vsync = false)
 		: Title(title), Width(width), Height(height), Monitor(monitor), Share(share), VSync(vsync)
 	{
 

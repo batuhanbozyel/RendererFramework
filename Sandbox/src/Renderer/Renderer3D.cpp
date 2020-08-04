@@ -34,8 +34,18 @@ Renderer3D::Renderer3D()
 
 	// Create Shader
 	m_Meshes.Program.reset(new Shader("assets/shaders/BindlessTexture.glsl"));
+
+	// Set Shader Properties
 	m_Meshes.Program->Bind();
-	m_Meshes.Program->SetUniformFloat3("u_LightColor", glm::vec3(1.0f));
+	
+	m_Meshes.Program->SetUniformFloat3("u_Light.Ambient", glm::vec3(0.5f));
+	m_Meshes.Program->SetUniformFloat3("u_Light.Diffuse", glm::vec3(0.5f));
+	m_Meshes.Program->SetUniformFloat3("u_Light.Specular", glm::vec3(1.0f));
+
+	m_Meshes.Program->SetUniformFloat3("u_Material.Ambient", glm::vec3(0.7f));
+	m_Meshes.Program->SetUniformFloat3("u_Material.Diffuse", glm::vec3(0.7f));
+	m_Meshes.Program->SetUniformFloat3("u_Material.Specular", glm::vec3(0.5f));
+	m_Meshes.Program->SetUniformFloat ("u_Material.Shininess", 32.0f);
 }
 
 void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)

@@ -21,6 +21,10 @@ void Context::GLFWInit()
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 		glfwWindowHint(GLFW_SAMPLES, 4);
 
+#ifdef DEBUG_ENABLED
+		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
+
 		glfwSetErrorCallback(GLFWErrorCallback);
 	}
 }

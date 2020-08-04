@@ -11,6 +11,9 @@ extern "C"
 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
 }
 
+static std::atomic<bool> s_RenderBegin = false;
+static bool s_ThirdPerson = false;
+
 constexpr RendererMode s_Mode = RendererMode::_3D;
 
 Window* Application::s_ActiveWindow = nullptr;
@@ -20,29 +23,35 @@ int main(int argc, char** argv)
 {
 	Application::Init();
 
-	Test3D();
-	glm::vec3 position(0.0f, 0.0f, 4.0f);
-	while (!glfwWindowShouldClose(Application::s_ActiveWindow->GetNativeWindow()))
 	{
-		Renderer::ClearColor();
-		float dt = Application::s_FrameTime.DeltaTime();
+		auto future = std::async(Application::DisplayFrameTimeAndFPS);
 
-		if (Input::IsKeyPressed(KEY_A))	position.x -= 0.001f * dt;
-		if (Input::IsKeyPressed(KEY_D)) position.x += 0.001f * dt;
-		if (Input::IsKeyPressed(KEY_W)) position.y += 0.001f * dt;
-		if (Input::IsKeyPressed(KEY_S)) position.y -= 0.001f * dt;
-		if (Input::IsKeyPressed(KEY_Q)) position.z += 0.001f * dt;
-		if (Input::IsKeyPressed(KEY_E)) position.z -= 0.001f * dt;
+		Test3D();
+		while (!glfwWindowShouldClose(Application::s_ActiveWindow->GetNativeWindow()))
+		{
+			s_RenderBegin = true;
 
-		Renderer::GetCamera()->SetPosition(position);
+			float dt = Application::s_FrameTime.DeltaTime();
 
-		Renderer::Draw();
+			Renderer::ClearColor();
 
-		Application::s_ActiveWindow->OnUpdate();
+			if (Input::IsKeyPressed(KEY_W)) Renderer::GetCamera()->Move(KEY_W, dt);
+			if (Input::IsKeyPressed(KEY_A))	Renderer::GetCamera()->Move(KEY_A, dt);
+			if (Input::IsKeyPressed(KEY_S)) Renderer::GetCamera()->Move(KEY_S, dt);
+			if (Input::IsKeyPressed(KEY_D)) Renderer::GetCamera()->Move(KEY_D, dt);
+
+			Renderer::GetCamera()->Update();
+			Renderer::Draw();
+
+			Application::s_ActiveWindow->OnUpdate();
+			s_RenderBegin = false;
+		}
 	}
 	
 	Application::Shutdown();
 }
+
+// Application Initialization and Shutdown Methods
 
 void Application::Init()
 {
@@ -66,17 +75,21 @@ void Application::Shutdown()
 	Context::GLFWTerminate();
 }
 
+// Application Event Handling Methods
+
 void Application::OnEvent(Event& e)
 {
 	EventDispatcher dispatcher(e);
 	dispatcher.Dispatch<WindowCloseEvent>(OnWindowClose);
 	dispatcher.Dispatch<WindowResizeEvent>(OnWindowResize);
+	dispatcher.Dispatch<KeyPressedEvent>(OnKeyPress);
+	dispatcher.Dispatch<MouseMovedEvent>(OnMouseMove);
+	dispatcher.Dispatch<MouseButtonPressedEvent>(OnMouseButtonPress);
 }
 
 bool Application::OnWindowClose(WindowCloseEvent& e)
 {
 	glfwSetWindowShouldClose(s_ActiveWindow->GetNativeWindow(), GLFW_TRUE);
-	LOG_TRACE(e.ToString());
 	return true;
 }
 
@@ -92,27 +105,51 @@ bool Application::OnWindowResize(WindowResizeEvent& e)
 	return true;
 }
 
+bool Application::OnKeyPress(KeyPressedEvent& e)
+{
+	if (e.GetKeyCode() == KEY_ESCAPE)
+		glfwSetWindowShouldClose(s_ActiveWindow->GetNativeWindow(), GLFW_TRUE);
+
+	return true;
+}
+
+bool Application::OnMouseButtonPress(MouseButtonPressedEvent& e)
+{
+	if (e.GetMouseButton() == MOUSE_BUTTON_2)
+	{
+		s_ThirdPerson = !s_ThirdPerson;
+		if (s_ThirdPerson)
+			glfwSetInputMode(s_ActiveWindow->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		else
+			glfwSetInputMode(s_ActiveWindow->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+
+	LOG_TRACE(e.ToString());
+	return true;
+}
+
+bool Application::OnMouseMove(MouseMovedEvent& e)
+{
+	if(s_ThirdPerson)
+		Renderer::GetCamera()->Rotate(e.GetPos());
+
+	return true;
+}
+
+// Application Utility Methods
+
 void Application::DisplayFrameTimeAndFPS()
 {
-	float dt = s_FrameTime.GetDeltaTime();
-	std::stringstream title;
-	title << s_ActiveWindow->GetWindowProps().Title;
-	title << " " << std::setprecision(4) << (uint32_t)(1.0f / (dt / 1000.0f)) << " FPS " << dt << " ms";
-	glfwSetWindowTitle(s_ActiveWindow->GetNativeWindow(), title.str().c_str());
-}
-
-void Application::DisplayFrameTime()
-{
-	std::stringstream title;
-	title << s_ActiveWindow->GetWindowProps().Title;
-	title << " " << std::setprecision(4) << s_FrameTime.GetDeltaTime() << "ms";
-	glfwSetWindowTitle(s_ActiveWindow->GetNativeWindow(), title.str().c_str());
-}
-
-void Application::DisplayFPS()
-{
-	std::stringstream title;
-	title << s_ActiveWindow->GetWindowProps().Title;
-	title << " " << (uint32_t)(1.0f / (s_FrameTime.GetDeltaTime() / 1000.0f)) << " FPS";
-	glfwSetWindowTitle(s_ActiveWindow->GetNativeWindow(), title.str().c_str());
+	while (!glfwWindowShouldClose(s_ActiveWindow->GetNativeWindow()))
+	{
+		if (!s_RenderBegin)
+		{
+			float dt = s_FrameTime.GetDeltaTime();
+			std::stringstream title;
+			title << s_ActiveWindow->GetWindowProps().Title;
+			title << " " << std::setprecision(4) << (uint32_t)(1.0f / (dt / 1000.0f)) << " FPS " << dt << " ms";
+			glfwSetWindowTitle(s_ActiveWindow->GetNativeWindow(), title.str().c_str());
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		}
+	}
 }

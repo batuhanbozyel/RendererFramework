@@ -30,6 +30,23 @@ void main()
 #version 460 core
 #extension GL_ARB_bindless_texture : require
 
+struct Material
+{
+	vec3  Ambient;
+	vec3  Diffuse;
+	vec3  Specular;
+	float Shininess;
+};
+
+struct Light
+{
+	vec3 Position;
+
+	vec3  Ambient;
+	vec3  Diffuse;
+	vec3  Specular;
+};
+
 layout(location = 0) out vec4 color;
 
 in vec3 v_Normal;
@@ -39,32 +56,29 @@ flat in uvec2 v_TexHandle;
 
 in vec3 v_FragPos;
 
-uniform vec3 u_LightColor;
-uniform vec3 u_LightPos;
 uniform vec3 u_CameraPos;
+
+uniform Material u_Material;
+uniform Light u_Light;
 
 void main()
 {
 	// Ambient Lighting
-	float ambientStrength = 0.1;
-	vec3 ambient = ambientStrength * u_LightColor;
+	vec3 ambient = u_Light.Ambient * u_Material.Ambient;
 
 	// Diffuse Lighting
 	vec3 norm = normalize(v_Normal);
-	vec3 lightDir = normalize(u_LightPos - v_FragPos);
+	vec3 lightDir = normalize(u_Light.Position - v_FragPos);
 
 	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 diffuse = diff * u_LightColor;
-
+	vec3 diffuse = u_Light.Diffuse * (diff * u_Material.Diffuse);
 
 	// Specular Lighting
-	float specularStrength = 0.5;
-
 	vec3 viewDir = normalize(u_CameraPos - v_FragPos);
 	vec3 reflectDir = reflect(-lightDir, norm);
 
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64);
-	vec3 specular = specularStrength * spec * u_LightColor;
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_Material.Shininess);
+	vec3 specular = u_Light.Specular * (spec * u_Material.Specular);
 
 	color = vec4(ambient + diffuse + specular, 1.0) * v_Color * texture(sampler2D(v_TexHandle), v_TexCoord);
 }
