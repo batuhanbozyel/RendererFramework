@@ -158,7 +158,7 @@ const std::vector<uint32_t> Sphere::CalculateIndices(uint32_t& offset)
 			}		
 		}
 	}
-	offset += (uint32_t)m_Data.size();
-	m_IndexCount = (uint32_t)indices.size();
+	offset += static_cast<uint32_t>(m_Data.size());
+	m_IndexCount = static_cast<uint32_t>(indices.size());
 	return indices;
 }

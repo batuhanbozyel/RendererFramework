@@ -9,7 +9,7 @@ public:
 
 	inline float DeltaTime()
 	{
-		float time = (float)glfwGetTime();
+		float time = static_cast<float>(glfwGetTime());
 		m_DeltaTime = time - m_LastFrameTime;
 		m_LastFrameTime = time;
 		return m_DeltaTime * 1000;

@@ -38,7 +38,7 @@ Texture::~Texture()
 	glDeleteTextures(max_textures, m_IDs.data());
 }
 
-uint64_t Texture::LoadTexture(const char* path)
+const uint64_t Texture::LoadTexture(const char* path)
 {
 	glBindTexture(GL_TEXTURE_2D, m_IDs[m_Count]);
 

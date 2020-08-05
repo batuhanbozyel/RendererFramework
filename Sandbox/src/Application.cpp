@@ -11,10 +11,10 @@ extern "C"
 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
 }
 
+constexpr RendererMode RENDER_MODE = RendererMode::_3D;
+
 static std::atomic<bool> s_RenderBegin = false;
 static bool s_ThirdPerson = false;
-
-constexpr RendererMode s_Mode = RendererMode::_3D;
 
 Window* Application::s_ActiveWindow = nullptr;
 Timestep Application::s_FrameTime = 0.0f;
@@ -40,6 +40,8 @@ int main(int argc, char** argv)
 			if (Input::IsKeyPressed(KEY_S)) Renderer::GetCamera()->Move(KEY_S, dt);
 			if (Input::IsKeyPressed(KEY_D)) Renderer::GetCamera()->Move(KEY_D, dt);
 
+			if(s_ThirdPerson) Renderer::GetCamera()->Rotate(Input::GetMousePos());
+
 			Renderer::GetCamera()->Update();
 			Renderer::Draw();
 
@@ -63,7 +65,7 @@ void Application::Init()
 	s_ActiveWindow = window;
 	Context::MakeCurrent(s_ActiveWindow->GetNativeWindow());
 
-	Renderer::Init(s_Mode, s_ActiveWindow->GetWindowProps());
+	Renderer::Init(RENDER_MODE, s_ActiveWindow->GetWindowProps());
 
 	LOG_WARN("Application started running!");
 }
@@ -98,7 +100,7 @@ bool Application::OnWindowResize(WindowResizeEvent& e)
 	glfwSetWindowSize(s_ActiveWindow->GetNativeWindow(), e.GetWidth(), e.GetHeight());
 	s_ActiveWindow->OnWindowResize(e);
 
-	Renderer::GetCamera()->SetProjection(e.GetWidth(), e.GetHeight());
+	Renderer::GetCamera()->SetProjection(static_cast<float>(e.GetWidth()), static_cast<float>(e.GetHeight()));
 	Renderer::SetViewport(0, 0, e.GetWidth(), e.GetHeight());
 
 	LOG_TRACE(e.ToString());
@@ -110,6 +112,7 @@ bool Application::OnKeyPress(KeyPressedEvent& e)
 	if (e.GetKeyCode() == KEY_ESCAPE)
 		glfwSetWindowShouldClose(s_ActiveWindow->GetNativeWindow(), GLFW_TRUE);
 
+	LOG_TRACE(e.ToString());
 	return true;
 }
 
@@ -119,9 +122,19 @@ bool Application::OnMouseButtonPress(MouseButtonPressedEvent& e)
 	{
 		s_ThirdPerson = !s_ThirdPerson;
 		if (s_ThirdPerson)
+		{
 			glfwSetInputMode(s_ActiveWindow->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+			if (glfwRawMouseMotionSupported())
+				glfwSetInputMode(s_ActiveWindow->GetNativeWindow(), GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+		}
 		else
+		{
 			glfwSetInputMode(s_ActiveWindow->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+			if (glfwRawMouseMotionSupported())
+				glfwSetInputMode(s_ActiveWindow->GetNativeWindow(), GLFW_RAW_MOUSE_MOTION, GLFW_FALSE);
+		}
 	}
 
 	LOG_TRACE(e.ToString());
@@ -130,9 +143,6 @@ bool Application::OnMouseButtonPress(MouseButtonPressedEvent& e)
 
 bool Application::OnMouseMove(MouseMovedEvent& e)
 {
-	if(s_ThirdPerson)
-		Renderer::GetCamera()->Rotate(e.GetPos());
-
 	return true;
 }
 
@@ -147,7 +157,7 @@ void Application::DisplayFrameTimeAndFPS()
 			float dt = s_FrameTime.GetDeltaTime();
 			std::stringstream title;
 			title << s_ActiveWindow->GetWindowProps().Title;
-			title << " " << std::setprecision(4) << (uint32_t)(1.0f / (dt / 1000.0f)) << " FPS " << dt << " ms";
+			title << " " << std::setprecision(4) << static_cast<uint32_t>(1.0f / (dt / 1000.0f)) << " FPS " << dt << " ms";
 			glfwSetWindowTitle(s_ActiveWindow->GetNativeWindow(), title.str().c_str());
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		}

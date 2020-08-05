@@ -10,8 +10,8 @@ public:
 private:
 	virtual void PushObject(const std::shared_ptr<SceneObject3D>& object) override;
 
-	virtual uint64_t AddTexture(const char* path) override;
-	virtual uint64_t GetDefaultTexture() override;
+	virtual const uint64_t AddTexture(const char* path) override;
+	virtual const uint64_t GetDefaultTexture() override;
 
 	virtual void Transform(const std::shared_ptr<SceneObject3D>& object, const glm::mat4& transform) override;
 
@@ -22,11 +22,20 @@ private:
 	// Cache for transforming or removing objects faster
 	struct ObjectMapValue
 	{
-		std::shared_ptr<SceneObject3D> Object;
-		std::shared_ptr<VertexBuffer> VertexBufferPtr;
-		std::shared_ptr<IndexBuffer> IndexBufferPtr;
-		uint32_t VertexOffset;
-		uint32_t IndexOffset;
+		ObjectMapValue(const std::shared_ptr<SceneObject3D>& objectPtr, 
+					   const std::shared_ptr<VertexBuffer>& vbPtr, 
+					   const std::shared_ptr<IndexBuffer>& ibPtr, 
+					   const uint32_t vOffset, const uint32_t iOffset)
+			: Object(objectPtr), VertexBufferPtr(vbPtr), IndexBufferPtr(ibPtr), VertexOffset(vOffset), IndexOffset(iOffset)
+		{
+
+		}
+
+		const std::shared_ptr<SceneObject3D>& Object;
+		const std::shared_ptr<VertexBuffer>& VertexBufferPtr;
+		const std::shared_ptr<IndexBuffer>& IndexBufferPtr;
+		const uint32_t VertexOffset;
+		const uint32_t IndexOffset;
 	};
 	std::unordered_map<std::shared_ptr<SceneObject3D>, ObjectMapValue> m_ObjectCache;
 };

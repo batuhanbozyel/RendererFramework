@@ -39,8 +39,8 @@ public:
 
 	static void Push(const std::shared_ptr<SceneObject3D>& object);
 
-	static uint64_t CreateTexture(const char* path);
-	static uint64_t DefaultTexture();
+	static const uint64_t CreateTexture(const char* path);
+	static const uint64_t DefaultTexture();
 
 	static void TransformObject(const std::shared_ptr<SceneObject3D>& object, const glm::mat4& transform);
 
@@ -53,8 +53,8 @@ public:
 protected:
 	// To be defined in Renderer2D/Renderer3D
 	virtual void PushObject(const std::shared_ptr<SceneObject3D>& object) = 0;
-	virtual uint64_t AddTexture(const char* path) = 0;
-	virtual uint64_t GetDefaultTexture() = 0;
+	virtual const uint64_t AddTexture(const char* path) = 0;
+	virtual const uint64_t GetDefaultTexture() = 0;
 	virtual void Transform(const std::shared_ptr<SceneObject3D>& object, const glm::mat4& transform) = 0;
 	virtual inline const Meshes& GetMeshes() const = 0;
 

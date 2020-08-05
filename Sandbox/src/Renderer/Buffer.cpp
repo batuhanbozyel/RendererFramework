@@ -14,7 +14,7 @@ VertexBuffer::VertexBuffer(const float* vertices, uint32_t size, BufferUsage usa
 {
 	glCreateBuffers(1, &m_RendererID);
 	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-	glBufferData(GL_ARRAY_BUFFER, size, vertices, (GLenum)usage);
+	glBufferData(GL_ARRAY_BUFFER, size, vertices, static_cast<GLenum>(usage));
 }
 
 VertexBuffer::~VertexBuffer()
@@ -45,7 +45,7 @@ IndexBuffer::IndexBuffer(uint32_t count, BufferUsage usage)
 {
 	glCreateBuffers(1, &m_RendererID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), nullptr, (GLenum)usage);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), nullptr, static_cast<GLenum>(usage));
 }
 
 IndexBuffer::IndexBuffer(const uint32_t* indices, uint32_t count, BufferUsage usage)
@@ -53,7 +53,7 @@ IndexBuffer::IndexBuffer(const uint32_t* indices, uint32_t count, BufferUsage us
 {
 	glCreateBuffers(1, &m_RendererID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, (GLenum)usage);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, static_cast<GLenum>(usage));
 }
 
 IndexBuffer::~IndexBuffer()

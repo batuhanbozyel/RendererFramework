@@ -70,7 +70,7 @@ Window::Window(const WindowProps& props)
 	{
 		WindowProps& props = *(WindowProps*)glfwGetWindowUserPointer(window);
 
-		props.EventCallback(MouseMovedEvent((float)xPos, (float)yPos));
+		props.EventCallback(MouseMovedEvent(static_cast<float>(xPos), static_cast<float>(yPos)));
 	});
 
 	// MouseScrolled Event
@@ -78,7 +78,7 @@ Window::Window(const WindowProps& props)
 	{
 		WindowProps& props = *(WindowProps*)glfwGetWindowUserPointer(window);
 
-		props.EventCallback(MouseScrolledEvent((float)xOffset, (float)yOffset));
+		props.EventCallback(MouseScrolledEvent(static_cast<float>(xOffset), static_cast<float>(yOffset)));
 	});
 
 	// WindowClose Event
@@ -93,10 +93,10 @@ Window::Window(const WindowProps& props)
 	glfwSetWindowSizeCallback(windowContext, [](GLFWwindow* window, int width, int height)
 	{
 		WindowProps& props = *(WindowProps*)glfwGetWindowUserPointer(window);
-		props.Width = (uint32_t)width;
-		props.Height = (uint32_t)height;
+		props.Width = static_cast<uint32_t>(width);
+		props.Height = static_cast<uint32_t>(height);
 
-		props.EventCallback(WindowResizeEvent((uint32_t)width, (uint32_t)height));
+		props.EventCallback(WindowResizeEvent(props.Width, props.Height));
 	});
 
 	// WindowFocus and WindowLostFocus Events
@@ -104,7 +104,7 @@ Window::Window(const WindowProps& props)
 	{
 		WindowProps& props = *(WindowProps*)glfwGetWindowUserPointer(window);
 
-		focused == true ? props.EventCallback(WindowFocusEvent()) : props.EventCallback(WindowLostFocusEvent());
+		static_cast<bool>(focused) == true ? props.EventCallback(WindowFocusEvent()) : props.EventCallback(WindowLostFocusEvent());
 	});
 
 	// WindowMoved Event

@@ -41,7 +41,7 @@ void Context::GLFWTerminate()
 void Context::MakeCurrent(GLFWwindow* window)
 {
 	glfwMakeContextCurrent(window);
-	LOG_WARN("Current Context assigned to ID: {0}", (void*)window);
+	LOG_WARN("Current Context assigned to ID: {0}", static_cast<void*>(window));
 }
 
 Context::Context(GLFWwindow* window)

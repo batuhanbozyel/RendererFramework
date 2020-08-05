@@ -32,5 +32,5 @@ std::pair<float, float> Input::GetMousePos()
 {
 	double xpos, ypos;
 	glfwGetCursorPos(Application::GetActiveWindow()->GetNativeWindow(), &xpos, &ypos);
-	return { (float)xpos, (float)ypos };
+	return { static_cast<float>(xpos), static_cast<float>(ypos) };
 }

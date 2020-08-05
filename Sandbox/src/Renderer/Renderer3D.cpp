@@ -76,14 +76,15 @@ void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)
 		}
 
 		// Insert object into cache
-		ObjectMapValue mapObject;
-		mapObject.Object = object;
-
-		mapObject.VertexBufferPtr = m_Meshes.VertexBufferPtr;
-		mapObject.VertexOffset = m_Meshes.VertexOffset;
-
-		mapObject.IndexBufferPtr = m_Meshes.IndexBufferPtr;
-		mapObject.IndexOffset = m_Meshes.IndexOffset;
+		ObjectMapValue mapObject(object, m_Meshes.VertexBufferPtr, m_Meshes.IndexBufferPtr, m_Meshes.VertexOffset, m_Meshes.IndexOffset);
+// 		ObjectMapValue mapObject;
+// 		mapObject.Object = object;
+// 
+// 		mapObject.VertexBufferPtr = m_Meshes.VertexBufferPtr;
+// 		mapObject.VertexOffset = m_Meshes.VertexOffset;
+// 
+// 		mapObject.IndexBufferPtr = m_Meshes.IndexBufferPtr;
+// 		mapObject.IndexOffset = m_Meshes.IndexOffset;
 		m_ObjectCache.insert(std::make_pair(object, mapObject));
 
 		// Push object into VertexArray
@@ -96,12 +97,12 @@ void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)
 	}
 }
 
-uint64_t Renderer3D::AddTexture(const char* path)
+const uint64_t Renderer3D::AddTexture(const char* path)
 {
 	return m_Meshes.Textures->LoadTexture(path);
 }
 
-uint64_t Renderer3D::GetDefaultTexture()
+const uint64_t Renderer3D::GetDefaultTexture()
 {
 	return m_Meshes.Textures->DefaultTexture();
 }

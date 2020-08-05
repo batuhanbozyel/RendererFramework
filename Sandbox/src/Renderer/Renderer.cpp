@@ -16,11 +16,11 @@ void Renderer::Init(const RendererMode& mode, const WindowProps& props)
 	switch (mode)
 	{
 		case RendererMode::_2D: //s_Renderer.reset(new Renderer2D);
-								s_Camera.reset(new OrthographicCamera((float)props.Width, (float)props.Height));
+								s_Camera.reset(new OrthographicCamera(static_cast<float>(props.Width), static_cast<float>(props.Height)));
 								LOG_WARN("Renderer2D initialization succeed!");
 							    return;
 		case RendererMode::_3D: s_Renderer.reset(new Renderer3D);
-								s_Camera.reset(new PerspectiveCamera(45.0f, (float)props.Width, (float)props.Height));
+								s_Camera.reset(new PerspectiveCamera(45.0f, static_cast<float>(props.Width), static_cast<float>(props.Height)));
 								LOG_WARN("Renderer3D initialization succeed!");
 								return;
 	}
@@ -53,12 +53,12 @@ void Renderer::Push(const std::shared_ptr<SceneObject3D>& object)
 	s_Renderer->PushObject(object);
 }
 
-uint64_t Renderer::CreateTexture(const char* path)
+const uint64_t Renderer::CreateTexture(const char* path)
 {
 	return s_Renderer->AddTexture(path);
 }
 
-uint64_t Renderer::DefaultTexture()
+const uint64_t Renderer::DefaultTexture()
 {
 	return s_Renderer->GetDefaultTexture();
 }
