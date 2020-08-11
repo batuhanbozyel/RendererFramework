@@ -61,7 +61,6 @@ public:
 	virtual void SetProjection(float width, float height) override;
 private:
 	glm::vec3 m_Front;
-	glm::vec3 m_Right;
 	glm::vec3 m_Up;
 
 	float m_Yaw;

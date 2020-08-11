@@ -10,7 +10,7 @@ Camera::Camera(const glm::mat4& projection, const glm::mat4& view, const glm::ve
 // Orthographic Camera
 
 OrthographicCamera::OrthographicCamera(float width, float height, const glm::vec3& position)
-	: Camera(glm::ortho(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f), glm::mat4(1.0f), position)
+	: Camera(glm::ortho(0.0f, width , 0.0f, height), glm::mat4(1.0f), position)
 {
 	
 }
@@ -90,7 +90,8 @@ void PerspectiveCamera::Rotate(const std::pair<float, float>& mousePos)
 	if (m_Pitch > 89.0f) m_Pitch = 89.0f; 
 	if (m_Pitch < -89.0f) m_Pitch = -89.0f;
 
-	glm::vec3 direction; direction.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch)); 
+	glm::vec3 direction;
+	direction.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch)); 
 	direction.y = sin(glm::radians(m_Pitch)); 
 	direction.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch)); 
 	m_Front = glm::normalize(direction);
