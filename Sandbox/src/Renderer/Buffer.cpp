@@ -7,7 +7,7 @@ VertexBuffer::VertexBuffer(uint32_t size, BufferUsage usage)
 {
 	glCreateBuffers(1, &m_RendererID);
 	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-	glBufferData(GL_ARRAY_BUFFER, size, nullptr, (GLenum)usage);
+	glBufferData(GL_ARRAY_BUFFER, size, nullptr, static_cast<GLenum>(usage));
 }
 
 VertexBuffer::VertexBuffer(const float* vertices, uint32_t size, BufferUsage usage)

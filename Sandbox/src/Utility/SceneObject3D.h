@@ -1,5 +1,24 @@
 #pragma once
 
+#pragma pack(push, 1)
+struct Vertex
+{
+	Vertex() {}
+
+	Vertex(const glm::vec3& pos, const glm::vec3& normal, const glm::vec4& color, const glm::vec2& tex, uint64_t handle = 0)
+		: Position(pos, 1.0f), Normal(normal), Color(color), TexCoord(tex), TexHandle(handle) {}
+
+	Vertex(const glm::vec4& pos, const glm::vec3& normal, const glm::vec4& color, const glm::vec2& tex, uint64_t handle = 0)
+		: Position(pos), Normal(normal), Color(1.0f), TexCoord(tex), TexHandle(handle) {}
+
+	glm::vec4 Position;
+	glm::vec3 Normal;
+	glm::vec4 Color;
+	glm::vec2 TexCoord;
+	uint64_t TexHandle;
+};
+#pragma pack(pop)
+
 class SceneObject3D
 {
 public:
@@ -10,11 +29,12 @@ public:
 protected:
 	virtual const std::vector<uint32_t> CalculateIndices(uint32_t& offset) = 0;
 
-	virtual inline const std::vector<Vertex>& GetData() const = 0;
+	inline const std::vector<Vertex>& GetData() const { return m_Vertices; }
+
 	virtual inline uint32_t GetVertexSize() const = 0;
 	virtual inline uint32_t GetIndexCount() const = 0;
 protected:
-	std::vector<Vertex> m_Data;
+	std::vector<Vertex> m_Vertices;
 };
 
 class Cuboid : public SceneObject3D
@@ -28,7 +48,6 @@ public:
 private:
 	virtual const std::vector<uint32_t> CalculateIndices(uint32_t& offset) override;
 
-	virtual inline const std::vector<Vertex>& GetData() const override { return m_Data; }
 	virtual inline uint32_t GetVertexSize() const { return 24 * sizeof(Vertex); }
 	virtual inline uint32_t GetIndexCount() const override { return 36; }
 };
@@ -44,8 +63,7 @@ public:
 private:
 	virtual const std::vector<uint32_t> CalculateIndices(uint32_t& offset) override;
 
-	virtual inline const std::vector<Vertex>& GetData() const override { return m_Data;	}
-	virtual inline uint32_t GetVertexSize() const { return (uint32_t)m_Data.size() * sizeof(Vertex); }
+	virtual inline uint32_t GetVertexSize() const { return (uint32_t)m_Vertices.size() * sizeof(Vertex); }
 	virtual inline uint32_t GetIndexCount() const { return m_IndexCount; }
 private:
 	uint32_t m_IndexCount = 0;
