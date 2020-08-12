@@ -24,7 +24,7 @@ IncludeDir["glm"] = "Sandbox/vendor/glm"
 IncludeDir["stb"] = "Sandbox/vendor/stb"
 
 LibraryDir = {}
-LibraryDir["assimp"] = "Sandbox/vendor/assimp/bin"
+LibraryDir["assimp"] = "Sandbox/vendor/assimp/lib"
 
 group "Dependencies"
 	include "Sandbox/vendor/GLFW"
