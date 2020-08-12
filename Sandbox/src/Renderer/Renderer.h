@@ -4,7 +4,7 @@
 
 struct WindowProps;
 
-struct Meshes
+struct RenderData
 {
 	void Bind() const
 	{
@@ -56,7 +56,7 @@ protected:
 	virtual const uint64_t AddTexture(const char* path) = 0;
 	virtual const uint64_t GetDefaultTexture() = 0;
 
-	virtual inline const Meshes& GetMeshes() const = 0;
+	virtual inline const RenderData& GetData() const = 0;
 private:
 	static std::unique_ptr<Renderer> s_Renderer;
 	static glm::vec4 s_BackgroundColor;

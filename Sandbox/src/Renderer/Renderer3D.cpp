@@ -6,10 +6,10 @@ constexpr uint32_t MaxQuads = 10000;
 Renderer3D::Renderer3D()
 {
 	// Create Texture array with a default white texture
-	m_Meshes.Textures.reset(new Texture);
+	m_Data.Textures.reset(new Texture);
 
 	// Create VertexArray
-	m_Meshes.VAO.reset(new VertexArray);
+	m_Data.VAO.reset(new VertexArray);
 
 	// Create new VertexBuffer
 	std::shared_ptr<VertexBuffer> vertexBuffer;
@@ -21,31 +21,28 @@ Renderer3D::Renderer3D()
 		{ ShaderDataType::Float2, "a_TexCoord" },
 		{ ShaderDataType::UInt2 , "a_TexHandle", true}
 	});
-	m_Meshes.VertexBufferPtr = vertexBuffer;
-	m_Meshes.VAO->AddVertexBuffer(vertexBuffer);
-	m_Meshes.VertexOffset = 0;
+	m_Data.VertexBufferPtr = vertexBuffer;
+	m_Data.VAO->AddVertexBuffer(vertexBuffer);
+	m_Data.VertexOffset = 0;
 
 	// Create IndexBuffer
 	std::shared_ptr<IndexBuffer> indexBuffer;
 	indexBuffer.reset(new IndexBuffer(MaxQuads * 6));
-	m_Meshes.IndexBufferPtr = indexBuffer;
-	m_Meshes.VAO->AddIndexBuffer(indexBuffer);
-	m_Meshes.IndexOffset = 0;
+	m_Data.IndexBufferPtr = indexBuffer;
+	m_Data.VAO->AddIndexBuffer(indexBuffer);
+	m_Data.IndexOffset = 0;
 
 	// Create Shader
-	m_Meshes.Program.reset(new Shader("assets/shaders/BindlessTexture.glsl"));
+	m_Data.Program.reset(new Shader("assets/shaders/BindlessTexture.glsl"));
 
 	// Set Shader Properties
-	m_Meshes.Program->Bind();
+	m_Data.Program->Bind();
 	
-	m_Meshes.Program->SetUniformFloat3("u_Light.Ambient", glm::vec3(0.5f));
-	m_Meshes.Program->SetUniformFloat3("u_Light.Diffuse", glm::vec3(0.5f));
-	m_Meshes.Program->SetUniformFloat3("u_Light.Specular", glm::vec3(1.0f));
+	m_Data.Program->SetUniformFloat3("u_Light.Ambient", glm::vec3(0.5f));
+	m_Data.Program->SetUniformFloat3("u_Light.Diffuse", glm::vec3(0.5f));
+	m_Data.Program->SetUniformFloat3("u_Light.Specular", glm::vec3(1.0f));
 
-	m_Meshes.Program->SetUniformFloat3("u_Material.Ambient", glm::vec3(0.7f));
-	m_Meshes.Program->SetUniformFloat3("u_Material.Diffuse", glm::vec3(0.7f));
-	m_Meshes.Program->SetUniformFloat3("u_Material.Specular", glm::vec3(0.5f));
-	m_Meshes.Program->SetUniformFloat ("u_Material.Shininess", 32.0f);
+	m_Data.Program->SetUniformFloat ("u_Material.Shininess", 32.0f);
 }
 
 void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)
@@ -53,7 +50,7 @@ void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)
 	if (m_ObjectCache.find(object) == m_ObjectCache.end())
 	{
 		// Create new VertexBuffer
-		if (m_Meshes.VertexOffset >= MaxQuads * 4 * sizeof(Vertex))
+		if (m_Data.VertexOffset >= MaxQuads * 4 * sizeof(Vertex))
 		{
 			std::shared_ptr<VertexBuffer> vertexBuffer;
 			vertexBuffer.reset(new VertexBuffer(MaxQuads * 4 * sizeof(Vertex)));
@@ -64,39 +61,39 @@ void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)
 				{ ShaderDataType::Float2, "a_TexCoord" },
 				{ ShaderDataType::UInt2 , "a_TexHandle", true}
 			});
-			m_Meshes.VertexBufferPtr = vertexBuffer;
-			m_Meshes.VAO->AddVertexBuffer(vertexBuffer);
-			m_Meshes.VertexOffset = 0;
+			m_Data.VertexBufferPtr = vertexBuffer;
+			m_Data.VAO->AddVertexBuffer(vertexBuffer);
+			m_Data.VertexOffset = 0;
 
 			std::shared_ptr<IndexBuffer> indexBuffer;
 			indexBuffer.reset(new IndexBuffer(MaxQuads * 6));
-			m_Meshes.IndexBufferPtr = indexBuffer;
-			m_Meshes.VAO->AddIndexBuffer(indexBuffer);
-			m_Meshes.IndexOffset = 0;
+			m_Data.IndexBufferPtr = indexBuffer;
+			m_Data.VAO->AddIndexBuffer(indexBuffer);
+			m_Data.IndexOffset = 0;
 		}
 
 		// Insert object into cache
-		ObjectMapValue mapObject(object, m_Meshes.VertexBufferPtr, m_Meshes.IndexBufferPtr, m_Meshes.VertexOffset, m_Meshes.IndexOffset);
+		ObjectMapValue mapObject(object, m_Data.VertexBufferPtr, m_Data.IndexBufferPtr, m_Data.VertexOffset, m_Data.IndexOffset);
 		m_ObjectCache.insert(std::make_pair(object, mapObject));
 
 		// Push object into VertexArray
-		m_Meshes.VertexBufferPtr->SetData(&(object->GetData()[0].Position[0]), m_Meshes.VertexOffset, object->GetVertexSize());
-		m_Meshes.VertexOffset += object->GetVertexSize();
+		m_Data.VertexBufferPtr->SetData(&(object->GetData()[0].Position[0]), m_Data.VertexOffset, object->GetVertexSize());
+		m_Data.VertexOffset += object->GetVertexSize();
 
-		const auto& indices = object->CalculateIndices(m_Meshes.offset);
-		m_Meshes.IndexBufferPtr->SetData(indices.data(), m_Meshes.IndexOffset, object->GetIndexCount());
-		m_Meshes.IndexOffset += object->GetIndexCount() * sizeof(uint32_t);
+		const auto& indices = object->CalculateIndices(m_Data.offset);
+		m_Data.IndexBufferPtr->SetData(indices.data(), m_Data.IndexOffset, object->GetIndexCount());
+		m_Data.IndexOffset += object->GetIndexCount() * sizeof(uint32_t);
 	}
 }
 
 const uint64_t Renderer3D::AddTexture(const char* path)
 {
-	return m_Meshes.Textures->LoadTexture(path);
+	return m_Data.Textures->LoadTexture(path);
 }
 
 const uint64_t Renderer3D::GetDefaultTexture()
 {
-	return m_Meshes.Textures->DefaultTexture();
+	return m_Data.Textures->DefaultTexture();
 }
 
 void Renderer3D::Transform(const std::shared_ptr<SceneObject3D>& object, const glm::mat4& transform)

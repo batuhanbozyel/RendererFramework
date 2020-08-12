@@ -29,23 +29,26 @@ void Renderer::Init(const RendererMode& mode, const WindowProps& props)
 
 void Renderer::Draw()
 {
-	const Meshes& mesh = s_Renderer->GetMeshes();
-	mesh.Bind();
+	const RenderData& data = s_Renderer->GetData();
+	data.Bind();
 
 	// Get Buffers
-	const auto& vertexBuffers = mesh.VAO->GetVertexBuffers();
-	const auto& indexBuffers = mesh.VAO->GetIndexBuffers();
+	const auto& vertexBuffers = data.VAO->GetVertexBuffers();
+	const auto& indexBuffers = data.VAO->GetIndexBuffers();
 
 	// Make a draw call for each buffer
+	int drawCount = 0;
 	for (int i = 0; i < vertexBuffers.size(); i++)
 	{
 		vertexBuffers[i]->Bind();
 		indexBuffers[i]->Bind();
-		mesh.Program->SetUniformMat4("u_ViewProjection", s_Camera->GetViewProjectionMatrix());
-		mesh.Program->SetUniformFloat3("u_CameraPos", s_Camera->GetPosition());
-		mesh.Program->SetUniformFloat3("u_Light.Position", s_Camera->GetPosition());
-		glDrawElements(GL_TRIANGLES, mesh.IndexBufferPtr->GetCount(), GL_UNSIGNED_INT, nullptr);
+		data.Program->SetUniformMat4("u_ViewProjection", s_Camera->GetViewProjectionMatrix());
+		data.Program->SetUniformFloat3("u_CameraPos", s_Camera->GetPosition());
+		data.Program->SetUniformFloat3("u_Light.Position", s_Camera->GetPosition());
+		glDrawElements(GL_TRIANGLES, data.IndexBufferPtr->GetCount(), GL_UNSIGNED_INT, nullptr);
+		drawCount++;
 	}
+	//LOG_TRACE("Draw Calls: {0}", drawCount);
 }
 
 void Renderer::Push(const std::shared_ptr<SceneObject3D>& object)

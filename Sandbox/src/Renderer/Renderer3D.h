@@ -15,9 +15,9 @@ private:
 
 	virtual void Transform(const std::shared_ptr<SceneObject3D>& object, const glm::mat4& transform) override;
 
-	virtual inline const Meshes& GetMeshes() const override { return m_Meshes; }
+	virtual inline const RenderData& GetData() const override { return m_Data; }
 private:
-	Meshes m_Meshes;
+	RenderData m_Data;
 
 	// Cache for transforming or removing objects faster
 	struct ObjectMapValue
