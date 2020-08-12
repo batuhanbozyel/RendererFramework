@@ -1,0 +1,10 @@
+^C:\USERS\TUNTI\DESKTOP\CODING AND STUFF\RESOURCES\OPENGL FILES\ASSIMP\CONTRIB\ZLIB\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/Tunti/Desktop/Coding and Stuff/Resources/OpenGL Files/assimp" "-BC:/Users/Tunti/Desktop/Coding and Stuff/Resources/OpenGL Files/assimp-lib-build" --check-stamp-file "C:/Users/Tunti/Desktop/Coding and Stuff/Resources/OpenGL Files/assimp-lib-build/contrib/zlib/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

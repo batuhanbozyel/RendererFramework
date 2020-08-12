@@ -18,9 +18,13 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Sandbox/vendor/GLFW/include"
 IncludeDir["Glad"] = "Sandbox/vendor/Glad/include"
-IncludeDir["glm"] = "Sandbox/vendor/glm"
 IncludeDir["spdlog"] = "Sandbox/vendor/spdlog/include"
+IncludeDir["assimp"] = "Sandbox/vendor/assimp/include"
+IncludeDir["glm"] = "Sandbox/vendor/glm"
 IncludeDir["stb"] = "Sandbox/vendor/stb"
+
+LibraryDir = {}
+LibraryDir["assimp"] = "Sandbox/vendor/assimp/bin"
 
 group "Dependencies"
 	include "Sandbox/vendor/GLFW"
@@ -45,10 +49,16 @@ project "Sandbox"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
+
 		"%{prj.name}/vendor/stb/**.h",
 		"%{prj.name}/vendor/stb/**.cpp",
+
+		"%{prj.name}/vendor/assimp/**.h",
+		"%{prj.name}/vendor/assimp/**.hpp",
+		"%{prj.name}/vendor/assimp/**.inl",
 
 		"%{prj.name}/tests/**.h",
 		"%{prj.name}/tests/**.cpp"
@@ -67,14 +77,21 @@ project "Sandbox"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.spdlog}"
+		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.assimp}"
+	}
+
+	libdirs
+	{
+		"%{LibraryDir.assimp}"
 	}
 
 	links
 	{
 		"GLFW",
 		"Glad",
-		"opengl32.lib"
+		"opengl32.lib",
+		"assimp-vc142-mt.lib"
 	}
 
 	filter "configurations:Debug"
