@@ -16,25 +16,25 @@ workspace "RendererFramework"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
-IncludeDir["GLFW"] = "Sandbox/vendor/GLFW/include"
-IncludeDir["Glad"] = "Sandbox/vendor/Glad/include"
-IncludeDir["spdlog"] = "Sandbox/vendor/spdlog/include"
-IncludeDir["assimp"] = "Sandbox/vendor/assimp/include"
-IncludeDir["glm"] = "Sandbox/vendor/glm"
-IncludeDir["stb"] = "Sandbox/vendor/stb"
+IncludeDir["GLFW"] = "Doge/vendor/GLFW/include"
+IncludeDir["Glad"] = "Doge/vendor/Glad/include"
+IncludeDir["spdlog"] = "Doge/vendor/spdlog/include"
+IncludeDir["assimp"] = "Doge/vendor/assimp/include"
+IncludeDir["glm"] = "Doge/vendor/glm"
+IncludeDir["stb"] = "Doge/vendor/stb"
 
 LibraryDir = {}
-LibraryDir["assimp"] = "Sandbox/vendor/assimp/lib"
+LibraryDir["assimp"] = "Doge/vendor/assimp/lib"
 
 group "Dependencies"
-	include "Sandbox/vendor/GLFW"
-	include "Sandbox/vendor/Glad"
+	include "Doge/vendor/GLFW"
+	include "Doge/vendor/Glad"
 
 group ""
 
-project "Sandbox"
-	location "Sandbox"
-	kind "ConsoleApp"
+project "Doge"
+	location "Doge"
+	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
@@ -43,7 +43,7 @@ project "Sandbox"
 	objdir ("bin-int/" ..outputdir .. "/%{prj.name}")
 
 	pchheader "pch.h"
-	pchsource "Sandbox/src/pch.cpp"
+	pchsource "Doge/src/pch.cpp"
 
 	files
 	{
@@ -59,9 +59,6 @@ project "Sandbox"
 		"%{prj.name}/vendor/assimp/**.h",
 		"%{prj.name}/vendor/assimp/**.hpp",
 		"%{prj.name}/vendor/assimp/**.inl",
-
-		"%{prj.name}/tests/**.h",
-		"%{prj.name}/tests/**.cpp"
 	}
 
 	defines
@@ -102,3 +99,35 @@ project "Sandbox"
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "on"
+
+project "Sandbox"
+	location "Sandbox"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"Doge/src",
+		"Doge/vendor",
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.assimp}"
+	}
+
+	links
+	{
+		"Doge"
+	}
