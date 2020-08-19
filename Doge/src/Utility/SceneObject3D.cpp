@@ -5,44 +5,41 @@
 
 // Cuboid Object Implementations
 
-Cuboid::Cuboid(glm::vec3 length, const glm::vec4& color, uint64_t handle)
+Cuboid::Cuboid(glm::vec3 length, uint32_t texIndex)
 {
-	if (handle == 0)
-		handle = Renderer::DefaultTexture();
-
 	m_Vertices.resize(24);
 	length = length / 2.0f;
 
 	// Front
-	m_Vertices[0] =  { glm::vec3(-length.x, -length.y,  length.z), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f), color, handle };
-	m_Vertices[1] =  { glm::vec3( length.x, -length.y,  length.z), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 0.0f), color, handle };
-	m_Vertices[2] =  { glm::vec3( length.x,  length.y,  length.z), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f), color, handle };
-	m_Vertices[3] =  { glm::vec3(-length.x,  length.y,  length.z), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f), color, handle };
+	m_Vertices[0] =  { glm::vec3(-length.x, -length.y,  length.z), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f), texIndex };
+	m_Vertices[1] =  { glm::vec3( length.x, -length.y,  length.z), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 0.0f), texIndex };
+	m_Vertices[2] =  { glm::vec3( length.x,  length.y,  length.z), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f), texIndex };
+	m_Vertices[3] =  { glm::vec3(-length.x,  length.y,  length.z), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f), texIndex };
 	// Back
-	m_Vertices[4] =  { glm::vec3(-length.x, -length.y, -length.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f), color, handle };
-	m_Vertices[5] =  { glm::vec3( length.x, -length.y, -length.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f), color, handle };
-	m_Vertices[6] =  { glm::vec3( length.x,  length.y, -length.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 1.0f), color, handle };
-	m_Vertices[7] =  { glm::vec3(-length.x,  length.y, -length.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f), color, handle };
+	m_Vertices[4] =  { glm::vec3(-length.x, -length.y, -length.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f), texIndex };
+	m_Vertices[5] =  { glm::vec3( length.x, -length.y, -length.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f), texIndex };
+	m_Vertices[6] =  { glm::vec3( length.x,  length.y, -length.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 1.0f), texIndex };
+	m_Vertices[7] =  { glm::vec3(-length.x,  length.y, -length.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f), texIndex };
 	// Left
-	m_Vertices[8] =  { glm::vec3(-length.x, -length.y, -length.z), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f), color, handle };
-	m_Vertices[9] =  { glm::vec3(-length.x, -length.y,  length.z), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f), color, handle };
-	m_Vertices[10] = { glm::vec3(-length.x,  length.y,  length.z), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f), color, handle };
-	m_Vertices[11] = { glm::vec3(-length.x,  length.y, -length.z), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f), color, handle };
+	m_Vertices[8] =  { glm::vec3(-length.x, -length.y, -length.z), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f), texIndex };
+	m_Vertices[9] =  { glm::vec3(-length.x, -length.y,  length.z), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f), texIndex };
+	m_Vertices[10] = { glm::vec3(-length.x,  length.y,  length.z), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f), texIndex };
+	m_Vertices[11] = { glm::vec3(-length.x,  length.y, -length.z), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f), texIndex };
 	// Right	
-	m_Vertices[12] = { glm::vec3( length.x, -length.y, -length.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f), color, handle };
-	m_Vertices[13] = { glm::vec3( length.x, -length.y,  length.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f), color, handle };
-	m_Vertices[14] = { glm::vec3( length.x,  length.y,  length.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f), color, handle };
-	m_Vertices[15] = { glm::vec3( length.x,  length.y, -length.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f), color, handle };
+	m_Vertices[12] = { glm::vec3( length.x, -length.y, -length.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f), texIndex };
+	m_Vertices[13] = { glm::vec3( length.x, -length.y,  length.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f), texIndex };
+	m_Vertices[14] = { glm::vec3( length.x,  length.y,  length.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f), texIndex };
+	m_Vertices[15] = { glm::vec3( length.x,  length.y, -length.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f), texIndex };
 	// Top
-	m_Vertices[16] = { glm::vec3(-length.x,  length.y, -length.z), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f), color, handle };
-	m_Vertices[17] = { glm::vec3( length.x,  length.y, -length.z), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f), color, handle };
-	m_Vertices[18] = { glm::vec3( length.x,  length.y,  length.z), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f), color, handle };
-	m_Vertices[19] = { glm::vec3(-length.x,  length.y,  length.z), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f), color, handle };
+	m_Vertices[16] = { glm::vec3(-length.x,  length.y, -length.z), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f), texIndex };
+	m_Vertices[17] = { glm::vec3( length.x,  length.y, -length.z), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f), texIndex };
+	m_Vertices[18] = { glm::vec3( length.x,  length.y,  length.z), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f), texIndex };
+	m_Vertices[19] = { glm::vec3(-length.x,  length.y,  length.z), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f), texIndex };
 	// Bottom
-	m_Vertices[20] = { glm::vec3(-length.x, -length.y, -length.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f), color, handle };
-	m_Vertices[21] = { glm::vec3( length.x, -length.y, -length.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f), color, handle };
-	m_Vertices[22] = { glm::vec3( length.x, -length.y,  length.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 1.0f), color, handle };
-	m_Vertices[23] = { glm::vec3(-length.x, -length.y,  length.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 1.0f), color, handle };
+	m_Vertices[20] = { glm::vec3(-length.x, -length.y, -length.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f), texIndex };
+	m_Vertices[21] = { glm::vec3( length.x, -length.y, -length.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f), texIndex };
+	m_Vertices[22] = { glm::vec3( length.x, -length.y,  length.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 1.0f), texIndex };
+	m_Vertices[23] = { glm::vec3(-length.x, -length.y,  length.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 1.0f), texIndex };
 }
 
 void Cuboid::Transform(const glm::mat4& transform)
@@ -72,12 +69,9 @@ const std::vector<uint32_t> Cuboid::CalculateIndices(uint32_t& offset)
 
 // Sphere Object Implementations
 
-Sphere::Sphere(float radius, uint32_t sectorCount, uint32_t stackCount, const glm::vec4& color, uint64_t handle)
+Sphere::Sphere(float radius, uint32_t sectorCount, uint32_t stackCount, uint32_t texIndex)
 	: m_SectorCount(sectorCount), m_StackCount(stackCount)
 {
-	if (handle == 0)
-		handle = Renderer::DefaultTexture();
-
 	radius = radius / 2.0f;
 	float x, y, z, xy;                              // vertex position
 	float nx, ny, nz, lengthInv = 1.0f / radius;		// vertex normal
@@ -110,7 +104,7 @@ Sphere::Sphere(float radius, uint32_t sectorCount, uint32_t stackCount, const gl
 			t = (float)i / stackCount;
 			glm::vec2 texCoord(s, t);
 
-			m_Vertices.push_back(Vertex(pos, normal, texCoord, color, handle));
+			m_Vertices.push_back(Vertex(pos, normal, texCoord, texIndex));
 		}
 	}
 	glm::mat4 transform(glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(-1.0f, 0.0f, 0.0f)));

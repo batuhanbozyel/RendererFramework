@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Model.h"
 
+#include "Renderer/Texture.h"
 #include "Renderer/Renderer.h"
 
 #include <assimp/Importer.hpp>
@@ -39,7 +40,19 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
-	std::vector<TextureHandle> textures;
+	uint32_t index = 0;
+
+	// Process Material
+	if (mesh->mMaterialIndex >= 0)
+	{
+		std::vector<std::pair<std::string, TextureType>> texturePaths;
+		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+		AddTexturePath(texturePaths, material, aiTextureType_DIFFUSE, TextureType::Diffuse);
+		AddTexturePath(texturePaths, material, aiTextureType_SPECULAR, TextureType::Specular);
+
+		index = TextureManager::LoadTextureMaps(texturePaths);
+	}
 
 	for (uint32_t i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -57,7 +70,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		glm::vec2 texCoord;
 		if (mesh->mTextureCoords[0])
 		{
-			
 			texCoord.x = mesh->mTextureCoords[0][i].x;
 			texCoord.y = mesh->mTextureCoords[0][i].y;
 		}
@@ -65,7 +77,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		{
 			texCoord = glm::vec2(0.0f);
 		}
-		vertices.push_back(Vertex(position, normal, texCoord));
+		vertices.push_back(Vertex(position, normal, texCoord, index));
 	}
 	// Process Indices
 	for (uint32_t i = 0; i < mesh->mNumFaces; i++)
@@ -75,32 +87,15 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			indices.push_back(face.mIndices[j]);
 	}
 
-	// Process Material
-	if (mesh->mMaterialIndex >= 0)
-	{
-		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
-		std::vector<TextureHandle> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::Diffuse);
-		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-
-		std::vector<TextureHandle> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TextureType::Specular);
-		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-	}
-
-	return Mesh(vertices, indices, textures);
+	return Mesh(vertices, indices);
 }
 
-std::vector<TextureHandle> Model::LoadMaterialTextures(aiMaterial* material, aiTextureType type, TextureType textureType)
+void Model::AddTexturePath(std::vector<std::pair<std::string, TextureType>>& texturePaths, aiMaterial* material, aiTextureType type, TextureType textureType)
 {
-	std::vector<TextureHandle> textures;
-	for (uint32_t i = 0; i < material->GetTextureCount(type); i++)
+	if (material->GetTextureCount(type))
 	{
-		aiString str;
-		material->GetTexture(type, i, &str);
-		TextureHandle texture;
-		texture.Handle = Renderer::CreateTexture((m_Directory + str.C_Str()).c_str());
-		texture.Type = textureType;
-		textures.push_back(texture);
+		aiString path;
+		material->GetTexture(type, 0, &path);
+		texturePaths.push_back(std::make_pair((m_Directory + path.C_Str()), textureType));
 	}
-	return textures;
 }

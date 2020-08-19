@@ -2,7 +2,6 @@
 #include "Renderer3D.h"
 
 #include "Shader.h"
-#include "Texture.h"
 #include "VertexArray.h"
 
 #include "Utility/SceneObject3D.h"
@@ -12,9 +11,6 @@ constexpr uint32_t MaxQuads = 10000;
 
 Renderer3D::Renderer3D()
 {
-	// Create Texture array with a default white texture
-	m_Data.Textures.reset(new Texture);
-
 	// Create VertexArray
 	m_Data.VAO.reset(new VertexArray);
 
@@ -24,9 +20,8 @@ Renderer3D::Renderer3D()
 	vertexBuffer->SetLayout({
 		{ ShaderDataType::Float4, "a_Position" },
 		{ ShaderDataType::Float3, "a_Normal" },
-		{ ShaderDataType::Float4, "a_Color" },
 		{ ShaderDataType::Float2, "a_TexCoord" },
-		{ ShaderDataType::UInt2 , "a_TexHandle", true}
+		{ ShaderDataType::UInt , "a_TexIndex", true }
 	});
 	m_Data.VertexBufferPtr = vertexBuffer;
 	m_Data.VAO->AddVertexBuffer(vertexBuffer);
@@ -40,7 +35,7 @@ Renderer3D::Renderer3D()
 	m_Data.IndexOffset = 0;
 
 	// Create Shader
-	m_Data.Program.reset(new Shader("assets/shaders/BindlessTexture.glsl"));
+	m_Data.Program.reset(ShaderLibrary::CreateShader("assets/shaders/BindlessTexture.glsl"));
 
 	// Set Shader Properties
 	m_Data.Program->Bind();
@@ -64,9 +59,8 @@ void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)
 			vertexBuffer->SetLayout({
 				{ ShaderDataType::Float4, "a_Position" },
 				{ ShaderDataType::Float3, "a_Normal" },
-				{ ShaderDataType::Float4, "a_Color" },
 				{ ShaderDataType::Float2, "a_TexCoord" },
-				{ ShaderDataType::UInt2 , "a_TexHandle", true}
+				{ ShaderDataType::UInt , "a_TexIndex", true }
 			});
 			m_Data.VertexBufferPtr = vertexBuffer;
 			m_Data.VAO->AddVertexBuffer(vertexBuffer);
@@ -91,16 +85,6 @@ void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)
 		m_Data.IndexBufferPtr->SetData(indices.data(), m_Data.IndexOffset, object->GetIndexCount());
 		m_Data.IndexOffset += object->GetIndexCount() * sizeof(uint32_t);
 	}
-}
-
-const uint64_t Renderer3D::AddTexture(const char* path)
-{
-	return m_Data.Textures->LoadTexture(path);
-}
-
-const uint64_t Renderer3D::GetDefaultTexture()
-{
-	return m_Data.Textures->DefaultTexture();
 }
 
 void Renderer3D::Transform(const std::shared_ptr<SceneObject3D>& object, const glm::mat4& transform)

@@ -7,7 +7,9 @@
 #include "Core/Timestep.h"
 
 // Renderer
-#include "Renderer/Renderer3D.h"
+#include "Renderer/Renderer.h"
+#include "Renderer/Texture.h"
+#include "Renderer/Shader.h"
 
 // Utility
 #include "Utility/Camera.h"

@@ -9,10 +9,6 @@ public:
 
 private:
 	virtual void PushObject(const std::shared_ptr<SceneObject3D>& object) override;
-
-	virtual const uint64_t AddTexture(const char* path) override;
-	virtual const uint64_t GetDefaultTexture() override;
-
 	virtual void Transform(const std::shared_ptr<SceneObject3D>& object, const glm::mat4& transform) override;
 
 	virtual inline const RenderData& GetData() const override { return m_Data; }

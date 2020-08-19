@@ -4,8 +4,9 @@
 #include "Renderer3D.h"
 
 #include "Shader.h"
-#include "Texture.h"
 #include "VertexArray.h"
+
+#include "Texture.h"
 
 #include "Core/Window.h"
 
@@ -24,6 +25,7 @@ void RenderData::Bind() const
 
 void Renderer::Init(const RendererMode& mode, const WindowProps& props)
 {
+	TextureManager::Init();
 	switch (mode)
 	{
 		case RendererMode::_2D: //s_Renderer.reset(new Renderer2D);
@@ -65,16 +67,6 @@ void Renderer::Draw()
 void Renderer::Push(const std::shared_ptr<SceneObject3D>& object)
 {
 	s_Renderer->PushObject(object);
-}
-
-const uint64_t Renderer::CreateTexture(const char* path)
-{
-	return s_Renderer->AddTexture(path);
-}
-
-const uint64_t Renderer::DefaultTexture()
-{
-	return s_Renderer->GetDefaultTexture();
 }
 
 void Renderer::TransformObject(const std::shared_ptr<SceneObject3D>& object, const glm::mat4& transform)

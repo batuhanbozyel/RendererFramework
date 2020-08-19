@@ -3,6 +3,8 @@
 
 #include <assimp/scene.h>
 
+enum class TextureType;
+
 class Model
 {
 public:
@@ -12,7 +14,7 @@ private:
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 
-	std::vector<TextureHandle> LoadMaterialTextures(aiMaterial* material, aiTextureType type, TextureType textureType);
+	void AddTexturePath(std::vector<std::pair<std::string, TextureType>>& texturePaths, aiMaterial* material, aiTextureType type, TextureType textureType);
 private:
 	std::vector<Mesh> m_Meshes;
 	std::string m_Directory;
