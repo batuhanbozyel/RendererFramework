@@ -131,3 +131,12 @@ project "Sandbox"
 	{
 		"Doge"
 	}
+
+	filter "configurations:Debug"
+		defines "DEBUG_ENABLED"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
