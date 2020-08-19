@@ -75,26 +75,21 @@ void PerspectiveCamera::Move(int keyCode, float dt)
 
 void PerspectiveCamera::Rotate(const std::pair<float, float>& mousePos)
 {
-	float xOffset = mousePos.first - m_LastMousePos.first;
-	float yOffset = m_LastMousePos.second - mousePos.second;
+	constexpr float sensitivity = 0.05f;
+
+	m_Yaw += (mousePos.first - m_LastMousePos.first) * sensitivity;
+	m_Pitch += (m_LastMousePos.second - mousePos.second) * sensitivity;
 
 	m_LastMousePos = mousePos;
-
-	constexpr float sensitivity = 0.05f;
-	xOffset *= sensitivity;
-	yOffset *= sensitivity;
-
-	m_Yaw += xOffset;
-	m_Pitch += yOffset;
 
 	if (m_Pitch > 89.0f) m_Pitch = 89.0f; 
 	if (m_Pitch < -89.0f) m_Pitch = -89.0f;
 
-	glm::vec3 direction;
-	direction.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch)); 
-	direction.y = sin(glm::radians(m_Pitch)); 
-	direction.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch)); 
-	m_Front = glm::normalize(direction);
+	m_Front = glm::normalize(glm::vec3(
+		glm::cos(glm::radians(m_Yaw)) * glm::cos(glm::radians(m_Pitch)),
+		glm::sin(glm::radians(m_Pitch)),
+		glm::sin(glm::radians(m_Yaw)) * glm::cos(glm::radians(m_Pitch))
+	));
 }
 
 void PerspectiveCamera::SetProjection(float width, float height)

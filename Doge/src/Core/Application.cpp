@@ -32,7 +32,6 @@ int main(int argc, char** argv)
 		while (!glfwWindowShouldClose(app->s_ActiveWindow->GetNativeWindow()))
 		{
 			s_RenderBegin = true;
-
 			float dt = app->s_FrameTime.DeltaTime();
 
 			Renderer::ClearColor();
