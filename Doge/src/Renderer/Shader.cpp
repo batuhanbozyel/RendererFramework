@@ -4,109 +4,53 @@
 
 #include <fstream>
 
-std::unordered_map<std::string, uint32_t> Shader::s_ShaderIDCache;
+// Shader Program initialization methods
 
 Shader::Shader(const char* filePath)
 	: m_RendererID(0)
 {
-	if (s_ShaderIDCache.find(filePath) == s_ShaderIDCache.end())
-	{
-		const std::string& source = ReadFile(filePath);
-		auto& parsedSource = ParseShaderSource(source);
-		Compile(parsedSource[GL_VERTEX_SHADER], parsedSource[GL_FRAGMENT_SHADER]);
-		s_ShaderIDCache.insert(std::pair<std::string, uint32_t>(filePath, m_RendererID));
-	}
-	else m_RendererID = s_ShaderIDCache[filePath];
+	const std::string& source = ReadFile(filePath);
+	auto& parsedSource = ParseShaderSource(source);
+	Compile(parsedSource[GL_VERTEX_SHADER], parsedSource[GL_FRAGMENT_SHADER]);
+	CalculateUniformLocations();
 }
 
-// name parameter will be used to cache Shader
 Shader::Shader(const char* name, const std::string& vertexSrc, const std::string& fragmentSrc)
 	: m_RendererID(0)
 {
-	if (s_ShaderIDCache.find(name) == s_ShaderIDCache.end())
+	Compile(vertexSrc, fragmentSrc);
+	CalculateUniformLocations();
+}
+
+void Shader::CalculateUniformLocations()
+{
+	GLint uniform_count = 0;
+	glGetProgramiv(m_RendererID, GL_ACTIVE_UNIFORMS, &uniform_count);
+
+	if (uniform_count != 0)
 	{
-		Compile(vertexSrc, fragmentSrc);
-		s_ShaderIDCache.insert(std::pair<const char*, uint32_t>(name, m_RendererID));
+		GLint 	max_name_len = 0;
+		GLsizei length = 0;
+		GLsizei count = 0;
+		GLenum 	type = GL_NONE;
+		glGetProgramiv(m_RendererID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_name_len);
+
+		auto uniform_name = std::make_unique<char[]>(max_name_len);
+
+		for (GLint i = 0; i < uniform_count; ++i)
+		{
+			glGetActiveUniform(m_RendererID, i, max_name_len, &length, &count, &type, uniform_name.get());
+
+			uint32_t location = glGetUniformLocation(m_RendererID, uniform_name.get());
+
+			m_UniformCache.emplace(std::make_pair(std::string(uniform_name.get(), length), location));
+		}
 	}
-	else m_RendererID = s_ShaderIDCache[name];
 }
 
 Shader::~Shader()
 {
 	glDeleteProgram(m_RendererID);
-}
-
-void Shader::Bind() const
-{
-	glUseProgram(m_RendererID);
-}
-
-void Shader::Unbind() const
-{
-	glUseProgram(0);
-}
-
-void Shader::SetUniformInt(const char* name, int value)
-{
-	glUniform1i(GetUniformLocation(name), value);
-}
-
-void Shader::SetUniformInt2(const char* name, const glm::ivec2& value)
-{
-	glUniform2i(GetUniformLocation(name), value.x, value.y);
-}
-
-void Shader::SetUniformInt3(const char* name, const glm::ivec3& value)
-{
-	glUniform3i(GetUniformLocation(name), value.x, value.y, value.z);
-}
-
-void Shader::SetUniformInt4(const char* name, const glm::ivec4& value)
-{
-	glUniform4i(GetUniformLocation(name), value.x, value.y, value.z, value.w);
-}
-
-void Shader::SetUniformFloat(const char* name, float value)
-{
-	glUniform1f(GetUniformLocation(name), value);
-}
-
-void Shader::SetUniformFloat2(const char* name, const glm::vec2& value)
-{
-	glUniform2f(GetUniformLocation(name), value.x, value.y);
-}
-
-void Shader::SetUniformFloat3(const char* name, const glm::vec3& value)
-{
-	glUniform3f(GetUniformLocation(name), value.x, value.y, value.z);
-}
-
-void Shader::SetUniformFloat4(const char* name, const glm::vec4& value)
-{
-	glUniform4f(GetUniformLocation(name), value.x, value.y, value.z, value.w);
-}
-
-void Shader::SetUniformMat3(const char* name, const glm::mat3& value)
-{
-	glUniformMatrix3fv(GetUniformLocation(name), 1 ,GL_FALSE, &value[0][0]);
-}
-
-void Shader::SetUniformMat4(const char* name, const glm::mat4& value)
-{
-	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &value[0][0]);
-}
-
-uint32_t Shader::GetUniformLocation(const char* name)
-{
-	auto& mapLocation = m_UniformCache.find(name);
-	if (mapLocation == m_UniformCache.end())
-	{
-		uint32_t location = glGetUniformLocation(m_RendererID, name);
-		LOG_ASSERT(location != -1, "Uniform could not found!");
-		m_UniformCache.insert(std::pair<std::string, uint32_t>(name, location));
-		return location;
-	}
-	return mapLocation->second;
 }
 
 std::string Shader::ReadFile(const char* filePath)
@@ -161,7 +105,7 @@ std::unordered_map<uint32_t, std::string> Shader::ParseShaderSource(const std::s
 		std::string type = source.substr(begin, end - begin);
 		// Invalid shader type
 		LOG_ASSERT(ShaderType(type), "Invalid Shader type!");
-		
+
 		begin = source.find_first_not_of("\r\n", end);
 		//  Syntax error
 		LOG_ASSERT(begin != std::string::npos, "Shader program: Syntax Error!");
@@ -277,4 +221,126 @@ void Shader::Compile(const std::string& vertexSrc, const std::string& fragmentSr
 	// Always detach shaders after a successful link.
 	glDetachShader(m_RendererID, vertexShader);
 	glDetachShader(m_RendererID, fragmentShader);
+}
+
+// Shader Program utility methods
+
+void Shader::Bind() const
+{
+	glUseProgram(m_RendererID);
+}
+
+void Shader::Unbind() const
+{
+	glUseProgram(0);
+}
+
+void Shader::SetUniformInt(const char* name, int value) const
+{
+	glUniform1i(GetUniformLocation(name), value);
+}
+
+void Shader::SetUniformInt2(const char* name, const glm::ivec2& value) const
+{
+	glUniform2i(GetUniformLocation(name), value.x, value.y);
+}
+
+void Shader::SetUniformInt3(const char* name, const glm::ivec3& value) const
+{
+	glUniform3i(GetUniformLocation(name), value.x, value.y, value.z);
+}
+
+void Shader::SetUniformInt4(const char* name, const glm::ivec4& value) const
+{
+	glUniform4i(GetUniformLocation(name), value.x, value.y, value.z, value.w);
+}
+
+void Shader::SetUniformUInt(const char* name, uint32_t value) const
+{
+	glUniform1ui(GetUniformLocation(name), value);
+}
+
+void Shader::SetUniformUInt2(const char* name, const glm::uvec2& value) const
+{
+	glUniform2ui(GetUniformLocation(name), value.x, value.y);
+}
+
+void Shader::SetUniformUInt3(const char* name, const glm::uvec3& value) const
+{
+	glUniform3ui(GetUniformLocation(name), value.x, value.y, value.z);
+}
+
+void Shader::SetUniformUInt4(const char* name, const glm::uvec4& value) const
+{
+	glUniform4ui(GetUniformLocation(name), value.x, value.y, value.z, value.w);
+}
+
+void Shader::SetUniformFloat(const char* name, float value) const
+{
+	glUniform1f(GetUniformLocation(name), value);
+}
+
+void Shader::SetUniformFloat2(const char* name, const glm::vec2& value) const
+{
+	glUniform2f(GetUniformLocation(name), value.x, value.y);
+}
+
+void Shader::SetUniformFloat3(const char* name, const glm::vec3& value) const
+{
+	glUniform3f(GetUniformLocation(name), value.x, value.y, value.z);
+}
+
+void Shader::SetUniformFloat4(const char* name, const glm::vec4& value) const
+{
+	glUniform4f(GetUniformLocation(name), value.x, value.y, value.z, value.w);
+}
+
+void Shader::SetUniformMat3(const char* name, const glm::mat3& value) const
+{
+	glUniformMatrix3fv(GetUniformLocation(name), 1 ,GL_FALSE, &value[0][0]);
+}
+
+void Shader::SetUniformMat4(const char* name, const glm::mat4& value) const
+{
+	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &value[0][0]);
+}
+
+uint32_t Shader::GetUniformLocation(const char* name) const
+{
+	auto& mapLocation = m_UniformCache.find(name);
+	LOG_ASSERT(mapLocation != m_UniformCache.end(), "Uniform could not found!");
+	return mapLocation->second;
+}
+
+// ShaderLibrary
+
+std::unordered_map<std::string, Shader*> ShaderLibrary::s_ShaderCache;
+
+Shader* ShaderLibrary::CreateShader(const char* filePath)
+{
+	auto& shaderIt = s_ShaderCache.find(filePath);
+	if (shaderIt == s_ShaderCache.end())
+	{
+		Shader* shader = new Shader(filePath);
+		s_ShaderCache.emplace(std::make_pair(filePath, shader));
+		return shader;
+	}
+	return shaderIt->second;
+}
+
+Shader* ShaderLibrary::CreateShader(const char* name, const std::string& vertexSrc, const std::string& fragmentSrc)
+{
+	auto& shaderIt = s_ShaderCache.find(name);
+	if (shaderIt == s_ShaderCache.end())
+	{
+		Shader* shader = new Shader(name, vertexSrc, fragmentSrc);
+		s_ShaderCache.emplace(std::make_pair(name, shader));
+		return shader;
+	}
+	return shaderIt->second;
+}
+
+Shader& ShaderLibrary::GetShader(const std::string& shader)
+{
+	return *s_ShaderCache.find(shader)->second;
 }
