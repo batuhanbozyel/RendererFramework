@@ -76,3 +76,34 @@ void IndexBuffer::SetData(const uint32_t* indices, uint32_t offset, uint32_t cou
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, sizeof(uint32_t) * count, indices);
 }
+
+/////////// ShaderStorageBuffer ///////////
+
+ShaderStorageBuffer::ShaderStorageBuffer(uint32_t size, uint32_t location, BufferUsage usage)
+{
+	glCreateBuffers(1, &m_RendererID);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_RendererID);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, size, nullptr, static_cast<GLenum>(usage));
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, location, m_RendererID);
+}
+
+ShaderStorageBuffer::~ShaderStorageBuffer()
+{
+	glDeleteBuffers(1, &m_RendererID);
+}
+
+void ShaderStorageBuffer::Bind() const
+{
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_RendererID);
+}
+
+void ShaderStorageBuffer::Unbind() const
+{
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
+
+void ShaderStorageBuffer::SetData(const void* data, uint32_t offset, uint32_t size)
+{
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_RendererID);
+	glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
+}

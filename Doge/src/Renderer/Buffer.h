@@ -112,3 +112,17 @@ private:
 	uint32_t m_RendererID;
 	uint32_t m_Count;
 };
+
+class ShaderStorageBuffer
+{
+public:
+	ShaderStorageBuffer(uint32_t size, uint32_t location, BufferUsage usage = BufferUsage::STATIC);
+	~ShaderStorageBuffer();
+
+	void Bind() const;
+	void Unbind() const;
+
+	void SetData(const void* data, uint32_t offset, uint32_t size);
+private:
+	uint32_t m_RendererID;
+};
