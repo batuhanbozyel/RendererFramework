@@ -33,19 +33,19 @@ void Texture::LoadTexture(const std::pair<std::string, TextureType>& texturePath
 	auto& textureIt = m_TextureMap.find(texturePath.first);
 	if (textureIt == m_TextureMap.end())
 	{
-		glBindTexture(GL_TEXTURE_2D, m_IDs[m_Count]);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-		int width, height, channels;
-		unsigned char* buffer = stbi_load(texturePath.first.c_str(), &width, &height, &channels, 4);
-		if (buffer)
+		if (m_Count < max_textures)
 		{
-			if (m_Count < max_textures)
+			glBindTexture(GL_TEXTURE_2D, m_IDs[m_Count]);
+
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+			int width, height, channels;
+			unsigned char* buffer = stbi_load(texturePath.first.c_str(), &width, &height, &channels, 4);
+			if (buffer)
 			{
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 				uint64_t handle = glGetTextureHandleARB(m_IDs[m_Count]);
@@ -56,11 +56,13 @@ void Texture::LoadTexture(const std::pair<std::string, TextureType>& texturePath
 				stbi_image_free(buffer);
 				return;
 			}
-			LOG_WARN("Texture slots are occupied!");
-			stbi_image_free(buffer);
+			LOG_ERROR("Could not load texture!");
 		}
-		LOG_ERROR("Could not load texture!");
+		LOG_ERROR("Texture slots are occupied!");
+		return;
 	}
+	uint64_t handle = glGetTextureHandleARB(m_IDs[textureIt->second]);
+	m_SSBO->SetData(&handle, sizeof(TextureMaps) * m_Count + static_cast<size_t>(texturePath.second), sizeof(uint64_t));
 }
 
 
@@ -74,6 +76,7 @@ void TextureManager::Init()
 uint32_t TextureManager::LoadTexture(const std::string& path)
 {
 	s_Textures->LoadTexture(std::make_pair(path, TextureType::Diffuse));
+	s_Textures->LoadTexture(std::make_pair(path, TextureType::Specular));
 	return s_Textures->m_Count++;
 }
 

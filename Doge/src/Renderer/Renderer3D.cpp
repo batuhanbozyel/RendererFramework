@@ -45,6 +45,7 @@ Renderer3D::Renderer3D()
 	m_Data.Program->SetUniformFloat3("u_Light.Specular", glm::vec3(1.0f));
 
 	m_Data.Program->SetUniformFloat ("u_Material.Shininess", 32.0f);
+	m_Data.Program->SetUniformFloat4("u_Material.Color", glm::vec4(1.0f));
 }
 
 void Renderer3D::PushObject(const std::shared_ptr<SceneObject3D>& object)
