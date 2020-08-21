@@ -4,7 +4,7 @@
 Camera::Camera(const glm::mat4& projection, const glm::mat4& view, const glm::vec3& position)
 	: m_ProjectionMatrix(projection), m_ViewMatrix(view), m_Position(position)
 {
-	m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
+
 }
 
 // Orthographic Camera
@@ -17,7 +17,7 @@ OrthographicCamera::OrthographicCamera(float width, float height, const glm::vec
 
 void OrthographicCamera::Update()
 {
-	m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
+
 }
 
 void OrthographicCamera::Move(int keyCode, float dt)
@@ -28,7 +28,6 @@ void OrthographicCamera::Move(int keyCode, float dt)
 void OrthographicCamera::SetProjection(float width, float height)
 {
 	m_ProjectionMatrix = glm::ortho(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f);
-	m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 }
 
 // Perspective Camera
@@ -49,8 +48,7 @@ PerspectiveCamera::PerspectiveCamera(float fov, float width, float height,
 
 void PerspectiveCamera::Update()
 {
-	m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Front, m_Up);
-	m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
+
 }
 
 void PerspectiveCamera::Move(int keyCode, float dt)
@@ -71,6 +69,7 @@ void PerspectiveCamera::Move(int keyCode, float dt)
 			m_Position += speed * glm::normalize(glm::cross(m_Front, m_Up)) * dt;
 			break;
 	}
+	m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Front, m_Up);
 }
 
 void PerspectiveCamera::Rotate(const std::pair<float, float>& mousePos)
@@ -90,6 +89,7 @@ void PerspectiveCamera::Rotate(const std::pair<float, float>& mousePos)
 		glm::sin(glm::radians(m_Pitch)),
 		glm::sin(glm::radians(m_Yaw)) * glm::cos(glm::radians(m_Pitch))
 	));
+	m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Front, m_Up);
 }
 
 void PerspectiveCamera::SetProjection(float width, float height)

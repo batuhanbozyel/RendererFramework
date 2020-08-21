@@ -12,7 +12,8 @@ flat out uint v_TexIndex;
 
 out vec3 v_FragPos;
 
-uniform mat4 u_ViewProjection;
+uniform mat4 u_View;
+uniform mat4 u_Projection;
 
 void main()
 {
@@ -20,7 +21,7 @@ void main()
 	v_Normal = a_Normal;
 	v_TexCoord = a_TexCoord;
 	v_TexIndex = a_TexIndex;
-	gl_Position = u_ViewProjection * a_Position;
+	gl_Position = u_Projection * u_View * a_Position;
 }
 
 #type fragment

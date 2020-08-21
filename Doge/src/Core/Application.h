@@ -13,8 +13,8 @@ class Application
 {
 public:
 	// To be defined in Client
-	virtual void OnStart() = 0;
-	virtual void OnUpdate(float dt) = 0;
+	virtual void OnStart() {};
+	virtual void OnUpdate(float dt) {};
 
 	inline static const Window* GetActiveWindow() { return s_ActiveWindow; }
 private:

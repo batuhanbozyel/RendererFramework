@@ -40,7 +40,6 @@ int main(int argc, char** argv)
 
 			if (s_ThirdPerson) Renderer::GetCamera()->Rotate(Input::GetMousePos());
 
-			Renderer::GetCamera()->Update();
 			Renderer::Draw();
 
 			app->s_ActiveWindow->Update();

@@ -49,15 +49,16 @@ void Renderer::Draw()
 	const auto& vertexBuffers = data.VAO->GetVertexBuffers();
 	const auto& indexBuffers = data.VAO->GetIndexBuffers();
 
+	data.Program->SetUniformMat4("u_View", s_Camera->GetViewMatrix());
+	data.Program->SetUniformMat4("u_Projection", s_Camera->GetProjectionMatrix());
+	data.Program->SetUniformFloat3("u_CameraPos", s_Camera->GetPosition());
+	data.Program->SetUniformFloat3("u_Light.Position", s_Camera->GetPosition());
 	// Make a draw call for each buffer
 	int drawCount = 0;
 	for (int i = 0; i < vertexBuffers.size(); i++)
 	{
 		vertexBuffers[i]->Bind();
 		indexBuffers[i]->Bind();
-		data.Program->SetUniformMat4("u_ViewProjection", s_Camera->GetViewProjectionMatrix());
-		data.Program->SetUniformFloat3("u_CameraPos", s_Camera->GetPosition());
-		data.Program->SetUniformFloat3("u_Light.Position", s_Camera->GetPosition());
 		glDrawElements(GL_TRIANGLES, data.IndexBufferPtr->GetCount(), GL_UNSIGNED_INT, nullptr);
 		drawCount++;
 	}
