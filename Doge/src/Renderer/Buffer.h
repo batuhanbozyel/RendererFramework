@@ -1,24 +1,18 @@
 #pragma once
 #include "ShaderDataType.h"
 
-enum class BufferUsage
-{
-	STATIC = GL_STATIC_DRAW,
-	DYNAMIC = GL_DYNAMIC_DRAW,
-	STREAM = GL_STREAM_DRAW
-};
+class VertexArray;
 
 struct BufferElement
 {
 	std::string Name;
 	ShaderDataType Type;
 	uint32_t Size;
-	uint64_t Offset;
+	uint32_t Offset;
 	bool Normalized;
-	bool AttribIPointer;
 
-	BufferElement(ShaderDataType type, const std::string& name, bool attribI = false, bool normalized = false)
-		: Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), AttribIPointer(attribI), Normalized(normalized)
+	BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
+		: Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), Normalized(normalized)
 	{
 	}
 
@@ -81,8 +75,10 @@ private:
 class VertexBuffer
 {
 public:
-	VertexBuffer(uint32_t size, BufferUsage usage = BufferUsage::STATIC);
-	VertexBuffer(const float* vertices, uint32_t size, BufferUsage usage = BufferUsage::STATIC);
+	friend class VertexArray;
+
+	VertexBuffer(uint32_t size);
+	VertexBuffer(const float* vertices, uint32_t size);
 	~VertexBuffer();
 
 	void Bind() const;
@@ -99,8 +95,10 @@ private:
 class IndexBuffer
 {
 public:
-	IndexBuffer(uint32_t count, BufferUsage usage = BufferUsage::STATIC);
-	IndexBuffer(const uint32_t* indices, uint32_t count, BufferUsage usage = BufferUsage::STATIC);
+	friend class VertexArray;
+
+	IndexBuffer(uint32_t count);
+	IndexBuffer(const uint32_t* indices, uint32_t count);
 	~IndexBuffer();
 
 	void Bind() const;
@@ -116,7 +114,7 @@ private:
 class ShaderStorageBuffer
 {
 public:
-	ShaderStorageBuffer(uint32_t size, uint32_t location, BufferUsage usage = BufferUsage::STATIC);
+	ShaderStorageBuffer(uint32_t size, uint32_t location);
 	~ShaderStorageBuffer();
 
 	void Bind() const;
@@ -125,4 +123,5 @@ public:
 	void SetData(const void* data, uint32_t offset, uint32_t size);
 private:
 	uint32_t m_RendererID;
+	uint32_t m_Location;
 };

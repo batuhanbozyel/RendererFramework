@@ -30,6 +30,7 @@ Texture::~Texture()
 
 void Texture::LoadTexture(const std::pair<std::string, TextureType>& texturePath)
 {
+	m_SSBO->Bind();
 	auto& textureIt = m_TextureMap.find(texturePath.first);
 	if (textureIt == m_TextureMap.end())
 	{
