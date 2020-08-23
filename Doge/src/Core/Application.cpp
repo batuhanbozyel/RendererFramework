@@ -65,12 +65,12 @@ void Application::Init()
 
 	Renderer::Init(RENDER_MODE, s_ActiveWindow->GetWindowProps());
 
-	LOG_WARN("Application started running!");
+	LOG_TRACE("Application started running!");
 }
 
 void Application::Shutdown()
 {
-	LOG_WARN("Application terminating!");
+	LOG_TRACE("Application terminating!");
 	delete s_ActiveWindow;
 	Context::GLFWTerminate();
 }

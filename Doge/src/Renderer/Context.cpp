@@ -9,6 +9,25 @@ static void GLFWErrorCallback(int error, const char* description)
 	LOG_ERROR("Error: {0}", description);
 }
 
+static void OpenGLMessageCallback(
+	unsigned int source,
+	unsigned int type,
+	unsigned int id,
+	unsigned int severity,
+	int length,
+	const char* message,
+	const void* userParam)
+{
+	switch (severity)
+	{
+		case GL_DEBUG_SEVERITY_HIGH:         LOG_CRITICAL(message); return;
+		case GL_DEBUG_SEVERITY_MEDIUM:       LOG_ERROR(message); return;
+		case GL_DEBUG_SEVERITY_LOW:          LOG_WARN(message); return;
+		case GL_DEBUG_SEVERITY_NOTIFICATION: LOG_TRACE(message); return;
+	}
+
+}
+
 void Context::GLFWInit()
 {
 	if (!s_Initialized)
@@ -41,7 +60,7 @@ void Context::GLFWTerminate()
 void Context::MakeCurrent(GLFWwindow* window)
 {
 	glfwMakeContextCurrent(window);
-	LOG_WARN("Current Context assigned to ID: {0}", static_cast<void*>(window));
+	LOG_TRACE("Current Context assigned to ID: {0}", static_cast<void*>(window));
 }
 
 Context::Context(GLFWwindow* window)
@@ -55,6 +74,13 @@ Context::Context(GLFWwindow* window)
 	int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	LOG_ASSERT(status, "Glad initialization failed");
 
+#ifdef DEBUG_ENABLED
+	glEnable(GL_DEBUG_OUTPUT);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	glDebugMessageCallback(OpenGLMessageCallback, nullptr);
+	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+#endif
+
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -62,7 +88,7 @@ Context::Context(GLFWwindow* window)
 	LOG_INFO(glGetString(GL_RENDERER));
 	LOG_INFO(glGetString(GL_VERSION));
 
-	LOG_WARN("Context creation succeed!");
+	LOG_TRACE("Context creation succeed!");
 }
 
 Context::~Context()
