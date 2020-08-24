@@ -20,16 +20,10 @@ public:
 	friend class TextureManager;
 	~Texture();
 private:
-	Texture();
+	explicit Texture(const std::string& texturePath);
 
-	void LoadTexture(const std::pair<std::string, TextureType>& texturePath);
 private:
-	std::vector<uint32_t> m_IDs;
-
-	std::unique_ptr<ShaderStorageBuffer> m_SSBO;
-	std::unordered_map<std::string, uint32_t> m_TextureMap;
-
-	uint32_t m_Count = 0;
+	uint32_t m_ID;
 };
 
 class TextureManager
@@ -40,5 +34,9 @@ public:
 	static uint32_t LoadTexture(const std::string& path);
 	static uint32_t LoadTextureMaps(const std::vector<std::pair<std::string, TextureType>>& texturePaths);
 private:
-	static std::unique_ptr<Texture> s_Textures;
+	static std::vector<std::unique_ptr<Texture>> s_Textures;
+	static std::unique_ptr<ShaderStorageBuffer> m_SSBO;
+
+	static uint32_t m_Count;
+	static std::unordered_map<std::string, uint32_t> s_TextureMap;
 };

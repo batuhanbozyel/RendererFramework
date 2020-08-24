@@ -7,84 +7,103 @@
 
 constexpr uint32_t max_textures = 1024;
 
-std::unique_ptr<Texture> TextureManager::s_Textures = nullptr;
+uint32_t TextureManager::m_Count = 0;
+std::vector<std::unique_ptr<Texture>> TextureManager::s_Textures;
+std::unique_ptr<ShaderStorageBuffer> TextureManager::m_SSBO = nullptr;
+std::unordered_map<std::string, uint32_t> TextureManager::s_TextureMap;
 
-Texture::Texture()
-	: m_Count(0), m_IDs(max_textures)
+Texture::Texture(const std::string& texturePath)
 {
 	stbi_set_flip_vertically_on_load(1);
-	m_SSBO.reset(new ShaderStorageBuffer(sizeof(TextureMaps) * max_textures, 0));
 
-	glGenTextures(max_textures, m_IDs.data());
+	glCreateTextures(GL_TEXTURE_2D, 1, &m_ID);
+
+	int width, height, channels;
+	unsigned char* buffer = stbi_load(texturePath.c_str(), &width, &height, &channels, 4);
+	if (buffer)
+	{
+		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		glTextureParameteri(m_ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTextureParameteri(m_ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glTextureStorage2D(m_ID, 1, GL_RGBA8, width, height);
+		glTextureSubImage2D(m_ID, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+
+		uint64_t handle = glGetTextureHandleARB(m_ID);
+		glMakeTextureHandleResidentARB(handle);
+	}
+	stbi_image_free(buffer);
 }
 
 Texture::~Texture()
 {
-	for (const auto& id : m_IDs)
-	{
-		uint64_t handle = glGetTextureHandleARB(id);
-		glMakeTextureHandleNonResidentARB(handle);
-	}
-	glDeleteTextures(max_textures, m_IDs.data());
+	uint64_t handle = glGetTextureHandleARB(m_ID);
+	glMakeTextureHandleNonResidentARB(handle);
+
+	glDeleteTextures(1, &m_ID);
 }
-
-void Texture::LoadTexture(const std::pair<std::string, TextureType>& texturePath)
-{
-	m_SSBO->Bind();
-	auto& textureIt = m_TextureMap.find(texturePath.first);
-	if (textureIt == m_TextureMap.end())
-	{
-		if (m_Count < max_textures)
-		{
-			glBindTexture(GL_TEXTURE_2D, m_IDs[m_Count]);
-
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-			int width, height, channels;
-			unsigned char* buffer = stbi_load(texturePath.first.c_str(), &width, &height, &channels, 4);
-			if (buffer)
-			{
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-				uint64_t handle = glGetTextureHandleARB(m_IDs[m_Count]);
-				glMakeTextureHandleResidentARB(handle);
-				glBindTexture(GL_TEXTURE_2D, 0);
-				m_SSBO->SetData(&handle, sizeof(TextureMaps) * m_Count + static_cast<size_t>(texturePath.second), sizeof(uint64_t));
-				m_TextureMap.emplace(std::make_pair(texturePath.first, m_Count));
-				stbi_image_free(buffer);
-				return;
-			}
-			LOG_ERROR("Could not load texture!");
-		}
-		LOG_ERROR("Texture slots are occupied!");
-		return;
-	}
-	uint64_t handle = glGetTextureHandleARB(m_IDs[textureIt->second]);
-	m_SSBO->SetData(&handle, sizeof(TextureMaps) * m_Count + static_cast<size_t>(texturePath.second), sizeof(uint64_t));
-}
-
 
 // TextureManager
 
 void TextureManager::Init()
 {
-	s_Textures.reset(new Texture());
+	s_Textures.reserve(max_textures);
+	m_SSBO.reset(new ShaderStorageBuffer(sizeof(TextureMaps) * max_textures, 0));
 }
 
 uint32_t TextureManager::LoadTexture(const std::string& path)
 {
-	s_Textures->LoadTexture(std::make_pair(path, TextureType::Diffuse));
-	s_Textures->LoadTexture(std::make_pair(path, TextureType::Specular));
-	return s_Textures->m_Count++;
+	auto& textureIt = s_TextureMap.find(path);
+	uint32_t index = 0;
+	// Texture does not exist: Create a new Texture
+	if (textureIt == s_TextureMap.end())
+	{
+		index = static_cast<uint32_t>(s_Textures.size());
+		s_Textures.emplace_back(new Texture(path));
+		s_TextureMap.emplace(std::make_pair(path, index));
+	}
+	// Texture Exists: Get existing Texture's index
+	else
+	{
+		index = textureIt->second;
+	}
+	// Get Handle with Texture index and store in SSBO
+	m_SSBO->Bind();
+	uint64_t handle = glGetTextureHandleARB(s_Textures[index]->m_ID);
+	m_SSBO->SetData(&handle, sizeof(TextureMaps) * m_Count + static_cast<size_t>(TextureType::Diffuse), sizeof(uint64_t));
+	m_SSBO->SetData(&handle, sizeof(TextureMaps) * m_Count + static_cast<size_t>(TextureType::Specular), sizeof(uint64_t));
+
+	// Return SSBO storage location
+	return m_Count++;
 }
 
 uint32_t TextureManager::LoadTextureMaps(const std::vector<std::pair<std::string, TextureType>>& texturePaths)
 {
-	for (const auto& path : texturePaths)
-		s_Textures->LoadTexture(path);
+	m_SSBO->Bind();
+	for (const auto& texture : texturePaths)
+	{
+		auto& textureIt = s_TextureMap.find(texture.first);
+		uint32_t index = 0;
+		// Texture does not exist: Create a new Texture
+		if (textureIt == s_TextureMap.end())
+		{
+			index = static_cast<uint32_t>(s_Textures.size());
+			s_Textures.emplace_back(new Texture(texture.first));
+			s_TextureMap.emplace(std::make_pair(texture.first, index));
+		}
+		// Texture Exists: Get existing Texture's index
+		else
+		{
+			index = textureIt->second;
+		}
+		// Get Handle with Texture index and store in SSBO
+		m_SSBO->Bind();
+		uint64_t handle = glGetTextureHandleARB(s_Textures[index]->m_ID);
+		m_SSBO->SetData(&handle, sizeof(TextureMaps) * m_Count + static_cast<size_t>(texture.second), sizeof(uint64_t));
+	}
 
-	return s_Textures->m_Count++;
+	// Return SSBO storage location
+	return m_Count++;
 }
