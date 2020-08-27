@@ -1,16 +1,29 @@
 #include "pch.h"
 #include "Model.h"
 
+#include "Mesh.h"
+
 #include "Renderer/Texture.h"
 #include "Renderer/Renderer.h"
 
 #include <assimp/Importer.hpp>
+#include <assimp/scene.h>
 #include <assimp/postprocess.h>
+
+static constexpr unsigned int assimpFlags =
+aiProcess_Triangulate |
+aiProcess_JoinIdenticalVertices |
+aiProcess_GenSmoothNormals |
+aiProcess_ValidateDataStructure |
+aiProcess_ImproveCacheLocality |
+aiProcess_OptimizeMeshes |
+aiProcess_OptimizeGraph	 |
+aiProcess_FlipUVs;
 
 Model::Model(const std::string& filePath)
 {
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs);
+	const aiScene* scene = importer.ReadFile(filePath, assimpFlags);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -27,6 +40,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 	for (uint32_t i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+
 		m_Meshes.push_back(ProcessMesh(mesh, scene));
 	}
 
@@ -97,5 +111,21 @@ void Model::AddTexturePath(std::vector<std::pair<std::string, TextureType>>& tex
 		aiString path;
 		material->GetTexture(type, 0, &path);
 		texturePaths.push_back(std::make_pair((m_Directory + path.C_Str()), textureType));
+	}
+}
+
+void Model::Translate(const glm::vec3& pos)
+{
+	for (auto& mesh : m_Meshes)
+	{
+		mesh.Translate(pos);
+	}
+}
+
+void Model::Rotate(float angle, const glm::vec3& axis)
+{
+	for (auto& mesh : m_Meshes)
+	{
+		mesh.Rotate(angle, axis);
 	}
 }
