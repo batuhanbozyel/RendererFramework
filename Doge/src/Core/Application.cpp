@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 	app->Init();
 
 	{
-		auto future = std::async(app->DisplayFrameTimeAndFPS);
+		//auto future = std::async(app->DisplayFrameTimeAndFPS);
 
 		app->OnStart();
 		while (!glfwWindowShouldClose(app->s_ActiveWindow->GetNativeWindow()))
@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 
 			if (s_ThirdPerson) Renderer::GetCamera()->Rotate(Input::GetMousePos());
 
-			Renderer::Draw();
+			Renderer::DrawIndexed();
 
 			app->s_ActiveWindow->Update();
 			s_RenderBegin = false;

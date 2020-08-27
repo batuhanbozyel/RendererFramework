@@ -12,8 +12,13 @@ flat out uint v_TexIndex;
 
 out vec3 v_FragPos;
 
-uniform mat4 u_View;
-uniform mat4 u_Projection;
+layout(std140, binding = 1) uniform ViewProjectionUniform
+{
+	mat4 u_View;
+	mat4 u_Projection;
+};
+
+uniform mat4 u_Model;
 
 void main()
 {
@@ -21,7 +26,7 @@ void main()
 	v_Normal = a_Normal;
 	v_TexCoord = a_TexCoord;
 	v_TexIndex = a_TexIndex;
-	gl_Position = u_Projection * u_View * a_Position;
+	gl_Position = u_Projection * u_View * u_Model * a_Position;
 }
 
 #type fragment
@@ -43,14 +48,13 @@ layout(std430, binding = 0) readonly buffer TextureMaps
 
 struct Material
 {
-	vec4 Color;
+	vec3 Color;
 	float Shininess;
 };
 
 struct Light
 {
 	vec3 Position;
-
 	vec3  Ambient;
 	vec3  Diffuse;
 	vec3  Specular;
@@ -63,8 +67,12 @@ flat in uint v_TexIndex;
 in vec3 v_FragPos;
 
 uniform Material u_Material;
-uniform vec3 u_CameraPos;
-uniform Light u_Light;
+
+layout(std140, binding = 2) uniform LightingUniform
+{
+	vec3 u_CameraPos;
+	Light u_Light;
+};
 
 void main()
 {
@@ -83,5 +91,5 @@ void main()
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_Material.Shininess);
 	vec3 specular = u_Light.Specular * spec * vec3(texture(sampler2D(textureBuffer.textures[v_TexIndex].Specular), v_TexCoord));
 
-	color = vec4(ambient + diffuse + specular, 1.0) * u_Material.Color;
+	color = vec4(ambient + diffuse + specular, 1.0) * vec4(u_Material.Color, 1.0);
 }
