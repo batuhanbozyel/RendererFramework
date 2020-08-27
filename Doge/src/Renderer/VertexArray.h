@@ -10,19 +10,11 @@ public:
 	void Bind() const;
 	void Unbind() const;
 
-	void BindVertexBuffer(uint32_t slot);
-	void BindIndexBuffer(uint32_t slot);
+	void BindVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, uint32_t binding);
+	void BindIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer);
 
-	void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
-	void AddIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer);
-
-	inline const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() const { return m_VertexBuffers; }
-	inline const std::vector<std::shared_ptr<IndexBuffer>>& GetIndexBuffers() const { return m_IndexBuffers; }
+	void SetBufferLayout(const BufferLayout& layout, uint32_t slot);
 private:
 	uint32_t m_RendererID;
-	uint32_t m_VertexBufferIndex = 0;
-	uint32_t m_VertexBufferCount = 0;
-
-	std::vector<std::shared_ptr<VertexBuffer>> m_VertexBuffers;
-	std::vector<std::shared_ptr<IndexBuffer>> m_IndexBuffers;
+	uint32_t m_VertexAttribIndex = 0;
 };

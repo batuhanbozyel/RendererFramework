@@ -21,25 +21,26 @@ void VertexArray::Unbind() const
 	glBindVertexArray(0);
 }
 
-void VertexArray::BindVertexBuffer(uint32_t slot)
+void VertexArray::BindVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, uint32_t binding)
 {
-	glVertexArrayVertexBuffer(m_RendererID, slot, m_VertexBuffers[slot]->m_RendererID, 0, m_VertexBuffers[slot]->m_Layout.GetStride());
+	LOG_ASSERT(binding < 16, "VertexArrayBinding must be in range 0 to 16");
+
+	glVertexArrayVertexBuffer(m_RendererID, binding, vertexBuffer->m_RendererID, 0, vertexBuffer->m_Layout.GetStride());
 }
 
-void VertexArray::BindIndexBuffer(uint32_t slot)
+void VertexArray::BindIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
 {
-	glVertexArrayElementBuffer(m_RendererID, m_IndexBuffers[slot]->m_RendererID);
+	glVertexArrayElementBuffer(m_RendererID, indexBuffer->m_RendererID);
 }
 
-void VertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+void VertexArray::SetBufferLayout(const BufferLayout& layout, uint32_t binding)
 {
-	LOG_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer is empty!");
+	LOG_ASSERT(binding < 16, "VertexArrayBinding must be in range 0 to 16");
 
-	const auto& layout = vertexBuffer->GetLayout();
+	//uint32_t index = 0;
 	for (const auto& element : layout)
 	{
-		glEnableVertexArrayAttrib(m_RendererID, m_VertexBufferIndex);
-
+		glEnableVertexArrayAttrib(m_RendererID, m_VertexAttribIndex);
 		switch (element.Type)
 		{
 			case ShaderDataType::Int:
@@ -51,28 +52,21 @@ void VertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuf
 			case ShaderDataType::UInt3:
 			case ShaderDataType::UInt4:
 				glVertexArrayAttribIFormat(m_RendererID,
-					m_VertexBufferIndex,
+					m_VertexAttribIndex,
 					element.GetComponentCount(),
 					ShaderDataTypeToOpenGLBaseType(element.Type),
 					element.Offset);
 				break;
 			default:
 				glVertexArrayAttribFormat(m_RendererID,
-					m_VertexBufferIndex,
+					m_VertexAttribIndex,
 					element.GetComponentCount(),
 					ShaderDataTypeToOpenGLBaseType(element.Type),
 					element.Normalized ? GL_TRUE : GL_FALSE,
 					element.Offset);
 				break;
 		}
-		glVertexArrayAttribBinding(m_RendererID, m_VertexBufferIndex, m_VertexBufferCount);
-		m_VertexBufferIndex++;
+		glVertexArrayAttribBinding(m_RendererID, m_VertexAttribIndex, binding);
+		m_VertexAttribIndex++;
 	}
-	m_VertexBuffers.push_back(vertexBuffer);
-	m_VertexBufferCount++;
-}
-
-void VertexArray::AddIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
-{
-	m_IndexBuffers.push_back(indexBuffer);
 }
