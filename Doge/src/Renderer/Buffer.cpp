@@ -99,3 +99,33 @@ void ShaderStorageBuffer::SetData(const void* data, uint32_t offset, uint32_t si
 {
 	glNamedBufferSubData(m_RendererID, offset, size, data);
 }
+
+/////////// UniformBuffer ///////////
+
+UniformBuffer::UniformBuffer(uint32_t size, uint32_t location)
+	: m_Location(location)
+{
+	glCreateBuffers(1, &m_RendererID);
+	glNamedBufferStorage(m_RendererID, size, nullptr, GL_DYNAMIC_STORAGE_BIT);
+
+}
+
+UniformBuffer::~UniformBuffer()
+{
+	glDeleteBuffers(1, &m_RendererID);
+}
+
+void UniformBuffer::Bind() const
+{
+	glBindBufferBase(GL_UNIFORM_BUFFER, m_Location, m_RendererID);
+}
+
+void UniformBuffer::Unbind() const
+{
+	glBindBufferBase(GL_UNIFORM_BUFFER, m_Location, 0);
+}
+
+void UniformBuffer::SetData(const void* data, uint32_t size, uint32_t offset)
+{
+	glNamedBufferSubData(m_RendererID, offset, size, data);
+}
