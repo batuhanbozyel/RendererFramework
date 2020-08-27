@@ -316,7 +316,7 @@ uint32_t Shader::GetUniformLocation(const char* name) const
 
 std::unordered_map<std::string, Shader*> ShaderLibrary::s_ShaderCache;
 
-Shader* ShaderLibrary::CreateShader(const char* filePath)
+const Shader* ShaderLibrary::CreateShader(const char* filePath)
 {
 	auto& shaderIt = s_ShaderCache.find(filePath);
 	if (shaderIt == s_ShaderCache.end())
@@ -328,7 +328,7 @@ Shader* ShaderLibrary::CreateShader(const char* filePath)
 	return shaderIt->second;
 }
 
-Shader* ShaderLibrary::CreateShader(const char* name, const std::string& vertexSrc, const std::string& fragmentSrc)
+const Shader* ShaderLibrary::CreateShader(const char* name, const std::string& vertexSrc, const std::string& fragmentSrc)
 {
 	auto& shaderIt = s_ShaderCache.find(name);
 	if (shaderIt == s_ShaderCache.end())

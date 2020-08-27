@@ -45,8 +45,8 @@ private:
 class ShaderLibrary
 {
 public:
-	static Shader* CreateShader(const char* filePath);
-	static Shader* CreateShader(const char* name, const std::string& vertexSrc, const std::string& fragmentSrc);
+	static const Shader* CreateShader(const char* filePath);
+	static const Shader* CreateShader(const char* name, const std::string& vertexSrc, const std::string& fragmentSrc);
 
 	static Shader& GetShader(const std::string& shader);
 private:

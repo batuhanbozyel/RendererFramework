@@ -64,7 +64,7 @@ uint32_t TextureManager::LoadTexture(const std::string& path)
 		s_Textures.emplace_back(new Texture(path));
 		s_TextureMap.emplace(std::make_pair(path, index));
 	}
-	// Texture Exists: Get existing Texture's index
+	// Texture already exists: Get existing Texture's index
 	else
 	{
 		index = textureIt->second;
@@ -75,7 +75,7 @@ uint32_t TextureManager::LoadTexture(const std::string& path)
 	m_SSBO->SetData(&handle, sizeof(TextureMaps) * m_Count + static_cast<size_t>(TextureType::Diffuse), sizeof(uint64_t));
 	m_SSBO->SetData(&handle, sizeof(TextureMaps) * m_Count + static_cast<size_t>(TextureType::Specular), sizeof(uint64_t));
 
-	// Return SSBO storage location
+	// Return SSBO storage index
 	return m_Count++;
 }
 
@@ -93,17 +93,16 @@ uint32_t TextureManager::LoadTextureMaps(const std::vector<std::pair<std::string
 			s_Textures.emplace_back(new Texture(texture.first));
 			s_TextureMap.emplace(std::make_pair(texture.first, index));
 		}
-		// Texture Exists: Get existing Texture's index
+		// Texture already exists: Get existing Texture's index
 		else
 		{
 			index = textureIt->second;
 		}
 		// Get Handle with Texture index and store in SSBO
-		m_SSBO->Bind();
 		uint64_t handle = glGetTextureHandleARB(s_Textures[index]->m_ID);
 		m_SSBO->SetData(&handle, sizeof(TextureMaps) * m_Count + static_cast<size_t>(texture.second), sizeof(uint64_t));
 	}
 
-	// Return SSBO storage location
+	// Return SSBO storage index
 	return m_Count++;
 }
