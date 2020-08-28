@@ -1,24 +1,26 @@
 #include "Doge.h"
+#include "Core/EntryPoint.h"
 
-class SandboxApp : public Application
+class SandboxApp : public Doge::Application
 {
 public:
-	virtual void OnStart() override
+	SandboxApp()
+		: Application("SandboxApp")
 	{
-		const Shader* shader = ShaderLibrary::CreateShader("assets/shaders/PhongLighting.glsl");
+		const Doge::Shader* shader = Doge::ShaderLibrary::CreateShader("assets/shaders/PhongLighting.glsl");
 
-		std::shared_ptr<Material> material = std::make_shared<Material>(*shader);
+		std::shared_ptr<Doge::Material> material = std::make_shared<Doge::Material>(*shader);
 		material->SetBaseColor(glm::vec3(1.0f));
 		material->SetBaseShininess(32.0f);
 
-		Model backpack("assets/models/backpack/backpack.obj");
-		Model handgun("assets/models/gun/M1911_01.obj");
+		Doge::Model backpack("assets/models/backpack/backpack.obj");
+		Doge::Model handgun("assets/models/gun/M1911_01.obj");
 
-		RenderData backpackData = RenderDataManager::ConstructBatched(backpack.GetMeshes(), material, glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 0.0f, 0.0f)));
+		Doge::RenderData backpackData = Doge::RenderDataManager::ConstructBatched(backpack.GetMeshes(), material, glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 0.0f, 0.0f)));
 		for (uint32_t i = 0; i < 10; i++)
 			for (uint32_t j = 0; j < 10; j++)
 			{
-				backpackData.modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(i*3.0f, j*3.0f, 0.0f));
+				backpackData.modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(i*4.0f, j*4.0f, 0.0f));
 				m_RenderDatas.push_back(backpackData);
 			}
 				
@@ -26,21 +28,23 @@ public:
 
 	virtual void OnUpdate(float dt) override
 	{
-		if (Input::IsKeyPressed(KEY_W)) Renderer::GetCamera()->Move(KEY_W, dt);
-		if (Input::IsKeyPressed(KEY_A))	Renderer::GetCamera()->Move(KEY_A, dt);
-		if (Input::IsKeyPressed(KEY_S)) Renderer::GetCamera()->Move(KEY_S, dt);
-		if (Input::IsKeyPressed(KEY_D)) Renderer::GetCamera()->Move(KEY_D, dt);
+		if (s_ThirdPerson) Doge::Renderer::GetCamera()->Rotate(Doge::Input::GetMousePos());
+
+		if (Doge::Input::IsKeyPressed(KEY_W)) Doge::Renderer::GetCamera()->Move(KEY_W, dt);
+		if (Doge::Input::IsKeyPressed(KEY_A)) Doge::Renderer::GetCamera()->Move(KEY_A, dt);
+		if (Doge::Input::IsKeyPressed(KEY_S)) Doge::Renderer::GetCamera()->Move(KEY_S, dt);
+		if (Doge::Input::IsKeyPressed(KEY_D)) Doge::Renderer::GetCamera()->Move(KEY_D, dt);
 
 		for (const auto& renderData : m_RenderDatas)
 		{
-			Renderer::Submit(renderData);
+			Doge::Renderer::Submit(renderData);
 		}
 	}
 private:
-	std::vector<RenderData> m_RenderDatas;
+	std::vector<Doge::RenderData> m_RenderDatas;
 };
 
-Application* CreateApplication()
+Doge::Application* CreateApplication()
 {
 	return new SandboxApp();
 }

@@ -1,48 +1,50 @@
 #include "pch.h"
 #include "VertexArray.h"
 
-VertexArray::VertexArray()
+namespace Doge
 {
-	glCreateVertexArrays(1, &m_RendererID);
-}
-
-VertexArray::~VertexArray()
-{
-	glDeleteVertexArrays(1, &m_RendererID);
-}
-
-void VertexArray::Bind() const
-{
-	glBindVertexArray(m_RendererID);
-}
-
-void VertexArray::Unbind() const
-{
-	glBindVertexArray(0);
-}
-
-void VertexArray::BindVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, uint32_t binding)
-{
-	LOG_ASSERT(binding < 16, "VertexArrayBinding must be in range 0 to 16");
-
-	glVertexArrayVertexBuffer(m_RendererID, binding, vertexBuffer->m_RendererID, 0, vertexBuffer->m_Layout.GetStride());
-}
-
-void VertexArray::BindIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
-{
-	glVertexArrayElementBuffer(m_RendererID, indexBuffer->m_RendererID);
-}
-
-void VertexArray::SetBufferLayout(const BufferLayout& layout, uint32_t binding)
-{
-	LOG_ASSERT(binding < 16, "VertexArrayBinding must be in range 0 to 16");
-
-	//uint32_t index = 0;
-	for (const auto& element : layout)
+	VertexArray::VertexArray()
 	{
-		glEnableVertexArrayAttrib(m_RendererID, m_VertexAttribIndex);
-		switch (element.Type)
+		glCreateVertexArrays(1, &m_RendererID);
+	}
+
+	VertexArray::~VertexArray()
+	{
+		glDeleteVertexArrays(1, &m_RendererID);
+	}
+
+	void VertexArray::Bind() const
+	{
+		glBindVertexArray(m_RendererID);
+	}
+
+	void VertexArray::Unbind() const
+	{
+		glBindVertexArray(0);
+	}
+
+	void VertexArray::BindVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, uint32_t binding)
+	{
+		LOG_ASSERT(binding < 16, "VertexArrayBinding must be in range 0 to 16");
+
+		glVertexArrayVertexBuffer(m_RendererID, binding, vertexBuffer->m_RendererID, 0, vertexBuffer->m_Layout.GetStride());
+	}
+
+	void VertexArray::BindIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+	{
+		glVertexArrayElementBuffer(m_RendererID, indexBuffer->m_RendererID);
+	}
+
+	void VertexArray::SetBufferLayout(const BufferLayout& layout, uint32_t binding)
+	{
+		LOG_ASSERT(binding < 16, "VertexArrayBinding must be in range 0 to 16");
+
+		//uint32_t index = 0;
+		for (const auto& element : layout)
 		{
+			glEnableVertexArrayAttrib(m_RendererID, m_VertexAttribIndex);
+			switch (element.Type)
+			{
 			case ShaderDataType::Int:
 			case ShaderDataType::Int2:
 			case ShaderDataType::Int3:
@@ -65,8 +67,9 @@ void VertexArray::SetBufferLayout(const BufferLayout& layout, uint32_t binding)
 					element.Normalized ? GL_TRUE : GL_FALSE,
 					element.Offset);
 				break;
+			}
+			glVertexArrayAttribBinding(m_RendererID, m_VertexAttribIndex, binding);
+			m_VertexAttribIndex++;
 		}
-		glVertexArrayAttribBinding(m_RendererID, m_VertexAttribIndex, binding);
-		m_VertexAttribIndex++;
 	}
 }

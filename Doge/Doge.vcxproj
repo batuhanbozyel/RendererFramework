@@ -102,6 +102,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Application.h" />
+    <ClInclude Include="src\Core\EntryPoint.h" />
     <ClInclude Include="src\Core\Input.h" />
     <ClInclude Include="src\Core\KeyCodes.h" />
     <ClInclude Include="src\Core\Log.h" />
@@ -114,11 +115,11 @@
     <ClInclude Include="src\Events\KeyEvent.h" />
     <ClInclude Include="src\Events\MouseEvent.h" />
     <ClInclude Include="src\Events\WindowEvent.h" />
-    <ClInclude Include="src\Renderer\RenderDataManager.h" />
     <ClInclude Include="src\Renderer\Buffer.h" />
     <ClInclude Include="src\Renderer\Context.h" />
     <ClInclude Include="src\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Renderer\Pipeline.h" />
+    <ClInclude Include="src\Renderer\RenderDataManager.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
     <ClInclude Include="src\Renderer\Shader.h" />
     <ClInclude Include="src\Renderer\ShaderDataType.h" />
@@ -130,7 +131,6 @@
     <ClInclude Include="src\Utility\Model.h" />
     <ClInclude Include="src\Utility\SceneObject3D.h" />
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="vendor\assimp\contrib\zlib\zconf.h" />
     <ClInclude Include="vendor\assimp\include\assimp\BaseImporter.h" />
     <ClInclude Include="vendor\assimp\include\assimp\Bitmap.h" />
     <ClInclude Include="vendor\assimp\include\assimp\BlobIOSystem.h" />
@@ -631,11 +631,11 @@
     <ClCompile Include="src\Core\Input.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
-    <ClCompile Include="src\Renderer\RenderDataManager.cpp" />
     <ClCompile Include="src\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Renderer\Context.cpp" />
     <ClCompile Include="src\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Renderer\Pipeline.cpp" />
+    <ClCompile Include="src\Renderer\RenderDataManager.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Renderer\Shader.cpp" />
     <ClCompile Include="src\Renderer\Texture.cpp" />

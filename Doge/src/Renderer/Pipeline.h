@@ -1,14 +1,17 @@
 #pragma once
 
-class PipelineSpecification
+namespace Doge
 {
+	class PipelineSpecification
+	{
 
-};
+	};
 
-class Pipeline
-{
-public:
+	class Pipeline
+	{
+	public:
 
-private:
+	private:
 
-};
+	};
+}

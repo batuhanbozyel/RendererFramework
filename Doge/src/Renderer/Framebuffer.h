@@ -1,9 +1,12 @@
 #pragma once
 
-class Framebuffer
+namespace Doge
 {
-public:
+	class Framebuffer
+	{
+	public:
 
-private:
+	private:
 
-};
+	};
+}

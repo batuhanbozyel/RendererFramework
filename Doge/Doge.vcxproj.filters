@@ -22,12 +22,6 @@
     <Filter Include="vendor\assimp">
       <UniqueIdentifier>{6F57A1F8-DB17-1D2F-A452-66AC10D2610B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="vendor\assimp\contrib">
-      <UniqueIdentifier>{6F9ECD05-DB0A-8900-A4FE-205E102AAB68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor\assimp\contrib\zlib">
-      <UniqueIdentifier>{0F3B8443-FB4A-3014-6404-953250331FAD}</UniqueIdentifier>
-    </Filter>
     <Filter Include="vendor\assimp\include">
       <UniqueIdentifier>{E27D8AD0-4EEA-45CB-17DE-DD2883096833}</UniqueIdentifier>
     </Filter>
@@ -67,6 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Application.h">
+      <Filter>src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\EntryPoint.h">
       <Filter>src\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Input.h">
@@ -117,6 +114,9 @@
     <ClInclude Include="src\Renderer\Pipeline.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\RenderDataManager.h">
+      <Filter>src\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Renderer\Renderer.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
@@ -149,9 +149,6 @@
     </ClInclude>
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\assimp\contrib\zlib\zconf.h">
-      <Filter>vendor\assimp\contrib\zlib</Filter>
     </ClInclude>
     <ClInclude Include="vendor\assimp\include\assimp\BaseImporter.h">
       <Filter>vendor\assimp\include\assimp</Filter>
@@ -1635,7 +1632,6 @@
     <ClInclude Include="vendor\stb\stb_image.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\RenderDataManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1660,6 +1656,9 @@
       <Filter>src\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Pipeline.cpp">
+      <Filter>src\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\RenderDataManager.cpp">
       <Filter>src\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Renderer.cpp">
@@ -1692,6 +1691,5 @@
     <ClCompile Include="vendor\stb\stb_image.cpp">
       <Filter>vendor\stb</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\RenderDataManager.cpp" />
   </ItemGroup>
 </Project>

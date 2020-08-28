@@ -2,106 +2,109 @@
 #include <glad/glad.h>
 #include "Context.h"
 
-bool Context::s_Initialized = false;
-
-static void GLFWErrorCallback(int error, const char* description)
+namespace Doge
 {
-	LOG_ERROR("Error: {0}", description);
-}
+	bool Context::s_Initialized = false;
 
-static void OpenGLMessageCallback(
-	unsigned int source,
-	unsigned int type,
-	unsigned int id,
-	unsigned int severity,
-	int length,
-	const char* message,
-	const void* userParam)
-{
-	switch (severity)
+	static void GLFWErrorCallback(int error, const char* description)
 	{
+		LOG_ERROR("Error: {0}", description);
+	}
+
+	static void OpenGLMessageCallback(
+		unsigned int source,
+		unsigned int type,
+		unsigned int id,
+		unsigned int severity,
+		int length,
+		const char* message,
+		const void* userParam)
+	{
+		switch (severity)
+		{
 		case GL_DEBUG_SEVERITY_HIGH:         LOG_CRITICAL(message); return;
 		case GL_DEBUG_SEVERITY_MEDIUM:       LOG_ERROR(message); return;
 		case GL_DEBUG_SEVERITY_LOW:          LOG_WARN(message); return;
 		case GL_DEBUG_SEVERITY_NOTIFICATION: LOG_TRACE(message); return;
+		}
+
 	}
 
-}
-
-void Context::GLFWInit()
-{
-	if (!s_Initialized)
+	void Context::GLFWInit()
 	{
-		int glfw = glfwInit();
-		LOG_ASSERT(glfw, "GLFW initialization failed!");
-		s_Initialized = true;
+		if (!s_Initialized)
+		{
+			int glfw = glfwInit();
+			LOG_ASSERT(glfw, "GLFW initialization failed!");
+			s_Initialized = true;
 
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-		glfwWindowHint(GLFW_SAMPLES, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+			glfwWindowHint(GLFW_SAMPLES, 4);
 
 #ifdef DEBUG_ENABLED
-		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 #endif
 
-		glfwSetErrorCallback(GLFWErrorCallback);
+			glfwSetErrorCallback(GLFWErrorCallback);
+		}
 	}
-}
 
-void Context::GLFWTerminate()
-{
-	if (s_Initialized)
+	void Context::GLFWTerminate()
 	{
-		glfwTerminate();
-		s_Initialized = false;
+		if (s_Initialized)
+		{
+			glfwTerminate();
+			s_Initialized = false;
+		}
 	}
-}
 
-void Context::MakeCurrent(GLFWwindow* window)
-{
-	glfwMakeContextCurrent(window);
-	LOG_TRACE("Current Context assigned to ID: {0}", static_cast<void*>(window));
-}
+	void Context::MakeCurrent(GLFWwindow* window)
+	{
+		glfwMakeContextCurrent(window);
+		LOG_TRACE("Current Context assigned to ID: {0}", static_cast<void*>(window));
+	}
 
-Context::Context(GLFWwindow* window)
-	: m_Window(window)
-{
-	GLFWInit();
-	LOG_ASSERT(window, "Window could not found!");
+	Context::Context(GLFWwindow* window)
+		: m_Window(window)
+	{
+		GLFWInit();
+		LOG_ASSERT(window, "Window could not found!");
 
-	glfwMakeContextCurrent(m_Window);
+		glfwMakeContextCurrent(m_Window);
 
-	int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	LOG_ASSERT(status, "Glad initialization failed");
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		LOG_ASSERT(status, "Glad initialization failed");
 
 #ifdef DEBUG_ENABLED
-	glEnable(GL_DEBUG_OUTPUT);
-	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-	glDebugMessageCallback(OpenGLMessageCallback, nullptr);
-	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
 #endif
 
-	glEnable(GL_MULTISAMPLE);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
+		glEnable(GL_MULTISAMPLE);
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 
-	LOG_INFO(glGetString(GL_RENDERER));
-	LOG_INFO(glGetString(GL_VERSION));
+		LOG_INFO(glGetString(GL_RENDERER));
+		LOG_INFO(glGetString(GL_VERSION));
 
-	LOG_TRACE("Context creation succeed!");
-}
+		LOG_TRACE("Context creation succeed!");
+	}
 
-Context::~Context()
-{
-	m_Window = nullptr;
-}
+	Context::~Context()
+	{
+		m_Window = nullptr;
+	}
 
-void Context::PollEvents()
-{
-	glfwPollEvents();
-}
+	void Context::PollEvents()
+	{
+		glfwPollEvents();
+	}
 
-void Context::SwapBuffers()
-{
-	glfwSwapBuffers(m_Window);
+	void Context::SwapBuffers()
+	{
+		glfwSwapBuffers(m_Window);
+	}
 }

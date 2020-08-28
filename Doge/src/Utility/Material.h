@@ -1,49 +1,52 @@
 #pragma once
 
-class Shader;
-
-enum class MaterialProperty
+namespace Doge
 {
-	Color,
-	Shininess
-};
+	class Shader;
 
-class Material
-{
-public:
-	explicit Material(const Shader& shader);
+	enum class MaterialProperty
+	{
+		Color,
+		Shininess
+	};
 
-	void SetSharedUniforms() const;
-	
-	void SetModifiable(const MaterialProperty& prop);
+	class Material
+	{
+	public:
+		explicit Material(const Shader& shader);
 
-	void SetBaseColor(const glm::vec3& color);
-	void SetBaseShininess(const float shininess);
+		void SetSharedUniforms() const;
 
-	const Shader& GetShaderRef() const { return m_Shader; }
+		void SetModifiable(const MaterialProperty& prop);
 
-	virtual void SetModifiedUniforms() const {};
-protected:
-	template <class T>
-	using MaterialData = std::pair<std::shared_ptr<T>, bool>;
+		void SetBaseColor(const glm::vec3& color);
+		void SetBaseShininess(const float shininess);
 
-	MaterialData<glm::vec3> m_Color = MaterialData<glm::vec3>(nullptr, false);
-	MaterialData<float> m_Shininess = MaterialData<float>(nullptr, false);
-private:
-	const Shader& m_Shader;
-};
+		const Shader& GetShaderRef() const { return m_Shader; }
 
-class MaterialInstance : public Material
-{
-public:
-	explicit MaterialInstance(const Material& material);
+		virtual void SetModifiedUniforms() const {};
+	protected:
+		template <class T>
+		using MaterialData = std::pair<std::shared_ptr<T>, bool>;
 
-	void SetColor(const glm::vec3& color);
-	void SetShininess(const float shininess);
+		MaterialData<glm::vec3> m_Color = MaterialData<glm::vec3>(nullptr, false);
+		MaterialData<float> m_Shininess = MaterialData<float>(nullptr, false);
+	private:
+		const Shader& m_Shader;
+	};
 
-	void SetModifiedUniforms() const override;
+	class MaterialInstance : public Material
+	{
+	public:
+		explicit MaterialInstance(const Material& material);
 
-	const Material& GetBaseMaterialRef() const { return m_BaseMaterialRef; }
-private:
-	const Material& m_BaseMaterialRef;
-};
+		void SetColor(const glm::vec3& color);
+		void SetShininess(const float shininess);
+
+		void SetModifiedUniforms() const override;
+
+		const Material& GetBaseMaterialRef() const { return m_BaseMaterialRef; }
+	private:
+		const Material& m_BaseMaterialRef;
+	};
+}

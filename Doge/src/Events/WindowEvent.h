@@ -1,63 +1,66 @@
 #pragma once
 #include "Event.h"
 
-class WindowCloseEvent : public Event
+namespace Doge
 {
-public:
-	WindowCloseEvent() = default;
-
-	EVENT_CLASS_TYPE(WindowClose)
-	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
-};
-
-class WindowResizeEvent : public Event
-{
-public:
-	WindowResizeEvent(uint32_t width, uint32_t height)
-		: m_Width(width), m_Height(height) {}
-
-	inline uint32_t GetWidth() const { return m_Width; }
-	inline uint32_t GetHeight() const { return m_Height; }
-
-	std::string ToString() const override
+	class WindowCloseEvent : public Event
 	{
-		std::stringstream ss;
-		ss << "WindowResizeEvent: " << m_Width << ", " << m_Height;
-		return ss.str();
-	}
+	public:
+		WindowCloseEvent() = default;
 
-	EVENT_CLASS_TYPE(WindowResize)
-	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
-private:
-	uint32_t m_Width, m_Height;
-};
+		EVENT_CLASS_TYPE(WindowClose)
+			EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
+	};
 
-class WindowFocusEvent : public Event
-{
-public:
-	WindowFocusEvent() = default;
+	class WindowResizeEvent : public Event
+	{
+	public:
+		WindowResizeEvent(uint32_t width, uint32_t height)
+			: m_Width(width), m_Height(height) {}
 
-	EVENT_CLASS_TYPE(WindowFocus)
-	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
-};
+		inline uint32_t GetWidth() const { return m_Width; }
+		inline uint32_t GetHeight() const { return m_Height; }
 
-class WindowLostFocusEvent : public Event
-{
-public:
-	WindowLostFocusEvent() = default;
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "WindowResizeEvent: " << m_Width << ", " << m_Height;
+			return ss.str();
+		}
 
-	EVENT_CLASS_TYPE(WindowLostFocus)
-	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
-};
+		EVENT_CLASS_TYPE(WindowResize)
+			EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
+	private:
+		uint32_t m_Width, m_Height;
+	};
 
-class WindowMovedEvent : public Event
-{
-public:
-	WindowMovedEvent(int xPos, int yPos)
-		: m_xPos(xPos), m_yPos(yPos) {}
+	class WindowFocusEvent : public Event
+	{
+	public:
+		WindowFocusEvent() = default;
 
-	EVENT_CLASS_TYPE(WindowMoved)
-	EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
-private:
-	int m_xPos, m_yPos;
-};
+		EVENT_CLASS_TYPE(WindowFocus)
+			EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
+	};
+
+	class WindowLostFocusEvent : public Event
+	{
+	public:
+		WindowLostFocusEvent() = default;
+
+		EVENT_CLASS_TYPE(WindowLostFocus)
+			EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
+	};
+
+	class WindowMovedEvent : public Event
+	{
+	public:
+		WindowMovedEvent(int xPos, int yPos)
+			: m_xPos(xPos), m_yPos(yPos) {}
+
+		EVENT_CLASS_TYPE(WindowMoved)
+			EVENT_CLASS_CATEGORY(EventCategoryWindow | EventCategoryApplication)
+	private:
+		int m_xPos, m_yPos;
+	};
+}

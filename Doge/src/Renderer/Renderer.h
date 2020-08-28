@@ -1,46 +1,49 @@
 #pragma once
 #include "RenderDataManager.h"
 
-class VertexArray;
-class UniformBuffer;
-class VertexBuffer;
-class IndexBuffer;
-class Shader;
-
-class Camera;
-class Material;
-class SceneObject3D;
-class Model;
-
-struct WindowProps;
-
-enum class RendererMode
+namespace Doge
 {
-	_2D, _3D
-};
+	class VertexArray;
+	class UniformBuffer;
+	class VertexBuffer;
+	class IndexBuffer;
+	class Shader;
 
-class Renderer
-{
-public:
-	static void Init(const RendererMode& mode, const WindowProps& props);
+	class Camera;
+	class Material;
+	class SceneObject3D;
+	class Model;
 
-	static void Submit(const RenderData& data);
-	static void DrawIndexed();
+	struct WindowProps;
 
-	// Render Commands
-	static void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
-	static void SetBackground(const glm::vec4& color);
-	static void ClearColor();
+	enum class RendererMode
+	{
+		_2D, _3D
+	};
 
-	inline static const std::unique_ptr<Camera>& GetCamera() { return s_Camera; }
-private:
-	static glm::vec4 s_BackgroundColor;
-	static std::unique_ptr<Camera> s_Camera;
+	class Renderer
+	{
+	public:
+		static void Init(const RendererMode& mode, const WindowProps& props);
 
-	static std::unique_ptr<VertexArray> s_VertexArray;
-	static std::unique_ptr<UniformBuffer> s_ViewProjectionUniformBuffer;
-	static std::unique_ptr<UniformBuffer> s_LightingUniformBuffer;
-	static std::unordered_map<std::shared_ptr<Material>, std::queue<RenderData>> s_RenderQueue;
+		static void Submit(const RenderData& data);
+		static void DrawIndexed();
 
-	static const Shader* s_LastShaderState;
-};
+		// Render Commands
+		static void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
+		static void SetBackground(const glm::vec4& color);
+		static void ClearColor();
+
+		inline static const std::unique_ptr<Camera>& GetCamera() { return s_Camera; }
+	private:
+		static glm::vec4 s_BackgroundColor;
+		static std::unique_ptr<Camera> s_Camera;
+
+		static std::unique_ptr<VertexArray> s_VertexArray;
+		static std::unique_ptr<UniformBuffer> s_ViewProjectionUniformBuffer;
+		static std::unique_ptr<UniformBuffer> s_LightingUniformBuffer;
+		static std::unordered_map<std::shared_ptr<Material>, std::queue<RenderData>> s_RenderQueue;
+
+		static const Shader* s_LastShaderState;
+	};
+}

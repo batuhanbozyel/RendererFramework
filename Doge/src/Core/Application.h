@@ -3,40 +3,44 @@
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
 
-#include "Core/Window.h"
-
-class Timestep;
+#include "Window.h"
+#include "Timestep.h"
 
 int main(int argc, char** argv);
 
-class Application
+namespace Doge
 {
-public:
-	// To be defined in Client
-	virtual void OnStart() {};
-	virtual void OnUpdate(float dt) {};
+	class Application
+	{
+	public:
+		Application(const std::string& appName = "Doge");
+		~Application();
 
-	inline static const Window* GetActiveWindow() { return s_ActiveWindow; }
-private:
-	// Application Initialization and Shutdown Methods
-	static void Init();
-	static void Shutdown();
+		// To be defined in Client
+		virtual void OnUpdate(float dt) {};
 
-	// Application Event Handling Methods
-	static void OnEvent(Event& e);
+		inline static const Window* GetActiveWindow() { return s_ActiveWindow; }
+	private:
+		// Application Event Handling Methods
+		static void OnEvent(Event& e);
 
-	static bool OnWindowClose(WindowCloseEvent& e);
-	static bool OnWindowResize(WindowResizeEvent& e);
+		static bool OnWindowClose(WindowCloseEvent& e);
+		static bool OnWindowResize(WindowResizeEvent& e);
 
-	static bool OnKeyPress(KeyPressedEvent& e);
-	static bool OnMouseButtonPress(MouseButtonPressedEvent& e);
-	static bool OnMouseMove(MouseMovedEvent& e);
+		static bool OnKeyPress(KeyPressedEvent& e);
+		static bool OnMouseButtonPress(MouseButtonPressedEvent& e);
+		static bool OnMouseMove(MouseMovedEvent& e);
+	protected:
+		static bool s_ThirdPerson;
 
-	// Application Utility Methods
-	static void DisplayFrameTimeAndFPS();
-private:
-	static Timestep s_FrameTime;
+	private:
+		static Timestep s_FrameTime;
 
-	static Window* s_ActiveWindow;
-	friend int ::main(int argc, char** argv);
-};
+		static Window* s_ActiveWindow;
+
+		static Application* s_Instance;
+		friend int ::main(int argc, char** argv);
+	};
+
+	Application* CreateApplication();
+}
