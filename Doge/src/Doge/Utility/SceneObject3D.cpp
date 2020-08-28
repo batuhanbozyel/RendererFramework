@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SceneObject3D.h"
 
-#include "Renderer/Renderer.h"
+#include "Doge/Renderer/Renderer.h"
 
 namespace Doge
 {

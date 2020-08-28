@@ -3,7 +3,7 @@
 
 #include "Buffer.h"
 
-#include "Utility/Mesh.h"
+#include "Doge/Utility/Mesh.h"
 
 namespace Doge
 {

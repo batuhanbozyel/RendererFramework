@@ -1,10 +1,8 @@
 #include "pch.h"
 #include "Window.h"
 
-#include "Renderer/Context.h"
-
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
+#include "Doge/Events/KeyEvent.h"
+#include "Doge/Events/MouseEvent.h"
 
 namespace Doge
 {

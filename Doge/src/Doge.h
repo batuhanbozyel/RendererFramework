@@ -1,21 +1,21 @@
 #pragma once
 
 // Core
-#include "Core/Application.h"
-#include "Core/Input.h"
-#include "Core/Log.h"
-#include "Core/Timestep.h"
+#include "Doge/Core/Application.h"
+#include "Doge/Core/Input.h"
+#include "Doge/Core/Log.h"
+#include "Doge/Core/Timestep.h"
 
 // Renderer
-#include "Renderer/Renderer.h"
-#include "Renderer/Texture.h"
-#include "Renderer/Shader.h"
+#include "Doge/Renderer/Renderer.h"
+#include "Doge/Renderer/Texture.h"
+#include "Doge/Renderer/Shader.h"
 
 // Utility
-#include "Utility/Camera.h"
-#include "Utility/Mesh.h"
-#include "Utility/Model.h"
-#include "Utility/SceneObject3D.h"
+#include "Doge/Utility/Camera.h"
+#include "Doge/Utility/Mesh.h"
+#include "Doge/Utility/Model.h"
+#include "Doge/Utility/SceneObject3D.h"
 
 // 3rd-Party Includes
 #include <glm/glm.hpp>

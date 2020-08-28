@@ -5,11 +5,11 @@
 #include "Texture.h"
 #include "VertexArray.h"
 
-#include "Core/Window.h"
+#include "Doge/Core/Window.h"
 
-#include "Utility/Camera.h"
-#include "Utility/Material.h"
-#include "Utility/SceneObject3D.h"
+#include "Doge/Utility/Camera.h"
+#include "Doge/Utility/Material.h"
+#include "Doge/Utility/SceneObject3D.h"
 
 namespace Doge
 {

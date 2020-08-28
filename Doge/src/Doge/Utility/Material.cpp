@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Material.h"
 
-#include "Renderer/Shader.h"
+#include "Doge/Renderer/Shader.h"
 
 namespace Doge
 {

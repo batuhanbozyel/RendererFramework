@@ -101,35 +101,35 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\Application.h" />
-    <ClInclude Include="src\Core\EntryPoint.h" />
-    <ClInclude Include="src\Core\Input.h" />
-    <ClInclude Include="src\Core\KeyCodes.h" />
-    <ClInclude Include="src\Core\Log.h" />
-    <ClInclude Include="src\Core\MouseButtonCodes.h" />
-    <ClInclude Include="src\Core\Timestep.h" />
-    <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Doge.h" />
-    <ClInclude Include="src\Events\ApplicationEvent.h" />
-    <ClInclude Include="src\Events\Event.h" />
-    <ClInclude Include="src\Events\KeyEvent.h" />
-    <ClInclude Include="src\Events\MouseEvent.h" />
-    <ClInclude Include="src\Events\WindowEvent.h" />
-    <ClInclude Include="src\Renderer\Buffer.h" />
-    <ClInclude Include="src\Renderer\Context.h" />
-    <ClInclude Include="src\Renderer\Framebuffer.h" />
-    <ClInclude Include="src\Renderer\Pipeline.h" />
-    <ClInclude Include="src\Renderer\RenderDataManager.h" />
-    <ClInclude Include="src\Renderer\Renderer.h" />
-    <ClInclude Include="src\Renderer\Shader.h" />
-    <ClInclude Include="src\Renderer\ShaderDataType.h" />
-    <ClInclude Include="src\Renderer\Texture.h" />
-    <ClInclude Include="src\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Utility\Camera.h" />
-    <ClInclude Include="src\Utility\Material.h" />
-    <ClInclude Include="src\Utility\Mesh.h" />
-    <ClInclude Include="src\Utility\Model.h" />
-    <ClInclude Include="src\Utility\SceneObject3D.h" />
+    <ClInclude Include="src\Doge\Core\Application.h" />
+    <ClInclude Include="src\Doge\Core\EntryPoint.h" />
+    <ClInclude Include="src\Doge\Core\Input.h" />
+    <ClInclude Include="src\Doge\Core\KeyCodes.h" />
+    <ClInclude Include="src\Doge\Core\Log.h" />
+    <ClInclude Include="src\Doge\Core\MouseButtonCodes.h" />
+    <ClInclude Include="src\Doge\Core\Timestep.h" />
+    <ClInclude Include="src\Doge\Core\Window.h" />
+    <ClInclude Include="src\Doge\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\Doge\Events\Event.h" />
+    <ClInclude Include="src\Doge\Events\KeyEvent.h" />
+    <ClInclude Include="src\Doge\Events\MouseEvent.h" />
+    <ClInclude Include="src\Doge\Events\WindowEvent.h" />
+    <ClInclude Include="src\Doge\Renderer\Buffer.h" />
+    <ClInclude Include="src\Doge\Renderer\Context.h" />
+    <ClInclude Include="src\Doge\Renderer\Framebuffer.h" />
+    <ClInclude Include="src\Doge\Renderer\Pipeline.h" />
+    <ClInclude Include="src\Doge\Renderer\RenderDataManager.h" />
+    <ClInclude Include="src\Doge\Renderer\Renderer.h" />
+    <ClInclude Include="src\Doge\Renderer\Shader.h" />
+    <ClInclude Include="src\Doge\Renderer\ShaderDataType.h" />
+    <ClInclude Include="src\Doge\Renderer\Texture.h" />
+    <ClInclude Include="src\Doge\Renderer\VertexArray.h" />
+    <ClInclude Include="src\Doge\Utility\Camera.h" />
+    <ClInclude Include="src\Doge\Utility\Material.h" />
+    <ClInclude Include="src\Doge\Utility\Mesh.h" />
+    <ClInclude Include="src\Doge\Utility\Model.h" />
+    <ClInclude Include="src\Doge\Utility\SceneObject3D.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="vendor\assimp\include\assimp\BaseImporter.h" />
     <ClInclude Include="vendor\assimp\include\assimp\Bitmap.h" />
@@ -624,30 +624,30 @@
     <ClInclude Include="vendor\glm\glm\vec3.hpp" />
     <ClInclude Include="vendor\glm\glm\vec4.hpp" />
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
-    <ClInclude Include="vendor\stb\stb_image.h" />
+    <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Core\Application.cpp" />
-    <ClCompile Include="src\Core\Input.cpp" />
-    <ClCompile Include="src\Core\Log.cpp" />
-    <ClCompile Include="src\Core\Window.cpp" />
-    <ClCompile Include="src\Renderer\Buffer.cpp" />
-    <ClCompile Include="src\Renderer\Context.cpp" />
-    <ClCompile Include="src\Renderer\Framebuffer.cpp" />
-    <ClCompile Include="src\Renderer\Pipeline.cpp" />
-    <ClCompile Include="src\Renderer\RenderDataManager.cpp" />
-    <ClCompile Include="src\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\Renderer\Shader.cpp" />
-    <ClCompile Include="src\Renderer\Texture.cpp" />
-    <ClCompile Include="src\Renderer\VertexArray.cpp" />
-    <ClCompile Include="src\Utility\Camera.cpp" />
-    <ClCompile Include="src\Utility\Material.cpp" />
-    <ClCompile Include="src\Utility\Model.cpp" />
-    <ClCompile Include="src\Utility\SceneObject3D.cpp" />
+    <ClCompile Include="src\Doge\Core\Application.cpp" />
+    <ClCompile Include="src\Doge\Core\Input.cpp" />
+    <ClCompile Include="src\Doge\Core\Log.cpp" />
+    <ClCompile Include="src\Doge\Core\Window.cpp" />
+    <ClCompile Include="src\Doge\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Doge\Renderer\Context.cpp" />
+    <ClCompile Include="src\Doge\Renderer\Framebuffer.cpp" />
+    <ClCompile Include="src\Doge\Renderer\Pipeline.cpp" />
+    <ClCompile Include="src\Doge\Renderer\RenderDataManager.cpp" />
+    <ClCompile Include="src\Doge\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Doge\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Doge\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Doge\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Doge\Utility\Camera.cpp" />
+    <ClCompile Include="src\Doge\Utility\Material.cpp" />
+    <ClCompile Include="src\Doge\Utility\Model.cpp" />
+    <ClCompile Include="src\Doge\Utility\SceneObject3D.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="vendor\stb\stb_image.cpp" />
+    <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

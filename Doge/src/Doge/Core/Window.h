@@ -1,8 +1,8 @@
 #pragma once
 #include <GLFW/glfw3.h>
 
-#include "Renderer/Context.h"
-#include "Events/WindowEvent.h"
+#include "Doge/Renderer/Context.h"
+#include "Doge/Events/WindowEvent.h"
 
 namespace Doge
 {

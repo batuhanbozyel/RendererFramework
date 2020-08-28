@@ -1,5 +1,5 @@
 #include "Doge.h"
-#include "Core/EntryPoint.h"
+#include "Doge/Core/EntryPoint.h"
 
 class SandboxApp : public Doge::Application
 {

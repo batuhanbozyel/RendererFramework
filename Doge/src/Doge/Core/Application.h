@@ -1,7 +1,7 @@
 #pragma once
-#include "Events/ApplicationEvent.h"
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
+#include "Doge/Events/ApplicationEvent.h"
+#include "Doge/Events/KeyEvent.h"
+#include "Doge/Events/MouseEvent.h"
 
 #include "Window.h"
 #include "Timestep.h"

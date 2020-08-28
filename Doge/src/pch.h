@@ -29,5 +29,5 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Core/Log.h"
-#include "Core/Input.h"
+#include "Doge/Core/Log.h"
+#include "Doge/Core/Input.h"

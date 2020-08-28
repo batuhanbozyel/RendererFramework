@@ -3,8 +3,8 @@
 
 #include "Mesh.h"
 
-#include "Renderer/Texture.h"
-#include "Renderer/Renderer.h"
+#include "Doge/Renderer/Texture.h"
+#include "Doge/Renderer/Renderer.h"
 
 namespace Doge
 {

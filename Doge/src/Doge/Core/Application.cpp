@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Application.h"
 
-#include "Renderer/Renderer.h"
-#include "Utility/Camera.h"
+#include "Doge/Renderer/Renderer.h"
+#include "Doge/Utility/Camera.h"
 
 namespace Doge
 {

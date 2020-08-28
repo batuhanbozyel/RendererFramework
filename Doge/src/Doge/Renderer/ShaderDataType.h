@@ -1,7 +1,7 @@
 #pragma once
 #include <glad/glad.h>
 
-#include "Core/Log.h"
+#include "Doge/Core/Log.h"
 
 namespace Doge
 {

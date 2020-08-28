@@ -4,17 +4,20 @@
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Core">
-      <UniqueIdentifier>{A5D31CCF-91A0-77DA-BAB9-6582A6E5AC68}</UniqueIdentifier>
+    <Filter Include="src\Doge">
+      <UniqueIdentifier>{9B5E1DCF-872B-78DA-B044-66829C70AD68}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Events">
-      <UniqueIdentifier>{7162C20E-5D1A-045C-C621-DDB7B2F89E4C}</UniqueIdentifier>
+    <Filter Include="src\Doge\Core">
+      <UniqueIdentifier>{D3DB307B-3F9C-ACB1-08D7-F52E7456F18D}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer">
-      <UniqueIdentifier>{73D1DFBF-5F34-6F64-08BA-A71AF4FB3AE7}</UniqueIdentifier>
+    <Filter Include="src\Doge\Events">
+      <UniqueIdentifier>{1F2EF90F-8BB9-66D4-94CA-E9C800D5C2D4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Utility">
-      <UniqueIdentifier>{70464FB2-DCFB-C7A7-65F0-C17ED1A4BEAB}</UniqueIdentifier>
+    <Filter Include="src\Doge\Renderer">
+      <UniqueIdentifier>{A140F8E9-0D57-F67F-56CE-81A1C223C707}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Doge\Utility">
+      <UniqueIdentifier>{DE875FDA-CA80-7E2C-F3B2-63B1DF0A5E38}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -55,97 +58,97 @@
     <Filter Include="vendor\glm\glm\gtx">
       <UniqueIdentifier>{B3A6A76B-9F8A-68C1-08EB-6214F4ED5243}</UniqueIdentifier>
     </Filter>
-    <Filter Include="vendor\stb">
-      <UniqueIdentifier>{8BD3C5A8-778B-07F6-E092-E051CC69A2E6}</UniqueIdentifier>
+    <Filter Include="vendor\stb_image">
+      <UniqueIdentifier>{0DA0BA59-F998-D9AB-22CB-BE300E23B9B7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\Application.h">
-      <Filter>src\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\EntryPoint.h">
-      <Filter>src\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Input.h">
-      <Filter>src\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\KeyCodes.h">
-      <Filter>src\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Log.h">
-      <Filter>src\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\MouseButtonCodes.h">
-      <Filter>src\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Timestep.h">
-      <Filter>src\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Window.h">
-      <Filter>src\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\Doge.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Events\ApplicationEvent.h">
-      <Filter>src\Events</Filter>
+    <ClInclude Include="src\Doge\Core\Application.h">
+      <Filter>src\Doge\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Events\Event.h">
-      <Filter>src\Events</Filter>
+    <ClInclude Include="src\Doge\Core\EntryPoint.h">
+      <Filter>src\Doge\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Events\KeyEvent.h">
-      <Filter>src\Events</Filter>
+    <ClInclude Include="src\Doge\Core\Input.h">
+      <Filter>src\Doge\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Events\MouseEvent.h">
-      <Filter>src\Events</Filter>
+    <ClInclude Include="src\Doge\Core\KeyCodes.h">
+      <Filter>src\Doge\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Events\WindowEvent.h">
-      <Filter>src\Events</Filter>
+    <ClInclude Include="src\Doge\Core\Log.h">
+      <Filter>src\Doge\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Buffer.h">
-      <Filter>src\Renderer</Filter>
+    <ClInclude Include="src\Doge\Core\MouseButtonCodes.h">
+      <Filter>src\Doge\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Context.h">
-      <Filter>src\Renderer</Filter>
+    <ClInclude Include="src\Doge\Core\Timestep.h">
+      <Filter>src\Doge\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Framebuffer.h">
-      <Filter>src\Renderer</Filter>
+    <ClInclude Include="src\Doge\Core\Window.h">
+      <Filter>src\Doge\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Pipeline.h">
-      <Filter>src\Renderer</Filter>
+    <ClInclude Include="src\Doge\Events\ApplicationEvent.h">
+      <Filter>src\Doge\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\RenderDataManager.h">
-      <Filter>src\Renderer</Filter>
+    <ClInclude Include="src\Doge\Events\Event.h">
+      <Filter>src\Doge\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Renderer.h">
-      <Filter>src\Renderer</Filter>
+    <ClInclude Include="src\Doge\Events\KeyEvent.h">
+      <Filter>src\Doge\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Shader.h">
-      <Filter>src\Renderer</Filter>
+    <ClInclude Include="src\Doge\Events\MouseEvent.h">
+      <Filter>src\Doge\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\ShaderDataType.h">
-      <Filter>src\Renderer</Filter>
+    <ClInclude Include="src\Doge\Events\WindowEvent.h">
+      <Filter>src\Doge\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Texture.h">
-      <Filter>src\Renderer</Filter>
+    <ClInclude Include="src\Doge\Renderer\Buffer.h">
+      <Filter>src\Doge\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\VertexArray.h">
-      <Filter>src\Renderer</Filter>
+    <ClInclude Include="src\Doge\Renderer\Context.h">
+      <Filter>src\Doge\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utility\Camera.h">
-      <Filter>src\Utility</Filter>
+    <ClInclude Include="src\Doge\Renderer\Framebuffer.h">
+      <Filter>src\Doge\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utility\Material.h">
-      <Filter>src\Utility</Filter>
+    <ClInclude Include="src\Doge\Renderer\Pipeline.h">
+      <Filter>src\Doge\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utility\Mesh.h">
-      <Filter>src\Utility</Filter>
+    <ClInclude Include="src\Doge\Renderer\RenderDataManager.h">
+      <Filter>src\Doge\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utility\Model.h">
-      <Filter>src\Utility</Filter>
+    <ClInclude Include="src\Doge\Renderer\Renderer.h">
+      <Filter>src\Doge\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utility\SceneObject3D.h">
-      <Filter>src\Utility</Filter>
+    <ClInclude Include="src\Doge\Renderer\Shader.h">
+      <Filter>src\Doge\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Doge\Renderer\ShaderDataType.h">
+      <Filter>src\Doge\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Doge\Renderer\Texture.h">
+      <Filter>src\Doge\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Doge\Renderer\VertexArray.h">
+      <Filter>src\Doge\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Doge\Utility\Camera.h">
+      <Filter>src\Doge\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Doge\Utility\Material.h">
+      <Filter>src\Doge\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Doge\Utility\Mesh.h">
+      <Filter>src\Doge\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Doge\Utility\Model.h">
+      <Filter>src\Doge\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Doge\Utility\SceneObject3D.h">
+      <Filter>src\Doge\Utility</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
@@ -1629,67 +1632,67 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\stb\stb_image.h">
-      <Filter>vendor\stb</Filter>
+    <ClInclude Include="vendor\stb_image\stb_image.h">
+      <Filter>vendor\stb_image</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Core\Application.cpp">
-      <Filter>src\Core</Filter>
+    <ClCompile Include="src\Doge\Core\Application.cpp">
+      <Filter>src\Doge\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Input.cpp">
-      <Filter>src\Core</Filter>
+    <ClCompile Include="src\Doge\Core\Input.cpp">
+      <Filter>src\Doge\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Log.cpp">
-      <Filter>src\Core</Filter>
+    <ClCompile Include="src\Doge\Core\Log.cpp">
+      <Filter>src\Doge\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Window.cpp">
-      <Filter>src\Core</Filter>
+    <ClCompile Include="src\Doge\Core\Window.cpp">
+      <Filter>src\Doge\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Buffer.cpp">
-      <Filter>src\Renderer</Filter>
+    <ClCompile Include="src\Doge\Renderer\Buffer.cpp">
+      <Filter>src\Doge\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Context.cpp">
-      <Filter>src\Renderer</Filter>
+    <ClCompile Include="src\Doge\Renderer\Context.cpp">
+      <Filter>src\Doge\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Framebuffer.cpp">
-      <Filter>src\Renderer</Filter>
+    <ClCompile Include="src\Doge\Renderer\Framebuffer.cpp">
+      <Filter>src\Doge\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Pipeline.cpp">
-      <Filter>src\Renderer</Filter>
+    <ClCompile Include="src\Doge\Renderer\Pipeline.cpp">
+      <Filter>src\Doge\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\RenderDataManager.cpp">
-      <Filter>src\Renderer</Filter>
+    <ClCompile Include="src\Doge\Renderer\RenderDataManager.cpp">
+      <Filter>src\Doge\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Renderer.cpp">
-      <Filter>src\Renderer</Filter>
+    <ClCompile Include="src\Doge\Renderer\Renderer.cpp">
+      <Filter>src\Doge\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Shader.cpp">
-      <Filter>src\Renderer</Filter>
+    <ClCompile Include="src\Doge\Renderer\Shader.cpp">
+      <Filter>src\Doge\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Texture.cpp">
-      <Filter>src\Renderer</Filter>
+    <ClCompile Include="src\Doge\Renderer\Texture.cpp">
+      <Filter>src\Doge\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\VertexArray.cpp">
-      <Filter>src\Renderer</Filter>
+    <ClCompile Include="src\Doge\Renderer\VertexArray.cpp">
+      <Filter>src\Doge\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utility\Camera.cpp">
-      <Filter>src\Utility</Filter>
+    <ClCompile Include="src\Doge\Utility\Camera.cpp">
+      <Filter>src\Doge\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utility\Material.cpp">
-      <Filter>src\Utility</Filter>
+    <ClCompile Include="src\Doge\Utility\Material.cpp">
+      <Filter>src\Doge\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utility\Model.cpp">
-      <Filter>src\Utility</Filter>
+    <ClCompile Include="src\Doge\Utility\Model.cpp">
+      <Filter>src\Doge\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utility\SceneObject3D.cpp">
-      <Filter>src\Utility</Filter>
+    <ClCompile Include="src\Doge\Utility\SceneObject3D.cpp">
+      <Filter>src\Doge\Utility</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\stb\stb_image.cpp">
-      <Filter>vendor\stb</Filter>
+    <ClCompile Include="vendor\stb_image\stb_image.cpp">
+      <Filter>vendor\stb_image</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
