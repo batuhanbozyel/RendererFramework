@@ -97,3 +97,8 @@ void PerspectiveCamera::SetProjection(float width, float height)
 	if (height == 0.0f) height = 0.0001f;
 	m_ProjectionMatrix = glm::perspective(glm::radians(m_Fov), width / height, 0.01f, 100.0f);
 }
+
+const glm::vec3 PerspectiveCamera::GetViewDirection() const
+{
+	return glm::vec3(-m_Front.x, -m_Front.y, m_Front.z);
+}

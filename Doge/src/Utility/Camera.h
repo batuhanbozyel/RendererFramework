@@ -18,6 +18,8 @@ public:
 	// To be defined in Inherited Camera classes
 	virtual void SetProjection(float left, float right, float bottom, float top) {}
 	virtual void SetProjection(float width, float height) {}
+
+	virtual const glm::vec3 GetViewDirection() const { return m_Position; }
 protected:
 	Camera(const glm::mat4& projection, const glm::mat4& view, const glm::vec3& position);
 	virtual void Update() = 0;
@@ -56,6 +58,8 @@ public:
 	virtual void Rotate(const std::pair<float, float>& mousePos) override;
 
 	virtual void SetProjection(float width, float height) override;
+
+	virtual const glm::vec3 GetViewDirection() const override;
 private:
 	virtual void Update() override;
 private:

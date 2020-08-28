@@ -27,9 +27,12 @@ public:
 
 	void SetUniformMat3(const char* name, const glm::mat3& value) const;
 	void SetUniformMat4(const char* name, const glm::mat4& value) const;
+
+	bool operator==(const Shader& shader) const;
+	bool operator!=(const Shader& shader) const;
 private:
-	Shader(const char* filePath);
-	Shader(const char* name, const std::string& vertexSrc, const std::string& fragmentSrc);
+	explicit Shader(const char* filePath);
+	explicit Shader(const char* name, const std::string& vertexSrc, const std::string& fragmentSrc);
 private:
 	void CalculateUniformLocations();
 	uint32_t GetUniformLocation(const char* name) const;

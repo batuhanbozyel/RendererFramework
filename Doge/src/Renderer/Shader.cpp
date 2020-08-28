@@ -305,6 +305,16 @@ void Shader::SetUniformMat4(const char* name, const glm::mat4& value) const
 	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &value[0][0]);
 }
 
+bool Shader::operator==(const Shader& shader) const
+{
+	return m_RendererID == shader.m_RendererID;
+}
+
+bool Shader::operator!=(const Shader& shader) const
+{
+	return m_RendererID != shader.m_RendererID;
+}
+
 uint32_t Shader::GetUniformLocation(const char* name) const
 {
 	auto& mapLocation = m_UniformCache.find(name);

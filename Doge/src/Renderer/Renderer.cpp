@@ -19,6 +19,8 @@ std::unique_ptr<UniformBuffer> Renderer::s_ViewProjectionUniformBuffer = nullptr
 std::unique_ptr<UniformBuffer> Renderer::s_LightingUniformBuffer = nullptr;
 std::unordered_map<std::shared_ptr<Material>, std::queue<RenderData>> Renderer::s_RenderQueue;
 
+const Shader* Renderer::s_LastShaderState = nullptr;
+
 void Renderer::Init(const RendererMode& mode, const WindowProps& props)
 {
 	TextureManager::Init();
@@ -74,13 +76,18 @@ void Renderer::DrawIndexed()
 
 	s_LightingUniformBuffer->Bind();
 	s_LightingUniformBuffer->SetData(&s_Camera->GetPosition()[0], sizeof(glm::vec3), 0);
-	// Temporary: Light position is set same as Camera position
-	s_LightingUniformBuffer->SetData(&s_Camera->GetPosition()[0], sizeof(glm::vec3), sizeof(glm::vec4));
+	// Temporary: Light direction is set same as Camera direction
+	s_LightingUniformBuffer->SetData(&s_Camera->GetViewDirection()[0], sizeof(glm::vec3), sizeof(glm::vec4));
 
 	for (auto& materialLayer : s_RenderQueue)
 	{
 		// Set Common Material properties
-		materialLayer.first->GetShaderRef().Bind();
+		const Shader& materialShader = materialLayer.first->GetShaderRef();
+		if (s_LastShaderState == nullptr || *s_LastShaderState != materialShader)
+		{
+			materialShader.Bind();
+			s_LastShaderState = &materialShader;
+		}
 		materialLayer.first->SetSharedUniforms();
 
 		auto& renderQueue = materialLayer.second;

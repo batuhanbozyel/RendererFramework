@@ -22,11 +22,12 @@ uniform mat4 u_Model;
 
 void main()
 {
-	v_FragPos = vec3(a_Position);
+	vec4 modelPosition = u_Model * a_Position;
+	v_FragPos = vec3(modelPosition);
 	v_Normal = a_Normal;
 	v_TexCoord = a_TexCoord;
 	v_TexIndex = a_TexIndex;
-	gl_Position = u_Projection * u_View * u_Model * a_Position;
+	gl_Position = u_Projection * u_View * modelPosition;
 }
 
 #type fragment
@@ -54,7 +55,7 @@ struct Material
 
 struct Light
 {
-	vec3 Position;
+	vec3  Direction;
 	vec3  Ambient;
 	vec3  Diffuse;
 	vec3  Specular;
@@ -81,7 +82,7 @@ void main()
 
 	// Diffuse Lighting
 	vec3 norm = normalize(v_Normal);
-	vec3 lightDir = normalize(u_Light.Position - v_FragPos);
+	vec3 lightDir = normalize(-u_Light.Direction);
 	float diff = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = u_Light.Diffuse * diff * vec3(texture(sampler2D(textureBuffer.textures[v_TexIndex].Diffuse), v_TexCoord));
 

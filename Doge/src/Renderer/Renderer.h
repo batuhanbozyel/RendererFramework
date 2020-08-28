@@ -41,4 +41,6 @@ private:
 	static std::unique_ptr<UniformBuffer> s_ViewProjectionUniformBuffer;
 	static std::unique_ptr<UniformBuffer> s_LightingUniformBuffer;
 	static std::unordered_map<std::shared_ptr<Material>, std::queue<RenderData>> s_RenderQueue;
+
+	static const Shader* s_LastShaderState;
 };
